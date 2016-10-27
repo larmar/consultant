@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+  
+    <!-- Action to open consultant -->
+    <act_window id="action_consultant_consult"
+      name="Consultant"
+      res_model="consultant.consult"
+      view_mode="tree,form" />
+
+    <!-- Menu item for cunsultant -->
+    <menuitem id="menu_consultant_consult"
+      name="Consultant"
+      parent="hr.menu_hr_root"
+      sequence="25"
+      action="action_consultant_consult" />
+
+
+    <record id="view_form_consultant_consult" model="ir.ui.view">
+      <field name="name">Consultants Form</field>
+      <field name="model">consultant.consult</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <field name="state" widget="statusbar"
+                clickable="Tru" statusbar_visible="draft,open,progress,done" />
+          </header>
+          <sheet>
+            <div class="oe_title">
+               <label for="name" class="oe_edit_only"/>
+               <h1>
+                  <field name="name" placeholder="Consultant's Name"/>
+               </h1>
+            </div>
+            <group name="group_top">
+              <group name="group_left">
+                <field name="linkedin" widget="url" />
+                <field name="availible" />
+              </group>
+              <group name="group_right">
+                <field name="priority" widget="priority" />
+                <field name="partner_id" />
+                <field name="user_id" />
+              </group>
+            </group>
+                    <notebook>
+                        <page string="Customer ref" autofocus="autofocus">
+                            <field name="customer_ids" />
+                        </page>
+                        <page string="Profile">
+                          <group name="Profile">
+                            <field name="industry_ids" widget="many2many_tags" />
+                            <field name="role_ids" widget="many2many_tags" />
+                            <field name="certificate_ids" widget="many2many_tags" />
+                            <field name="competence_ids" widget="many2many_tags" />
+                          </group>
+                        </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_tree_consultants_consultant" model="ir.ui.view">
+      <field name="name">Consultants Tree</field>
+      <field name="model">consultant.consult</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="availible" />
+          <field name="priority" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</openerp>
