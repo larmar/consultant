@@ -5,5 +5,8 @@
   'author': 'Martin WIlderoth',
   'depends': ['hr', 'crm'],
   'application': True,
-  'data': [ 'views/consultant_consult.xml' ],
+  'data': [ 
+		'data/consultant.xml',
+		'views/consultant_consult.xml' 
+	],
 }
