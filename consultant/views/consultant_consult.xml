@@ -6,7 +6,7 @@
     <act_window id="action_consultant_consult"
       name="Consultant"
       res_model="consultant.consult"
-      view_mode="tree,form" />
+      view_mode="kanban,tree,form" />
 
     <!-- Menu item for cunsultant -->
     <menuitem id="menu_consultant_consult"
@@ -128,6 +128,55 @@
         </form>
       </field>
     </record>
+
+    <record model="ir.ui.view" id="view_kanban_consultant_consult">
+        <field name="name">Consultant - Kanban</field>
+        <field name="model">consultant.consult</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>
+                <field name="linkedin"/>
+                <field name="availible"/>
+                <field name="message_needaction_counter"/>
+                <field name="color"/>
+                <templates>
+                    <field name="priority"/>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                            <div class="o_dropdown_kanban dropdown">
+
+                                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                    <span class="fa fa-bars fa-lg"/>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                                    <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                </ul>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <field name="competence_ids"/>
+                                </div>
+                                <div>
+                                    <strong><h3><field name="name"/></h3></strong>
+                                </div>
+                                
+                                <div class="o_kanban_footer">
+                                    <field name="priority" widget="priority"/>
+                                    <t t-if="record.message_needaction_counter.raw_value">
+                                        <span class='oe_kanban_mail_new' title='Unread Messages'><i class='fa fa-comments'/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
 
     <record id="view_tree_consultants_consultant" model="ir.ui.view">
       <field name="name">Consultants Tree</field>

@@ -4,7 +4,7 @@ from openerp import _, api, models, fields
 class consultant_consult(models.Model):
     _name = 'consultant.consult'
     _description = "Consultants"
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'ir.needaction_mixin', 'utm.mixin']
 
     name = fields.Char(String='Name')
     linkedin = fields.Char('Linkedin')
@@ -19,6 +19,7 @@ class consultant_consult(models.Model):
     stage_id = fields.Many2one('consultant.stage', 'Stage', track_visibility='onchange')
     state = fields.Char(related="stage_id.name", string='State')
     partner_id = fields.Many2one('res.partner', 'Vendor')
+    color = fields.Integer('Color Index')
   
 
 class consultant_industry(models.Model):
