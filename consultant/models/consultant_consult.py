@@ -43,3 +43,11 @@ class consultant_certificate(models.Model):
     _description = "Consultant Certificate"
     
     name = fields.Char('Name')
+
+class consultant_stage(models.Model):
+    _name = "consultant.stage"
+    _description = "Consultant Stages"
+
+    name = fields.Char('Stage Name', required=True)
+    fold = fields.Boolean('Show As Folded', default=False)
+    sequence = fields.Integer('Sequence', default=1)
