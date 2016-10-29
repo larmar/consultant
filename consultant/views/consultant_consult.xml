@@ -232,5 +232,143 @@
         sequence="1"
         action="action_consultant_stage"/>
 
+    <!-- Consultant - Configuration views -->
+    <!-- Competence -->
+    <record id="consultant_competence_form" model="ir.ui.view">
+        <field name="name">consultant.competence.form</field>
+        <field name="model">consultant.competence</field>
+        <field name="arch" type="xml">
+            <form string="Competence">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_competence_tree" model="ir.ui.view">
+        <field name="name">consultant.competence.tree</field>
+        <field name="model">consultant.competence</field>
+        <field name="arch" type="xml">
+            <tree string="Competence">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_competence"
+      name="Competence"
+      res_model="consultant.competence"
+      view_mode="tree,form" />
+
+    <!-- Certificate -->
+    <record id="consultant_certificate_form" model="ir.ui.view">
+        <field name="name">consultant.certificate.form</field>
+        <field name="model">consultant.certificate</field>
+        <field name="arch" type="xml">
+            <form string="Certificate">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_certificate_tree" model="ir.ui.view">
+        <field name="name">consultant.certificate.tree</field>
+        <field name="model">consultant.certificate</field>
+        <field name="arch" type="xml">
+            <tree string="Certificate">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_certificate"
+      name="Certificate"
+      res_model="consultant.certificate"
+      view_mode="tree,form" />
+
+    <!-- Industry -->
+    <record id="consultant_industry_form" model="ir.ui.view">
+        <field name="name">consultant.industry.form</field>
+        <field name="model">consultant.industry</field>
+        <field name="arch" type="xml">
+            <form string="Industry">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_industry_tree" model="ir.ui.view">
+        <field name="name">consultant.industry.tree</field>
+        <field name="model">consultant.industry</field>
+        <field name="arch" type="xml">
+            <tree string="Industry">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_industry"
+      name="Industry"
+      res_model="consultant.industry"
+      view_mode="tree,form" />
+
+    <!-- Role -->
+    <record id="consultant_role_form" model="ir.ui.view">
+        <field name="name">consultant.role.form</field>
+        <field name="model">consultant.role</field>
+        <field name="arch" type="xml">
+            <form string="Role">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_role_tree" model="ir.ui.view">
+        <field name="name">consultant.role.tree</field>
+        <field name="model">consultant.role</field>
+        <field name="arch" type="xml">
+            <tree string="Role">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_role"
+      name="Role"
+      res_model="consultant.role"
+      view_mode="tree,form" />
+
+    <!-- Consultant - Configuration menus -->
+    <menuitem id="menu_consultant_configuration_competence"
+        action="action_consultant_competence"
+        parent="menu_consultant_configuration"
+        sequence="3"/>
+
+    <menuitem id="menu_consultant_configuration_certificate"
+        action="action_consultant_certificate"
+        parent="menu_consultant_configuration"
+        sequence="5"/>
+
+    <menuitem id="menu_consultant_configuration_industry"
+        action="action_consultant_industry"
+        parent="menu_consultant_configuration"
+        sequence="7"/>
+
+    <menuitem id="menu_consultant_configuration_role"
+        action="action_consultant_role"
+        parent="menu_consultant_configuration"
+        sequence="9"/>
+
   </data>
 </openerp>
