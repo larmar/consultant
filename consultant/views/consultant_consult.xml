@@ -15,7 +15,14 @@
       sequence="25"
       action="action_consultant_consult" />
 
+    <!-- Menu for Consultants Configuration -->
+    <menuitem id="menu_consultant_configuration"
+        name="Consultant"
+        parent="hr.menu_human_resources_configuration"
+        sequence="20"/>
 
+
+    <!-- Consultant view -->
     <record id="view_form_consultant_consult" model="ir.ui.view">
       <field name="name">Consultants Form</field>
       <field name="model">consultant.consult</field>
@@ -170,7 +177,10 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-
+    <menuitem id="menu_consultant_configuration_stages"
+        parent="menu_consultant_configuration"
+        sequence="1"
+        action="action_consultant_stage"/>
 
   </data>
 </openerp>
