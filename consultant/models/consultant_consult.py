@@ -5,13 +5,13 @@ class consultant_consult(models.Model):
     _name = 'consultant.consult'
     _description = "Consultants"
     _inherit = ['mail.thread']
-    
+
     name = fields.Char(String='Name')
     linkedin = fields.Char('Linkedin')
     availible = fields.Date('Next availible')
     industry_ids = fields.Many2many('consultant.industry', string='Industry')
     role_ids = fields.Many2many('consultant.role', string='Role')
-    customer_ids = fields.Many2many('res.partner', string='Customer Ref')
+    customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
     user_id = fields.Many2one('res.users', 'Related User')
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
