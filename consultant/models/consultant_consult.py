@@ -16,7 +16,8 @@ class consultant_consult(models.Model):
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
     priority = fields.Selection([('0','Very Low'),('1','Low'),('2','Normal'),('3','High'),('4','Very High')])
-    state = fields.Selection([('draft','Qualification'),('open','Open'),('progress','Interviewed'),('done','Approved')], 'State')
+    stage_id = fields.Many2one('consultant.stage', 'Stage', track_visibility='onchange')
+    state = fields.Char(related="stage_id.name", string='State')
     partner_id = fields.Many2one('res.partner', 'Vendor')
   
 
