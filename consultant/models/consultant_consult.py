@@ -20,7 +20,8 @@ class consultant_consult(models.Model):
     state = fields.Char(related="stage_id.name", string='State')
     partner_id = fields.Many2one('res.partner', 'Vendor')
     color = fields.Integer('Color Index')
-    opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
+    #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
+    opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
   
 
 class consultant_industry(models.Model):

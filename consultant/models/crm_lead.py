@@ -13,7 +13,7 @@ class crm_lead(osv.osv):
         }
 
     _columns = {
-        'consultant_ids': fields.many2many('consultant.consult', 'crm_lead_consultant_consult_rel', 'opportunity_id', 'consultant_id', 'Consultants'),
+        #'consultant_ids': fields.many2many('consultant.consult', 'crm_lead_consultant_consult_rel', 'opportunity_id', 'consultant_id', 'Consultants'),
         'consultant_count': fields.function(_consultant_count, string='# Consultants', type='integer'),
     }
 
