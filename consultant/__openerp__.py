@@ -7,6 +7,7 @@
   'application': True,
   'data': [ 
 		'data/consultant.xml',
-		'views/consultant_consult.xml' 
+		'views/consultant_consult.xml',
+		'views/crm_lead.xml',
 	],
 }
