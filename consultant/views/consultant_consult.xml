@@ -43,6 +43,7 @@
               <group name="group_left">
                 <field name="linkedin" widget="url" />
                 <field name="availible" />
+                <field name="opportunity_id"/>
               </group>
               <group name="group_right">
                 <field name="priority" widget="priority" />
@@ -189,6 +190,25 @@
           <field name="stage_id"/>
         </tree>
       </field>
+    </record>
+
+    <record id="view_search_consultants_consultant" model="ir.ui.view">
+        <field name="name">Consultants Search</field>
+        <field name="model">consultant.consult</field>
+        <field name="arch" type="xml">
+            <search string="Consultants">
+                <field name="name" />
+                <field name="availible" />
+                <field name="priority" />
+                <field name="stage_id"/>
+                <field name="opportunity_id"/>
+                <newline/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_stage" string="Stages" context="{'group_by': 'stage_id'}"/>
+                    <filter name="group_by_opportunity" string="Opportunity" context="{'group_by': 'opportunity_id'}"/>
+                </group>
+            </search>
+        </field>
     </record>
 
     <!-- Consultants Stages -->
