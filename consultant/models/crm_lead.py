@@ -6,14 +6,14 @@ class crm_lead(osv.osv):
     _inherit = "crm.lead"
 
     def _consultant_count(self, cr, uid, ids, field_name, arg, context=None):
-        Consultants = self.pool['consultant.consult']
-        return {
-            opp_id: Consultants.search_count(cr,uid, [('opportunity_id', '=', opp_id)], context=context)
-            for opp_id in ids
-        }
+        count = 0
+        for rec in self.browse(cr, uid, ids):
+            for consultant in rec.consultant_ids:
+                count += 1
+        return {ids[0]: count}
 
     _columns = {
-        #'consultant_ids': fields.many2many('consultant.consult', 'crm_lead_consultant_consult_rel', 'opportunity_id', 'consultant_id', 'Consultants'),
+        'consultant_ids': fields.many2many('consultant.consult', 'consultant_consult_opportunity_rel', 'opportunity_id', 'consultant_id', 'Consultants'),
         'consultant_count': fields.function(_consultant_count, string='# Consultants', type='integer'),
     }
 
