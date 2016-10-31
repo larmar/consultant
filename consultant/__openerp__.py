@@ -9,5 +9,6 @@
 		'data/consultant.xml',
 		'views/consultant_consult.xml',
 		'views/crm_lead.xml',
+    'wizard/consultant_opportunity_link.xml',
 	],
 }
