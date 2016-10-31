@@ -22,10 +22,14 @@ class crm_lead(osv.osv):
         Open Consultants related to current opportunity.
         :return dict: dictionary value Consultants view
         """
-        opportunity = self.browse(cr, uid, ids[0], context)
         res = self.pool.get('ir.actions.act_window').for_xml_id(cr, uid, 'consultant', 'action_consultant_consult', context)
-        res['context'] = {
-            'search_default_opportunity_id': opportunity.id or False,
-            'default_opportunity_id': opportunity.id or False,
-        }
+        
+        cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
+                                where opportunity_id=%s """%(ids[0]))
+        result = cr.fetchall()
+        consultants = []
+        for r in result:
+            r = r[0]
+            consultants.append(r)
+        res['domain'] = [['id', 'in', consultants]]
         return res
