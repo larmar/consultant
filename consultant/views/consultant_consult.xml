@@ -6,7 +6,7 @@
     <act_window id="action_consultant_consult"
       name="Consultant"
       res_model="consultant.consult"
-      view_mode="tree,form" />
+      view_mode="kanban,tree,form" />
 
     <!-- Menu item for cunsultant -->
     <menuitem id="menu_consultant_consult"
@@ -15,27 +15,35 @@
       sequence="25"
       action="action_consultant_consult" />
 
+    <!-- Menu for Consultants Configuration -->
+    <menuitem id="menu_consultant_configuration"
+        name="Consultant"
+        parent="hr.menu_human_resources_configuration"
+        sequence="20"/>
 
+
+    <!-- Consultant view -->
     <record id="view_form_consultant_consult" model="ir.ui.view">
       <field name="name">Consultants Form</field>
       <field name="model">consultant.consult</field>
       <field name="arch" type="xml">
         <form>
           <header>
-            <field name="state" widget="statusbar"
-                clickable="Tru" statusbar_visible="draft,open,progress,done" />
+          	<field name="state" invisible="1"/>
+            <field name="stage_id" widget="statusbar" clickable="True"/>
           </header>
           <sheet>
             <div class="oe_title">
                <label for="name" class="oe_edit_only"/>
                <h1>
-                  <field name="name" placeholder="Consultant's Name"/>
+                  <field name="name" placeholder="Consultant's Name" required="1"/>
                </h1>
             </div>
             <group name="group_top">
               <group name="group_left">
                 <field name="linkedin" widget="url" />
                 <field name="availible" />
+                <field name="opportunity_ids" widget="many2many_tags"/>
               </group>
               <group name="group_right">
                 <field name="priority" widget="priority" />
@@ -45,7 +53,64 @@
             </group>
                     <notebook>
                         <page string="Customer ref" autofocus="autofocus">
-                            <field name="customer_ids" />
+                            <field name="customer_ids" widget="many2many_kanban">
+                              <kanban>
+                                    <field name="color"/>
+                                    <field name="name"/>
+                                    <field name="title"/>
+                                    <field name="type"/>
+                                    <field name="email"/>
+                                    <field name="parent_id"/>
+                                    <field name="is_company"/>
+                                    <field name="function"/>
+                                    <field name="phone"/>
+                                    <field name="street"/>
+                                    <field name="street2"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                    <field name="mobile"/>
+                                    <field name="fax"/>
+                                    <field name="state_id"/>
+                                    <field name="image"/>
+                                    <field name="lang"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color + (record.title.raw_value == 1 ? ' oe_kanban_color_alert' : '') + ' oe_kanban_global_click'">
+                                                <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+                                                <div class="o_kanban_image">
+                                                    <img t-if="record.image.raw_value" t-att-src="'data:image/png;base64,'+record.image.raw_value"/>
+                                                    <t t-if="!record.image.raw_value">
+                                                        <img t-if="record.type.raw_value === 'delivery'" t-att-src='_s + "/base/static/src/img/truck.png"'/>
+                                                        <img t-if="record.type.raw_value === 'invoice'" t-att-src='_s + "/base/static/src/img/money.png"'/>
+                                                        <t t-if="record.type.raw_value !== 'invoice' &amp;&amp; record.type.raw_value !== 'delivery'">
+                                                            <img t-if="record.is_company.raw_value === true" t-att-src='_s + "/base/static/src/img/company_image.png"'/>
+                                                            <img t-if="record.is_company.raw_value === false" t-att-src='_s + "/base/static/src/img/avatar.png"'/>
+                                                        </t>
+                                                    </t>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                    <div t-if="record.function.raw_value"><field name="function"/></div>
+                                                    <div t-if="record.email.raw_value"><field name="email"/></div>
+                                                    <div t-if="record.type.raw_value != 'contact'">
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <field name="phone"/></div>
+                                                    <div t-if="record.mobile.raw_value">Mobile: <field name="mobile"/></div>
+                                                    <div t-if="record.fax.raw_value">Fax: <field name="fax"/></div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                              </field>
                         </page>
                         <page string="Profile">
                           <group name="Profile">
@@ -65,6 +130,55 @@
       </field>
     </record>
 
+    <record model="ir.ui.view" id="view_kanban_consultant_consult">
+        <field name="name">Consultant - Kanban</field>
+        <field name="model">consultant.consult</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>
+                <field name="linkedin"/>
+                <field name="availible"/>
+                <field name="message_needaction_counter"/>
+                <field name="color"/>
+                <templates>
+                    <field name="priority"/>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                            <div class="o_dropdown_kanban dropdown">
+
+                                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                    <span class="fa fa-bars fa-lg"/>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                                    <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                </ul>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <field name="competence_ids"/>
+                                </div>
+                                <div>
+                                    <strong><h3><field name="name"/></h3></strong>
+                                </div>
+                                
+                                <div class="o_kanban_footer">
+                                    <field name="priority" widget="priority"/>
+                                    <t t-if="record.message_needaction_counter.raw_value">
+                                        <span class='oe_kanban_mail_new' title='Unread Messages'><i class='fa fa-comments'/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
     <record id="view_tree_consultants_consultant" model="ir.ui.view">
       <field name="name">Consultants Tree</field>
       <field name="model">consultant.consult</field>
@@ -73,9 +187,207 @@
           <field name="name" />
           <field name="availible" />
           <field name="priority" />
+          <field name="stage_id"/>
         </tree>
       </field>
     </record>
+
+    <record id="view_search_consultants_consultant" model="ir.ui.view">
+        <field name="name">Consultants Search</field>
+        <field name="model">consultant.consult</field>
+        <field name="arch" type="xml">
+            <search string="Consultants">
+                <field name="name" />
+                <field name="availible" />
+                <field name="priority" />
+                <field name="stage_id"/>
+                <field name="opportunity_ids"/>
+                <newline/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_stage" string="Stages" context="{'group_by': 'stage_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Consultants Stages -->
+    <record id="consultant_stage_form" model="ir.ui.view">
+        <field name="name">consultant.stage.form</field>
+        <field name="model">consultant.stage</field>
+        <field name="arch" type="xml">
+            <form string="Stages">
+                <sheet>
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="fold"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_stage_tree" model="ir.ui.view">
+        <field name="name">consultant.stage.tree</field>
+        <field name="model">consultant.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Stages" editable="bottom">
+                <field name="name"/>
+                <field name="sequence"/>
+                <field name="fold"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_consultant_stage" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">consultant.stage</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_consultant_configuration_stages"
+        parent="menu_consultant_configuration"
+        sequence="1"
+        action="action_consultant_stage"/>
+
+    <!-- Consultant - Configuration views -->
+    <!-- Competence -->
+    <record id="consultant_competence_form" model="ir.ui.view">
+        <field name="name">consultant.competence.form</field>
+        <field name="model">consultant.competence</field>
+        <field name="arch" type="xml">
+            <form string="Competence">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_competence_tree" model="ir.ui.view">
+        <field name="name">consultant.competence.tree</field>
+        <field name="model">consultant.competence</field>
+        <field name="arch" type="xml">
+            <tree string="Competence">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_competence"
+      name="Competence"
+      res_model="consultant.competence"
+      view_mode="tree,form" />
+
+    <!-- Certificate -->
+    <record id="consultant_certificate_form" model="ir.ui.view">
+        <field name="name">consultant.certificate.form</field>
+        <field name="model">consultant.certificate</field>
+        <field name="arch" type="xml">
+            <form string="Certificate">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_certificate_tree" model="ir.ui.view">
+        <field name="name">consultant.certificate.tree</field>
+        <field name="model">consultant.certificate</field>
+        <field name="arch" type="xml">
+            <tree string="Certificate">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_certificate"
+      name="Certificate"
+      res_model="consultant.certificate"
+      view_mode="tree,form" />
+
+    <!-- Industry -->
+    <record id="consultant_industry_form" model="ir.ui.view">
+        <field name="name">consultant.industry.form</field>
+        <field name="model">consultant.industry</field>
+        <field name="arch" type="xml">
+            <form string="Industry">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_industry_tree" model="ir.ui.view">
+        <field name="name">consultant.industry.tree</field>
+        <field name="model">consultant.industry</field>
+        <field name="arch" type="xml">
+            <tree string="Industry">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_industry"
+      name="Industry"
+      res_model="consultant.industry"
+      view_mode="tree,form" />
+
+    <!-- Role -->
+    <record id="consultant_role_form" model="ir.ui.view">
+        <field name="name">consultant.role.form</field>
+        <field name="model">consultant.role</field>
+        <field name="arch" type="xml">
+            <form string="Role">
+                <sheet>
+                    <label for="name"/>
+                    <field name="name" required="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_role_tree" model="ir.ui.view">
+        <field name="name">consultant.role.tree</field>
+        <field name="model">consultant.role</field>
+        <field name="arch" type="xml">
+            <tree string="Role">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_role"
+      name="Role"
+      res_model="consultant.role"
+      view_mode="tree,form" />
+
+    <!-- Consultant - Configuration menus -->
+    <menuitem id="menu_consultant_configuration_competence"
+        action="action_consultant_competence"
+        parent="menu_consultant_configuration"
+        sequence="3"/>
+
+    <menuitem id="menu_consultant_configuration_certificate"
+        action="action_consultant_certificate"
+        parent="menu_consultant_configuration"
+        sequence="5"/>
+
+    <menuitem id="menu_consultant_configuration_industry"
+        action="action_consultant_industry"
+        parent="menu_consultant_configuration"
+        sequence="7"/>
+
+    <menuitem id="menu_consultant_configuration_role"
+        action="action_consultant_role"
+        parent="menu_consultant_configuration"
+        sequence="9"/>
 
   </data>
 </openerp>

@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="crm_case_form_view_oppor_consultant">
+            <field name="name">Opportunities - Consultant</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                <div class="oe_button_box" position="inside">
+                    <button class="oe_stat_button" type="object"
+                        name="action_open_consultants" icon="fa-users">
+                        <div class="o_stat_info">
+                            <field name="consultant_count" class="o_stat_value"/>
+                            <span class="o_stat_text" attrs="{'invisible': [('consultant_count', '&lt;', 2)]}"> Consultants</span>
+                            <span class="o_stat_text" attrs="{'invisible': [('consultant_count', '&gt;', 1)]}"> Consultant</span>
+                        </div>
+                    </button>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

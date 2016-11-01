@@ -1,0 +1,35 @@
+<odoo>
+	<data>
+
+		<record id="consultant_opportunity_link_form" model="ir.ui.view">
+			<field name="name">consultant.opportunity.link.form</field>
+			<field name="model">consultant.opportunity.link</field>
+			<field name="arch" type="xml">
+				<form string="Assign Opportunity">
+					<group>
+						<field name="consultant_ids" widget="many2many_tags" context="{'no_create':1, 'create':0}" readonly="1"/>
+					</group>
+					<group>
+						<group string="Assign Opportunity">
+							<field name="opportunity_id" required="1"/>
+						</group>
+					</group>
+					<footer>
+						<button name="action_assign" type="object" string="Assign" class="oe_highlight"/> or
+						<button name="cancel" special="cancel" string="cancel" class="oe_link"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- wizard action on consultants -->
+        <act_window id="consultant_opportunity_link_action"
+            name="Assign Opportunity"
+            src_model="consultant.consult"
+            res_model="consultant.opportunity.link"
+            view_type="form" view_mode="form"
+            key2="client_action_multi" target="new"
+		/>
+
+	</data>
+</odoo>

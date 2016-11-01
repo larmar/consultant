@@ -5,5 +5,10 @@
   'author': 'Martin WIlderoth',
   'depends': ['hr', 'crm'],
   'application': True,
-  'data': [ 'views/consultant_consult.xml' ],
+  'data': [ 
+		'data/consultant.xml',
+		'views/consultant_consult.xml',
+		'views/crm_lead.xml',
+    'wizard/consultant_opportunity_link.xml',
+	],
 }

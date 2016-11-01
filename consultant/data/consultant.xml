@@ -1,0 +1,25 @@
+<odoo>
+	<data noupdate="1">
+
+		<record id="consultant_stage_draft" model="consultant.stage">
+			<field name="name">Qualification</field>
+			<field name="sequence">1</field>
+		</record>
+
+		<record id="consultant_stage_open" model="consultant.stage">
+			<field name="name">Open</field>
+			<field name="sequence">2</field>
+		</record>
+
+		<record id="consultant_stage_progress" model="consultant.stage">
+			<field name="name">Interviewed</field>
+			<field name="sequence">3</field>
+		</record>
+
+		<record id="consultant_stage_done" model="consultant.stage">
+			<field name="name">Approved</field>
+			<field name="sequence">4</field>
+		</record>
+
+	</data>
+</odoo>
