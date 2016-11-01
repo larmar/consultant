@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import _, api, models, fields
+from lxml import etree
+from openerp.osv.orm import setup_modifiers
 
 class consultant_consult(models.Model):
     _name = 'consultant.consult'
@@ -23,6 +25,36 @@ class consultant_consult(models.Model):
     #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
   
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        """ This function Adds "Remove Active Opportunity" button if Consultant view is loaded from active Opportunity.
+        """
+        res = super(consultant_consult, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        doc = etree.XML(res['arch'])
+        context = self._context
+        if view_type == 'form':
+            if 'active_model' in context and context['active_model'] == 'crm.lead' and 'active_id' in context:
+                context = context
+                dlink_button = etree.Element('button')
+                dlink_button.set('string', 'Remove Active Opportunity')
+                dlink_button.set('name', 'action_delink_active_opportunity')
+                dlink_button.set('type', 'object')
+                dlink_button.set('class', 'oe_highlight')
+                node = doc.xpath("//field[@name='state']")
+                node[0].addnext(dlink_button)
+                res['arch'] = etree.tostring(doc)
+        return res
+
+    @api.multi
+    def action_delink_active_opportunity(self):
+        context = self._context
+        for consultant in self:
+            if context and 'active_model' in context and context['active_model'] == 'crm.lead':
+                opportunity_id = context['active_id']
+                if opportunity_id:
+                    self._cr.execute(""" delete from consultant_consult_opportunity_rel where 
+                                            opportunity_id=%s and 
+                                            consultant_id=%s;"""%(opportunity_id, consultant.id))
 
 class consultant_industry(models.Model):
     _name = 'consultant.industry'
