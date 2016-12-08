@@ -1,32 +1,38 @@
-#-*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016 Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
 
-from openerp.osv import osv, fields
+from odoo import models, fields, api
 
-class crm_lead(osv.osv):
+class crm_lead(models.Model):
     _inherit = "crm.lead"
 
-    def _consultant_count(self, cr, uid, ids, field_name, arg, context=None):
+    @api.depends('consultant_ids')
+    def _consultant_count(self):
         count = 0
-        for rec in self.browse(cr, uid, ids):
+        for rec in self:
             for consultant in rec.consultant_ids:
                 count += 1
-        return {ids[0]: count}
+            rec.consultant_count = count
 
-    _columns = {
-        'consultant_ids': fields.many2many('consultant.consult', 'consultant_consult_opportunity_rel', 'opportunity_id', 'consultant_id', 'Consultants'),
-        'consultant_count': fields.function(_consultant_count, string='# Consultants', type='integer'),
-    }
+    consultant_ids = fields.Many2many('consultant.consult', 'consultant_consult_opportunity_rel', 'opportunity_id', 'consultant_id', 'Consultants')
+    consultant_count = fields.Integer(compute='_consultant_count', string='# Consultants', copy=False, default=0)
 
-    def action_open_consultants(self, cr, uid, ids, context=None):
+    @api.multi
+    def action_open_consultants(self):
         """
         Open Consultants related to current opportunity.
         :return dict: dictionary value Consultants view
         """
-        res = self.pool.get('ir.actions.act_window').for_xml_id(cr, uid, 'consultant', 'action_consultant_consult', context)
+        res = self.env['ir.actions.act_window'].for_xml_id('consultant', 'action_consultant_consult')
         
-        cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
-                                where opportunity_id=%s """%(ids[0]))
-        result = cr.fetchall()
+        self._cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
+                                where opportunity_id=%s """%(self.id))
+        result = self._cr.fetchall()
         consultants = []
         for r in result:
             r = r[0]

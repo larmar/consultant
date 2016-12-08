@@ -1,6 +1,12 @@
-#-*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016 Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 class consultant_opportunity_link(models.TransientModel):
     _name = "consultant.opportunity.link"
@@ -25,7 +31,6 @@ class consultant_opportunity_link(models.TransientModel):
                 self._cr.execute("""select consultant_id from consultant_consult_opportunity_rel
     									where consultant_id=%s and opportunity_id=%s"""%(consultant.id, opportunity_id))
                 result = self._cr.fetchone()
-                print"########### result " ,result
                 if not result:
                     self._cr.execute(""" insert into consultant_consult_opportunity_rel(consultant_id, opportunity_id)
                                             values(%s, %s)"""%(consultant.id, opportunity_id))

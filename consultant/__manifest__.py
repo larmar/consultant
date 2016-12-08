@@ -1,6 +1,14 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016 Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
+
 {
   'name': 'Consultant Application',
-  'version': '9.0.0.2',
+  'version': '10.0.0.1',
   'category': 'Consultants',
   'summary': 'Manage consultants and search for knowledge',
   'description': """
