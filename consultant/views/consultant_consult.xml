@@ -9,16 +9,27 @@
       view_mode="kanban,tree,form" />
 
     <!-- Menu item for cunsultant -->
+    <menuitem id="menu_consultant_main"
+        name="Consultants"
+        groups=""
+        sequence="74"/>
+
+    <menuitem id="menu_consultant_main_sub"
+        name="Consultants"
+        parent="menu_consultant_main"
+        groups=""
+        sequence="3"/>
+
     <menuitem id="menu_consultant_consult"
-      name="Consultant"
-      parent="hr.menu_hr_root"
-      sequence="25"
+      name="Consultants"
+      parent="menu_consultant_main_sub"
+      sequence="1"
       action="action_consultant_consult" />
 
     <!-- Menu for Consultants Configuration -->
     <menuitem id="menu_consultant_configuration"
-        name="Consultant"
-        parent="hr.menu_human_resources_configuration"
+        name="Configuration"
+        parent="menu_consultant_main"
         sequence="20"/>
 
 
