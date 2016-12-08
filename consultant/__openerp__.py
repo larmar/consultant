@@ -1,9 +1,18 @@
 {
   'name': 'Consultant Application',
-  'version': '9.0.1',
-  'description': 'Manage consultants and search for knowledge',
+  'version': '9.0.0.2',
+  'category': 'Consultants',
+  'summary': 'Manage consultants and search for knowledge',
+  'description': """
+##############################################################
+                    CONSULTANTS
+##############################################################                    
+
+Manage consultants and search for knowledge
+  """,
   'author': 'Martin WIlderoth',
-  'depends': ['hr', 'crm'],
+  'website': 'www.linserv.se/en/',
+  'depends': ['crm'],
   'application': True,
   'data': [ 
 		'data/consultant.xml',
