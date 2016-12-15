@@ -19,7 +19,7 @@ class consultant_consult(models.Model):
 
     name = fields.Char(String='Name')
     linkedin = fields.Char('Linkedin')
-    availible = fields.Date('Next availible')
+    available = fields.Date('Next available')
     industry_ids = fields.Many2many('consultant.industry', string='Industry')
     role_ids = fields.Many2many('consultant.role', string='Role')
     customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
