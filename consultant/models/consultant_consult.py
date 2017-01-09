@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
-from openerp import _, api, models, fields
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016 Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
+
+from odoo import api, models, fields
+from odoo.tools.translate import _
+from odoo.osv.orm import setup_modifiers
+
 from lxml import etree
-from openerp.osv.orm import setup_modifiers
 
 class consultant_consult(models.Model):
     _name = 'consultant.consult'
@@ -10,7 +19,7 @@ class consultant_consult(models.Model):
 
     name = fields.Char(String='Name')
     linkedin = fields.Char('Linkedin')
-    availible = fields.Date('Next availible')
+    available = fields.Date('Next available')
     industry_ids = fields.Many2many('consultant.industry', string='Industry')
     role_ids = fields.Many2many('consultant.role', string='Role')
     customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
