@@ -54,6 +54,14 @@ class consultant_consult(models.Model):
                 res['arch'] = etree.tostring(doc)
         return res
 
+    @api.model
+    def default_get(self, fields):
+        res = super(consultant_consult, self).default_get(fields)
+        stage = self.env['ir.model.data'].xmlid_to_res_id('consultant.consultant_stage_draft') or False
+        if stage:
+            res.update(stage_id = stage)
+        return res
+
     @api.multi
     def action_delink_active_opportunity(self):
         context = self._context
