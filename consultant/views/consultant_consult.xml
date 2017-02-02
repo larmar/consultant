@@ -5,7 +5,7 @@
     <act_window id="action_consultant_consult"
       name="Consultant"
       res_model="consultant.consult"
-      view_mode="kanban,tree,form" />
+      view_mode="tree,kanban,form" />
 
     <!-- Menu item for cunsultant -->
     <menuitem id="menu_consultant_main"
