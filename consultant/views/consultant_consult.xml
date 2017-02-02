@@ -210,9 +210,13 @@
         <field name="arch" type="xml">
             <search string="Consultants">
                 <field name="name" />
+                <field name="industry_ids"/>
+                <field name="role_ids"/>
+                <field name="certificate_ids"/>
+                <field name="competence_ids"/>
+                <field name="stage_id"/>
                 <field name="available" />
                 <field name="priority" />
-                <field name="stage_id"/>
                 <field name="opportunity_ids"/>
                 <newline/>
                 <group expand="0" string="Group By">
