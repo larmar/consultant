@@ -7,9 +7,10 @@
 ##############################################################################
 
 {
-  'name': 'Consultant Application',
+  'name': 'Consultant',
+  'sequence': 20,
   'version': '10.0.0.1',
-  'category': 'Consultants',
+  'category': 'Consultant',
   'summary': 'Manage consultants and search for knowledge',
   'description': """
 ##############################################################
@@ -22,10 +23,17 @@ Manage consultants and search for knowledge
   'website': 'www.linserv.se/en/',
   'depends': ['crm'],
   'application': True,
+  'auto_install': False,
+  'installable': True,
   'data': [ 
-		'data/consultant.xml',
+    'security/consultant_security.xml',
+
 		'views/consultant_consult.xml',
 		'views/crm_lead.xml',
     'wizard/consultant_opportunity_link.xml',
+
+    'data/consultant.xml',
+    
+    'security/ir.model.access.csv',
 	],
 }
