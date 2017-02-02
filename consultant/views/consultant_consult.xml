@@ -10,13 +10,14 @@
     <!-- Menu item for cunsultant -->
     <menuitem id="menu_consultant_main"
         name="Consultants"
-        groups=""
+        web_icon="consultant,static/description/icon.png"
+        groups="base.group_consultant_user,base.group_consultant_manager"
         sequence="74"/>
 
     <menuitem id="menu_consultant_main_sub"
         name="Consultants"
         parent="menu_consultant_main"
-        groups=""
+        groups="base.group_consultant_user,base.group_consultant_manager"
         sequence="3"/>
 
     <menuitem id="menu_consultant_consult"
@@ -29,6 +30,7 @@
     <menuitem id="menu_consultant_configuration"
         name="Configuration"
         parent="menu_consultant_main"
+        groups="base.group_consultant_manager"
         sequence="20"/>
 
 
