@@ -17,22 +17,23 @@ class consultant_consult(models.Model):
     _description = "Consultants"
     _inherit = ['mail.thread', 'ir.needaction_mixin', 'utm.mixin']
 
-    name = fields.Char(String='Name')
+    name = fields.Char(String='Name', track_visibility='onchange')
     linkedin = fields.Char('Linkedin')
-    available = fields.Date('Next available')
+    available = fields.Date('Next available', track_visibility='onchange')
     industry_ids = fields.Many2many('consultant.industry', string='Industry')
     role_ids = fields.Many2many('consultant.role', string='Role')
     customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
-    user_id = fields.Many2one('res.users', 'Related User')
+    user_id = fields.Many2one('res.users', 'Related User', track_visibility='onchange')
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
-    priority = fields.Selection([('0','Very Low'),('1','Low'),('2','Normal'),('3','High'),('4','Very High')])
-    stage_id = fields.Many2one('consultant.stage', 'Stage', track_visibility='onchange')
-    state = fields.Char(related="stage_id.name", string='State')
-    partner_id = fields.Many2one('res.partner', 'Vendor')
+    priority = fields.Selection([('0','Very Low'),('1','Low'),('2','Normal'),('3','High'),('4','Very High')], track_visibility='onchange')
+    stage_id = fields.Many2one('consultant.stage', 'Stage')
+    state = fields.Char(related="stage_id.name", string='Status', track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', 'Vendor', track_visibility='onchange')
     color = fields.Integer('Color Index')
     #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
+    contact_id = fields.Many2one('res.partner', 'Contact', track_visibility='onchange')
   
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
@@ -61,6 +62,31 @@ class consultant_consult(models.Model):
         if stage:
             res.update(stage_id = stage)
         return res
+
+    @api.model
+    def create(self, vals):
+        """Add Contact to Followers list
+        """
+        if 'contact_id' in vals and vals['contact_id']:
+            followers = []
+            user_partner = self.env['res.users'].browse(self._uid).partner_id.id
+            followers.append([user_partner, vals['contact_id']])
+            vals['message_follower_ids'] = [[6, 0, followers[0]]]
+        return super(consultant_consult, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        """Add Contact to Followers list
+        """        
+        if 'contact_id' in vals and vals['contact_id']:
+            existing_followers = []
+            #get all existing followers of the document:
+            for consultant in self:
+                for follower in consultant.message_follower_ids:
+                    existing_followers.append(follower.partner_id.id)
+            if vals['contact_id'] not in existing_followers:
+                self._cr.execute("insert into mail_followers(res_model, res_id, partner_id)values('%s', %s, %s);"%(self._name, self.id, vals['contact_id']))
+        return super(consultant_consult, self).write(vals)
 
     @api.multi
     def action_delink_active_opportunity(self):
