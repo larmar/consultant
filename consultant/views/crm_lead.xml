@@ -16,6 +16,25 @@
                         </div>
                     </button>
                 </div>
+                <notebook position="inside">
+                    <page name="consultants" string="Consultant Profile">
+                        <group/>
+                        <div colspan="4" style="color:grey;"><strong>Select Consultant Profile Options and click <i style="color:black;">Search Consultants</i> button.</strong></div>
+
+                        <group>
+                            <group>
+                                <button name="action_search_consultants" type="object" string="Search Consultants" class="oe_highlight"/>
+                            </group>
+                            <group/>
+                        </group>
+                        <group col="4">
+                            <field name="industry_ids" widget="many2many_tags"/>
+                            <field name="role_ids" widget="many2many_tags"/>
+                            <field name="certificate_ids" widget="many2many_tags"/>
+                            <field name="competence_ids" widget="many2many_tags"/>
+                        </group>
+                    </page>
+                </notebook>
             </field>
         </record>
 
