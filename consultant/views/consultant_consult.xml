@@ -276,8 +276,9 @@
         <field name="arch" type="xml">
             <form string="Competence">
                 <sheet>
-                    <label for="name"/>
-                    <field name="name" required="1"/>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -305,8 +306,9 @@
         <field name="arch" type="xml">
             <form string="Certificate">
                 <sheet>
-                    <label for="name"/>
-                    <field name="name" required="1"/>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -334,8 +336,9 @@
         <field name="arch" type="xml">
             <form string="Industry">
                 <sheet>
-                    <label for="name"/>
-                    <field name="name" required="1"/>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -363,8 +366,9 @@
         <field name="arch" type="xml">
             <form string="Role">
                 <sheet>
-                    <label for="name"/>
-                    <field name="name" required="1"/>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>
