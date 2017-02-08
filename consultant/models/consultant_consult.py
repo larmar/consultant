@@ -34,7 +34,9 @@ class consultant_consult(models.Model):
     #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
     contact_id = fields.Many2one('res.partner', 'Contact', track_visibility='onchange')
-  
+
+    _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
+
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         """ This function Adds "Remove Active Opportunity" button if Consultant view is loaded from active Opportunity.
