@@ -10,6 +10,9 @@ from odoo import api, models, fields
 from odoo.tools.translate import _
 from odoo.osv.orm import setup_modifiers
 
+import logging
+_logger = logging.getLogger(__name__)
+
 from lxml import etree
 
 class consultant_consult(models.Model):
@@ -36,6 +39,18 @@ class consultant_consult(models.Model):
     contact_id = fields.Many2one('res.partner', 'Contact', track_visibility='onchange')
 
     _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
+
+    @api.model_cr
+    def init(self):
+        """Create Index to ignore case for checking Unique Consultant Name
+        """
+        try:
+            self._cr.execute("CREATE UNIQUE INDEX unique_name_idx on consultant_consult (LOWER(name));")
+            _logger.info("Unique Constraint Index successfully created")
+        except Exception, e:
+            error = "Error Creating Constraint!\n\nConsultant with Duplicate Names exist.\n\nError Details:\n%s"%(e)
+            _logger.error(error)
+            pass
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
