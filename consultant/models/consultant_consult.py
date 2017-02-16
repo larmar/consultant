@@ -26,7 +26,6 @@ class consultant_consult(models.Model):
     industry_ids = fields.Many2many('consultant.industry', string='Industry')
     role_ids = fields.Many2many('consultant.role', string='Role')
     customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
-    user_id = fields.Many2one('res.users', 'Related User', track_visibility='onchange')
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
     priority = fields.Selection([('0','Very Low'),('1','Low'),('2','Normal'),('3','High'),('4','Very High')], track_visibility='onchange')
