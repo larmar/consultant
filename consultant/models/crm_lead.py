@@ -51,54 +51,52 @@ class crm_lead(models.Model):
         """Search Consultants by Industry | Role | Competence | Certificate & show in list view
         """
         res = self.env['ir.actions.act_window'].for_xml_id('consultant', 'action_consultant_consult')
-        consultants = []
         industries, roles, competences, certificates = [], [], [], []
+        result = []
         for oppr in self:
             for industry in oppr.industry_ids:
                 industries.append(industry.id)
-            if industries:
-                industries = ', '.join(str(ind) for ind in industries)
-                oppr._cr.execute(""" select consultant_consult_id from consultant_consult_consultant_industry_rel \
-                                        where consultant_industry_id in (%s)"""%(industries))
-                result = self._cr.fetchall()
-                for r in result:
-                    r = r[0]
-                    consultants.append(r)
-
             for role in oppr.role_ids:
                 roles.append(role.id)
-            if roles:
-                roles = ', '.join(str(rl) for rl in roles)
-                oppr._cr.execute("""select consultant_consult_id from consultant_consult_consultant_role_rel \
-                                        where consultant_role_id in (%s)"""%(roles))
-                result = self._cr.fetchall()
-                for r in result:
-                    r = r[0]
-                    consultants.append(r)
-
             for competence in oppr.competence_ids:
                 competences.append(competence.id)
-            if competences:
-                competences = ', '.join(str(cmpt) for cmpt in competences)
-                oppr._cr.execute(""" select consultant_consult_id from consultant_competence_consultant_consult_rel \
-                                         where consultant_competence_id in (%s)"""%(competences))
-                result = self._cr.fetchall()
-                for r in result:
-                    r = r[0]
-                    consultants.append(r)
-
             for certificate in oppr.certificate_ids:
                 certificates.append(certificate.id)
-            if certificates:
-                certificates = ', '.join(str(cert) for cert in certificates)
-                oppr._cr.execute(""" select consultant_consult_id from consultant_certificate_consultant_consult_rel \
-                                         where consultant_certificate_id in (%s)"""%(certificates))
-                result = self._cr.fetchall()
-                for r in result:
-                    r = r[0]
-                    consultants.append(r)            
+        	
+            consultants = self.env['consultant.consult'].search([('id','>',0)])        	
+            for consultant in consultants:
+                flag = True
+                c_industries, c_roles, c_competences, c_certificates = [], [], [], []
 
-            consultants = list(set(consultants))
+                for c_industry in consultant.industry_ids:
+                    c_industries.append(c_industry.id)                    
+                for s_industry in industries:
+                    if s_industry not in c_industries:
+                        flag = False
+                        break
 
-        res['domain'] = [['id', 'in', consultants]]
+                for c_role in consultant.role_ids:
+                    c_roles.append(c_role.id)
+                for s_role in roles:
+                    if s_role not in c_roles:
+                        flag = False
+                        break
+
+                for c_competence in consultant.competence_ids:
+                    c_competences.append(c_competence.id)
+                for s_competence in competences:
+                    if s_competence not in c_competences:
+                        flag = False
+                        break
+
+                for c_certificate in consultant.certificate_ids:
+                    c_certificates.append(c_certificate.id)
+                for s_certificate in certificates:
+                    if s_certificate not in c_certificates:
+                        flag = False
+                        break
+
+                if flag is True:
+                    result.append(consultant.id)
+        res['domain'] = [['id', 'in', result]]
         return res
