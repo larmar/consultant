@@ -75,6 +75,10 @@ class consultant_consult(models.Model):
     @api.model
     def default_get(self, fields):
         res = super(consultant_consult, self).default_get(fields)
+        context = self._context
+        if context and isinstance(context, dict):
+            if 'active_model' in context and context['active_model'] == 'crm.lead':
+                res.update(opportunity_ids = [[6, 0, [context.get('active_id', False)]]])
         stage = self.env['ir.model.data'].xmlid_to_res_id('consultant.consultant_stage_draft') or False
         if stage:
             res.update(stage_id = stage)
