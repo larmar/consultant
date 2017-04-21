@@ -198,9 +198,12 @@
       <field name="arch" type="xml">
         <tree>
           <field name="name" />
+          <field name="partner_id"/>
+          <field name="contact_no"/>
           <field name="available" />
-          <field name="priority" />
           <field name="stage_id"/>
+          <field name="priority" />
+          <field name="opportunity_ids"/>
         </tree>
       </field>
     </record>

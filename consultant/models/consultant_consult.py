@@ -36,6 +36,7 @@ class consultant_consult(models.Model):
     #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
     contact_id = fields.Many2one('res.partner', 'Contact', track_visibility='onchange')
+    contact_no = fields.Char(related="contact_id.mobile", string="Telephone")
     category_ids = fields.Many2many('res.partner.category', 'res_partner_category_consultant_rel', 'consultant_id', 'category_id', 'Tags')
 
     _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
