@@ -1,0 +1,16 @@
+<odoo>
+	<data>
+
+		<act_window id="mass_mail_consultants"
+			name="Consultants - Mass Mailing"
+			res_model="mail.compose.message"
+			src_model="consultant.consult"
+			view_type="form"
+			view_mode="form"
+			target="new"
+			multi="True"
+			context="{'consultant_mass_mail': True}"			
+			/>
+
+	</data>
+</odoo>

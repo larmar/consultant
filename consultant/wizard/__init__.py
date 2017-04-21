@@ -7,3 +7,4 @@
 ##############################################################################
 
 from . import consultant_opportunity_link
+from . import mass_mail

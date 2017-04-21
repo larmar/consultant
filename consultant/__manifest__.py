@@ -31,6 +31,7 @@ Manage consultants and search for knowledge
 		'views/consultant_consult.xml',
 		'views/crm_lead.xml',
     'wizard/consultant_opportunity_link.xml',
+    'wizard/mass_mail_view.xml',
 
     'data/consultant.xml',
     
