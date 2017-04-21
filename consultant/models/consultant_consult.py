@@ -28,6 +28,7 @@ class consultant_consult(models.Model):
     customer_ids = fields.Many2many('res.partner', string='Customer Ref', domain="['|', ('customer','=',True), ('supplier','=',True)]")
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
+    region_ids = fields.Many2many('consultant.region', string='Regions')
     priority = fields.Selection([('0','Very Low'),('1','Low'),('2','Normal'),('3','High'),('4','Very High')], track_visibility='onchange')
     stage_id = fields.Many2one('consultant.stage', 'Stage')
     state = fields.Char(related="stage_id.name", string='Status', track_visibility='onchange')
@@ -152,3 +153,9 @@ class consultant_stage(models.Model):
     name = fields.Char('Stage Name', required=True)
     fold = fields.Boolean('Show As Folded', default=False)
     sequence = fields.Integer('Sequence', default=1)
+
+class consultant_region(models.Model):
+    _name = "consultant.region"
+    _description = "Consultant Regions"
+
+    name = fields.Char('Region Name')
