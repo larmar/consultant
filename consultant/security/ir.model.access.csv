@@ -14,3 +14,6 @@ access_consultant_role_manager,consultant.role.manager,model_consultant_role,bas
 access_consultant_competence_manager,consultant.competence.manager,model_consultant_competence,base.group_consultant_manager,1,1,1,1
 access_consultant_certificate_manager,consultant.certificate.manager,model_consultant_certificate,base.group_consultant_manager,1,1,1,1
 access_consultant_stage_manager,consultant.stage.manager,model_consultant_stage,base.group_consultant_manager,1,1,1,1
+,,,,,,,
+access_consultant_region_user,consultant.region.user,model_consultant_region,base.group_consultant_user,1,0,0,0
+access_consultant_region_manager,consultant.region.manager,model_consultant_region,base.group_consultant_manager,1,1,1,1
