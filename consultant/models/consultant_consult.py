@@ -100,6 +100,15 @@ class consultant_consult(models.Model):
             user_partner = self.env['res.users'].browse(self._uid).partner_id.id
             followers.append([user_partner, vals['contact_id']])
             vals['message_follower_ids'] = [[6, 0, followers[0]]]
+        #keep only 5 main roles:
+        if 'main_role_ids' in vals and vals['main_role_ids']:
+            vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
+        #keep only 2 future roles:
+        if 'future_role_ids' in vals and vals['future_role_ids']:
+            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-2:] ]]
+        #keep only 10 main competences:
+        if 'main_competence_ids' in vals and vals['main_competence_ids']:
+            vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
         return super(consultant_consult, self).create(vals)
 
     @api.multi
@@ -114,6 +123,15 @@ class consultant_consult(models.Model):
                     existing_followers.append(follower.partner_id.id)
             if vals['contact_id'] not in existing_followers:
                 self._cr.execute("insert into mail_followers(res_model, res_id, partner_id)values('%s', %s, %s);"%(self._name, self.id, vals['contact_id']))
+        #keep only 5 main roles:
+        if 'main_role_ids' in vals and vals['main_role_ids']:
+            vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
+        #keep only 2 future roles:
+        if 'future_role_ids' in vals and vals['future_role_ids']:
+            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-2:] ]]
+        #keep only 10 main competences:
+        if 'main_competence_ids' in vals and vals['main_competence_ids']:
+            vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
         return super(consultant_consult, self).write(vals)
 
     @api.onchange('main_role_ids')
