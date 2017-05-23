@@ -40,9 +40,9 @@ class consultant_consult(models.Model):
     contact_no = fields.Char(related="contact_id.mobile", string="Telephone")
     category_ids = fields.Many2many('res.partner.category', 'res_partner_category_consultant_rel', 'consultant_id', 'category_id', 'Tags')
 
-    main_role_ids = fields.Many2many('consultant.role', 'consultant_consult_main_role_rel', 'consultant_id', 'role_id', 'Main Roles')
-    main_competence_ids = fields.Many2many('consultant.competence', 'consultant_consult_main_competence_rel', 'consultant_id', 'competence_id', 'Main Competence')
-    future_role_ids = fields.Many2many('consultant.role', 'consultant_consult_future_role_rel', 'consultant_id', 'role_id', 'Future Roles')
+    main_role_ids = fields.Many2many('consultant.role.main', 'consultant_consult_role_main_rel', 'consultant_id', 'main_role_id', 'Main Roles')
+    main_competence_ids = fields.Many2many('consultant.competence.main', 'consultant_consult_competence_main_rel', 'consultant_id', 'main_competence_id', 'Main Competence')
+    future_role_ids = fields.Many2many('consultant.role.future', 'consultant_consult_role_future_rel', 'consultant_id', 'future_role_id', 'Future Roles')
     web_approved = fields.Boolean('Web profile approved')
 
     _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
