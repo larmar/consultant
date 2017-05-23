@@ -189,11 +189,15 @@ class consultant_consult(models.Model):
                                             opportunity_id=%s and 
                                             consultant_id=%s;"""%(opportunity_id, consultant.id))
 
+# Industry
+
 class consultant_industry(models.Model):
     _name = 'consultant.industry'
     _description = "Consultant Industry"
     
     name = fields.Char('Name')
+
+# Roles
 
 class consultant_role(models.Model):
     _name = 'consultant.role'
@@ -201,17 +205,47 @@ class consultant_role(models.Model):
 
     name = fields.Char('Name')
 
+# Main Roles
+
+class consultant_role_main(models.Model):
+    _name = 'consultant.role.main'
+    _description = "Consultant Main Roles"
+
+    name = fields.Char('Name')
+
+# Future Roles
+
+class consultant_role_future(models.Model):
+    _name = 'consultant.role.future'
+    _description = "Consultant Future Roles"
+
+    name = fields.Char('Name')
+
+# Competence
+
 class consultant_competence(models.Model):
     _name = 'consultant.competence'
     _description = "Consultant Competence"
 
     name = fields.Char('Name')
 
+# Main Competences
+
+class consultant_competence_main(models.Model):
+    _name = 'consultant.competence.main'
+    _description = "Consultant Main Competence"
+
+    name = fields.Char('Name')
+
+# Certificates
+
 class consultant_certificate(models.Model):
     _name = 'consultant.certificate'
     _description = "Consultant Certificate"
     
     name = fields.Char('Name')
+
+# Stages 
 
 class consultant_stage(models.Model):
     _name = "consultant.stage"
@@ -220,6 +254,8 @@ class consultant_stage(models.Model):
     name = fields.Char('Stage Name', required=True)
     fold = fields.Boolean('Show As Folded', default=False)
     sequence = fields.Integer('Sequence', default=1)
+
+# Regions
 
 class consultant_region(models.Model):
     _name = "consultant.region"

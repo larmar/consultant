@@ -307,6 +307,36 @@
       res_model="consultant.competence"
       view_mode="tree,form" />
 
+    <!-- Main Competence -->
+    <record id="consultant_competence_main_form" model="ir.ui.view">
+        <field name="name">consultant.competence.main.form</field>
+        <field name="model">consultant.competence.main</field>
+        <field name="arch" type="xml">
+            <form string="Main Competence">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_competence_main_tree" model="ir.ui.view">
+        <field name="name">consultant.competence.main.tree</field>
+        <field name="model">consultant.competence.main</field>
+        <field name="arch" type="xml">
+            <tree string="Competence">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_competence_main"
+      name="Main Competence"
+      res_model="consultant.competence.main"
+      view_mode="tree,form" />
+
     <!-- Certificate -->
     <record id="consultant_certificate_form" model="ir.ui.view">
         <field name="name">consultant.certificate.form</field>
@@ -428,11 +458,101 @@
       res_model="consultant.role"
       view_mode="tree,form" />
 
+    <!-- Main Roles -->
+    <record id="consultant_role_main_form" model="ir.ui.view">
+        <field name="name">consultant.role.main.form</field>
+        <field name="model">consultant.role.main</field>
+        <field name="arch" type="xml">
+            <form string="Main Roles">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_role_main_tree" model="ir.ui.view">
+        <field name="name">consultant.role.main.tree</field>
+        <field name="model">consultant.role.main</field>
+        <field name="arch" type="xml">
+            <tree string="Main Roles">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_role_main"
+      name="Main Roles"
+      res_model="consultant.role.main"
+      view_mode="tree,form" />
+
+    <!-- Future Roles -->
+    <record id="consultant_role_future_form" model="ir.ui.view">
+        <field name="name">consultant.role.future.form</field>
+        <field name="model">consultant.role.future</field>
+        <field name="arch" type="xml">
+            <form string="Future Roles">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="consultant_role_future_tree" model="ir.ui.view">
+        <field name="name">consultant.role.future.tree</field>
+        <field name="model">consultant.role.future</field>
+        <field name="arch" type="xml">
+            <tree string="Future Roles">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_consultant_role_future"
+      name="Future Roles"
+      res_model="consultant.role.future"
+      view_mode="tree,form" />
+
     <!-- Consultant - Configuration menus -->
-    <menuitem id="menu_consultant_configuration_competence"
-        action="action_consultant_competence"
+    <menuitem id="menu_consultant_configuration_competence_config"
+        name="Competences"
         parent="menu_consultant_configuration"
         sequence="3"/>
+
+        <menuitem id="menu_consultant_configuration_competence"
+            action="action_consultant_competence"
+            parent="menu_consultant_configuration_competence_config"
+            sequence="1"/>
+
+        <menuitem id="menu_consultant_configuration_competence_main"
+            action="action_consultant_competence_main"
+            parent="menu_consultant_configuration_competence_config"
+            sequence="2"/>
+
+    <menuitem id="menu_consultant_configuration_role_config"
+        name="Roles"
+        parent="menu_consultant_configuration"
+        sequence="4"/>
+
+        <menuitem id="menu_consultant_configuration_role"
+            action="action_consultant_role"
+            parent="menu_consultant_configuration_role_config"
+            sequence="1"/>
+
+        <menuitem id="menu_consultant_configuration_role_main"
+            action="action_consultant_role_main"
+            parent="menu_consultant_configuration_role_config"
+            sequence="2"/>
+
+        <menuitem id="menu_consultant_configuration_role_future"
+            action="action_consultant_role_future"
+            parent="menu_consultant_configuration_role_config"
+            sequence="3"/>
 
     <menuitem id="menu_consultant_configuration_certificate"
         action="action_consultant_certificate"
@@ -444,15 +564,10 @@
         parent="menu_consultant_configuration"
         sequence="7"/>
 
-    <menuitem id="menu_consultant_configuration_role"
-        action="action_consultant_role"
-        parent="menu_consultant_configuration"
-        sequence="9"/>
-
     <menuitem id="menu_consultant_configuration_region"
         action="action_consultant_region"
         parent="menu_consultant_configuration"
-        sequence="11"/>
+        sequence="15"/>
 
   </data>
 </odoo>
