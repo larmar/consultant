@@ -3,7 +3,10 @@ access_consultant_crm_lead_user,crm.lead.consultant.user,crm.model_crm_lead,base
 access_consultant_consult_user,consultant.consult.user,model_consultant_consult,base.group_consultant_user,1,1,1,0
 access_consultant_industry_user,consultant.industry.user,model_consultant_industry,base.group_consultant_user,1,0,0,0
 access_consultant_role_user,consultant.role.user,model_consultant_role,base.group_consultant_user,1,0,0,0
+access_consultant_role_main_user,consultant.role.main.user,model_consultant_role_main,base.group_consultant_user,1,0,0,0
+access_consultant_role_future_user,consultant.role.future.user,model_consultant_role_future,base.group_consultant_user,1,0,0,0
 access_consultant_competence_user,consultant.competence.user,model_consultant_competence,base.group_consultant_user,1,0,0,0
+access_consultant_competence_main_user,consultant.competence.main.user,model_consultant_competence_main,base.group_consultant_user,1,0,0,0
 access_consultant_certificate_user,consultant.certificate.user,model_consultant_certificate,base.group_consultant_user,1,0,0,0
 access_consultant_stage_user,consultant.stage.user,model_consultant_stage,base.group_consultant_user,1,0,0,0
 ,,,,,,,
@@ -12,6 +15,9 @@ access_consultant_consult_manager,consultant.consult.manager,model_consultant_co
 access_consultant_industry_manager,consultant.industry.manager,model_consultant_industry,base.group_consultant_manager,1,1,1,1
 access_consultant_role_manager,consultant.role.manager,model_consultant_role,base.group_consultant_manager,1,1,1,1
 access_consultant_competence_manager,consultant.competence.manager,model_consultant_competence,base.group_consultant_manager,1,1,1,1
+access_consultant_role_main_manager,consultant.role.main.manager,model_consultant_role_main,base.group_consultant_manager,1,1,1,1
+access_consultant_role_future_manager,consultant.role.future.manager,model_consultant_role_future,base.group_consultant_manager,1,1,1,1
+access_consultant_competence_main_manager,consultant.competence.main.manager,model_consultant_competence_main,base.group_consultant_manager,1,1,1,1
 access_consultant_certificate_manager,consultant.certificate.manager,model_consultant_certificate,base.group_consultant_manager,1,1,1,1
 access_consultant_stage_manager,consultant.stage.manager,model_consultant_stage,base.group_consultant_manager,1,1,1,1
 ,,,,,,,
