@@ -1,0 +1,62 @@
+<odoo>
+
+    <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website Consultant Profiles">
+      <xpath expr="." position="inside">
+          <link rel='stylesheet' href='/website_consultant/static/src/less/website_consultant.less'/>
+      </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_consultant_profile" name="Portal layout : consultant menu entries" inherit_id="website_portal.portal_layout" priority="25">
+        <xpath expr="//ul[contains(@class,'o_portal_submenu')]" position="inside">
+            <li groups="website_consultant.group_portal_consultant">
+                <a href="/my/consultants">Profiles</a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_consultants" name="Portal My Home : consultant entries" inherit_id="website_portal.portal_my_home" priority="25">
+        <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside">
+            <h3 class="page-header" groups="website_consultant.group_portal_consultant">
+                <a href="/my/consultants">Your Profiles
+                    <small class="ml8">
+                        <t t-if="profiles_count">
+                            <span class='badge'><t t-esc="profiles_count"/></span>
+                        </t>
+                        <t t-if="not profiles_count">
+                            There are currently no consultant profiles linked to your account.
+                        </t>
+                    </small>
+                </a>
+            </h3>
+        </xpath>
+    </template>
+
+    <template id="portal_my_consultants" name="My Profiles">
+      <t t-call="website_portal.portal_layout">
+        <h3 class="page-header">Your Profiles</h3>
+        <t t-if="not consultants">
+            <p>There are currently no consultant profiles linked to your account.</p>
+        </t>
+        <t t-if="consultants">
+            <table class="table table-hover o_my_status_table">
+                <thead>
+                  <tr class="active">
+                    <th>Consultant Name</th>
+                    </tr>
+                </thead>
+                <t t-foreach="consultants" t-as="consultant">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/consultants/#{consultant.id}?#{keep_query()}"><t t-esc="consultant.name"/></a>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+            <div t-if="pager" class="o_portal_pager text-center">
+              <t t-call="website.pager"/>
+            </div>
+        </t>
+      </t>
+    </template>
+
+</odoo>

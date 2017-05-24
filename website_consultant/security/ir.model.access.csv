@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consultant_consult website_portal,consultant.consult website,consultant.model_consultant_consult,website_consultant.group_portal_consultant,1,0,0,0
