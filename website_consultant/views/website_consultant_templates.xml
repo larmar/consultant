@@ -79,6 +79,56 @@
                 </div>
                 <h1><t t-esc="consultant.name"/></h1>
                 <br/>
+                <form action="/my/consultants/#{consultant.id}?#{keep_query()}" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_website_portal_details">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+                                    <label class="control-label" for="available">Next Available</label>
+                                    <h3 t-if="consultant.available"><i><span t-field="consultant.available"/></i></h3>
+                                    <span t-if="not consultant.available" style="padding-left:10px;">Availability Not Set</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_role_ids">Main Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_role.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.main_role_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_competence_ids">Main Competence</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_competence.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.main_competence_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="future_role_ids">Future Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="future_role.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.future_role_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
               </div>
               
