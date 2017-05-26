@@ -40,14 +40,18 @@
         <t t-if="consultants">
             <table class="table table-hover o_my_status_table">
                 <thead>
-                  <tr class="active">
-                    <th>Consultant Name</th>
+                    <tr class="active">
+                        <th>Consultant Name</th>
+                        <th>Next Available</th>
                     </tr>
                 </thead>
                 <t t-foreach="consultants" t-as="consultant">
                     <tr>
                         <td>
                             <a t-attf-href="/my/consultants/#{consultant.id}?#{keep_query()}"><t t-esc="consultant.name"/></a>
+                        </td>
+                        <td>
+                            <span t-field="consultant.available"/>
                         </td>
                     </tr>
                 </t>
