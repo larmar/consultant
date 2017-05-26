@@ -59,4 +59,33 @@
       </t>
     </template>
 
+    <template id="consultants_followup" name="Consultant">
+      <t t-call="website.layout">
+        <div id="wrap">
+            <div class="container">
+              <div class="oe_structure">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb mt8">
+                            <li><a href="/my/home"><i class="fa fa-home"/></a></li>
+                            <li>
+                              <a t-attf-href="/my/#consultants?{{ keep_query()}}">My Profiles</a>
+                            </li>
+                            <li>
+                              Consultant
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <h1><t t-esc="consultant.name"/></h1>
+                <br/>
+
+              </div>
+              
+              </div>
+              <div class="oe_structure mb32"/>
+          </div>
+      </t>
+    </template>
+
 </odoo>

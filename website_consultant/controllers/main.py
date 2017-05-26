@@ -65,6 +65,18 @@ class website_account(website_account):
         })
         return request.render("website_consultant.portal_my_consultants", values)
 
+    @http.route(['/my/consultants/<int:consultant>'], type='http', auth="user", website=True)
+    def consultants_followup(self, consultant=None, **kw):
+        consultant = request.env['consultant.consult'].browse([consultant])
+        try:
+            consultant.check_access_rights('read')
+            consultant.check_access_rule('read')
+        except AccessError:
+            return request.render("website.403")
+        return request.render("website_consultant.consultants_followup", {
+            'consultant': consultant.sudo(),
+        })
+
     def details_form_validate(self, data):
         error, error_message = super(website_account, self).details_form_validate(data)
         return error, error_message
