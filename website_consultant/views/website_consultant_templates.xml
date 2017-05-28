@@ -81,8 +81,18 @@
                         </ol>
                     </div>
                 </div>
-                <h1><t t-esc="consultant.name"/></h1>
+                <div class="row">
+                	<div class="col-md-12" style="display: inline-block">
+                		<a class="btn btn-info" t-att-href="'/web#return_label=Website&amp;model=consultant.consult&amp;id=%s&amp;view_type=form' % (consultant.id)">Edit</a>
+                		<h1><t t-esc="consultant.name"/></h1> 
+                	</div>
+                </div>
+
+                <!-- Website edit mode -->
+                <!--a t-attf-href="/my/consultants/edit/#{consultant.id}?#{keep_query()}" class="btn btn-default">Edit</a-->
+
                 <br/>
+                
                 <form action="/my/consultants/#{consultant.id}?#{keep_query()}" method="post">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <div class="row o_website_portal_details">
@@ -126,6 +136,79 @@
                                     </t>
                                     <t t-if="not consultant.future_role_ids">
                                         Not Defined
+                                    </t>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+              </div>
+              
+              </div>
+              <div class="oe_structure mb32"/>
+          </div>
+      </t>
+    </template>
+
+
+	<!-- TODO Consultant Profile - Edit mode -->
+    <template id="consultants_profile_update" name="Consultant Profile Update">
+      <t t-call="website.layout">
+        <div id="wrap">
+            <div class="container">
+              <div class="oe_structure">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb mt8">
+                            <li><a href="/my/home"><i class="fa fa-home"/></a></li>
+                            <li>
+                              <a t-attf-href="/my/#consultants?{{ keep_query()}}">My Profiles</a>
+                            </li>
+                            <li>
+                              Consultant
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <h1><t t-esc="consultant.name"/></h1>
+                <br/>
+                <form action="/my/consultants/edit/#{consultant}?#{keep_query()}" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_website_portal_details">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+                                    <label class="control-label" for="available">Next Available</label>
+                                    <h3 t-if="consultant.available"><i><span t-field="consultant.available"/></i></h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_role_ids">Main Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_role.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                </div>
+                                
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_competence_ids">Main Competence</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_competence.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                </div>
+                                
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="future_role_ids">Future Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="future_role.name" style="padding-right:15px;"/>
+                                        </div>
                                     </t>
                                 </div>
 

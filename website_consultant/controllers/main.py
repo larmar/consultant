@@ -77,6 +77,20 @@ class website_account(website_account):
             'consultant': consultant.sudo(),
         })
 
+    @http.route(['/my/consultants/edit/<int:consultant>'], type='http', auth="user", website=True)
+    def consultants_profile_update(self, consultant=None, **kw):
+        """TODO : to be used for website portal edit mode
+        """
+        consultant = request.env['consultant.consult'].browse([consultant])
+        try:
+            consultant.check_access_rights('read')
+            consultant.check_access_rule('read')
+        except AccessError:
+            return request.render("website.403")
+        return request.render("website_consultant.consultants_profile_update", {
+            'consultant': consultant.sudo(),
+        })
+
     def details_form_validate(self, data):
         error, error_message = super(website_account, self).details_form_validate(data)
         return error, error_message
