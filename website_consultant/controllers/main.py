@@ -87,8 +87,16 @@ class website_account(website_account):
             consultant.check_access_rule('read')
         except AccessError:
             return request.render("website.403")
+        
+        main_roles = request.env['consultant.role.main'].sudo().search([])
+        main_competence = request.env['consultant.competence.main'].sudo().search([])
+        future_roles = request.env['consultant.role.future'].sudo().search([])
+
         return request.render("website_consultant.consultants_profile_update", {
             'consultant': consultant.sudo(),
+            'main_roles': main_roles,
+            'future_roles': future_roles,
+            'main_competence': main_competence,
         })
 
     def details_form_validate(self, data):

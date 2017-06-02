@@ -83,7 +83,8 @@
                 </div>
                 <div class="row">
                 	<div class="col-md-12" style="display: inline-block">
-                		<a class="btn btn-info" t-att-href="'/web#return_label=Website&amp;model=consultant.consult&amp;id=%s&amp;view_type=form' % (consultant.id)">Edit</a>
+                		<!--a class="btn btn-info" t-att-href="'/web#return_label=Website&amp;model=consultant.consult&amp;id=%s&amp;view_type=form' % (consultant.id)">Edit</a-->
+                		<a t-attf-href="/my/consultants/edit/#{consultant.id}?#{keep_query()}" class="btn btn-default">Edit</a>
                 		<h1><t t-esc="consultant.name"/></h1> 
                 	</div>
                 </div>
@@ -138,7 +139,6 @@
                                         Not Defined
                                     </t>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -172,47 +172,159 @@
                         </ol>
                     </div>
                 </div>
-                <h1><t t-esc="consultant.name"/></h1>
-                <br/>
+
                 <form action="/my/consultants/edit/#{consultant}?#{keep_query()}" method="post">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <h1><t t-esc="consultant.name"/></h1>
+
                     <div class="row o_website_portal_details">
                         <div class="col-md-8">
                             <div class="row">
                                 <div t-attf-class="form-group col-lg-6">
                                     <label class="control-label" for="available">Next Available</label>
-                                    <h3 t-if="consultant.available"><i><span t-field="consultant.available"/></i></h3>
+                                    <br/>
+                                    <h4><input type="date" t-att-value="consultant.available"/></h4>
                                 </div>
                             </div>
+                            
                             <div class="row">
-                                <div t-attf-class="form-group col-xs-4">
-                                    <label class="control-label" for="main_role_ids">Main Roles</label><br/>
-                                    <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role"> 
-                                        <div class="oe_kanban_details" style="display: inline-block;">
-                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_role.name" style="padding-right:15px;"/>
-                                        </div>
-                                    </t>
-                                </div>
-                                
-                                <div t-attf-class="form-group col-xs-4">
-                                    <label class="control-label" for="main_competence_ids">Main Competence</label><br/>
-                                    <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence"> 
-                                        <div class="oe_kanban_details" style="display: inline-block;">
-                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_competence.name" style="padding-right:15px;"/>
-                                        </div>
-                                    </t>
-                                </div>
-                                
-                                <div t-attf-class="form-group col-xs-4">
-                                    <label class="control-label" for="future_role_ids">Future Roles</label><br/>
-                                    <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role"> 
-                                        <div class="oe_kanban_details" style="display: inline-block;">
-                                            <span t-attf-class="label #{'label-primary'}" t-esc="future_role.name" style="padding-right:15px;"/>
-                                        </div>
-                                    </t>
+                            	<!-- Main Roles - Upto 5 choices -->
+                            	<div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_roles">Main Roles</label>
+
+                                    <select name="main_role1" class="form-control" >
+                                        <option value="">Role 1</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                            <option t-att-value="role.id" > 
+                                                <t t-esc="role.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role2" class="form-control" >
+                                        <option value="">Role 2</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" > 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role3" class="form-control" >
+                                        <option value="">Role 3</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" > 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role4" class="form-control" >
+                                        <option value="">Role 4</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" > 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role5" class="form-control" >
+                                        <option value="">Role 5</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" > 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
                                 </div>
 
+                                <!-- Main Competence - Upto 5 choices -->
+                            	<div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_competence">Main Competence</label>
+
+                                    <select name="main_competence1" class="form-control" >
+                                        <option value="">Competence 1</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" > 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence2" class="form-control" >
+                                        <option value="">Competence 2</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" > 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence3" class="form-control" >
+                                        <option value="">Competence 3</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" > 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence4" class="form-control" >
+                                        <option value="">Competence 4</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" > 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence5" class="form-control" >
+                                        <option value="">Competence 5</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" > 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <!-- Future Roles - Upto 3 choices -->
+                            	<div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="future_roles">Future Roles</label>
+
+                                    <select name="future_role1" class="form-control" >
+                                        <option value="">Future Role 1</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" > 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role2" class="form-control" >
+                                        <option value="">Future Role 2</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" > 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role3" class="form-control" >
+                                        <option value="">Future Role 3</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" > 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+
                             </div>
+
                         </div>
                     </div>
                 </form>
