@@ -63,6 +63,34 @@ class website_account(website_account):
             'archive_groups': archive_groups,
             'default_url': '/my/consultants',
         })
+
+        data = kw
+        if data:
+            consultant_id = data.get('consultant_id', False)
+            if consultant_id: 
+                consultant = request.env['consultant.consult'].browse([int(consultant_id)])
+            
+            main_competence, main_roles, future_roles = [], [], []
+            for i in range(1, 6):
+                competence_str = 'main_competence'+str(i)
+                if competence_str in data and data[competence_str]:
+                    main_competence.append(int(data[competence_str]))
+                
+                mrole_str = 'main_role'+str(i)
+                if mrole_str in data and data[mrole_str]:
+                    main_roles.append(int(data[mrole_str]))
+                
+                frole_str = 'future_role'+str(i)
+                if frole_str in data and data[frole_str]:
+                    future_roles.append(int(data[frole_str]))
+
+            vals = {}
+            vals['main_competence_ids'] = [[6, 0, main_competence]]
+            vals['main_role_ids'] = [[6, 0, main_roles]]
+            vals['future_role_ids'] = [[6, 0, future_roles]]
+            vals['available'] = data.get('next_available')
+            consultant.write(vals)
+            return request.redirect('/my/consultants/%s'%(str(consultant_id)))
         return request.render("website_consultant.portal_my_consultants", values)
 
     @http.route(['/my/consultants/<int:consultant>'], type='http', auth="user", website=True)

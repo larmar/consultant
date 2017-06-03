@@ -5,6 +5,4 @@
 #    Copyright (C) 2016-Today Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
 #
 ##############################################################################
-
-from . import controllers
-from . import models
+from . import consultant

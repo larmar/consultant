@@ -73,7 +73,7 @@
                         <ol class="breadcrumb mt8">
                             <li><a href="/my/home"><i class="fa fa-home"/></a></li>
                             <li>
-                              <a t-attf-href="/my/#consultants?{{ keep_query()}}">My Profiles</a>
+                              <a t-attf-href="/my/consultants">My Profiles</a>
                             </li>
                             <li>
                               Consultant
@@ -173,10 +173,17 @@
                     </div>
                 </div>
 
-                <form action="/my/consultants/edit/#{consultant}?#{keep_query()}" method="post">
+                <form action="/my/consultants/" method="post">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input name="consultant_id" type="hidden" t-att-value="consultant.id"/>
 
                     <h1><t t-esc="consultant.name"/></h1>
+
+                    <div class="col-md-8" style="display: inline-block">
+						<button type="submit" class="btn btn-default btn-primary pull-right ">Confirm
+							<span class="fa fa-long-arrow-right" />
+						</button>
+					</div>
 
                     <div class="row o_website_portal_details">
                         <div class="col-md-8">
@@ -184,55 +191,55 @@
                                 <div t-attf-class="form-group col-lg-6">
                                     <label class="control-label" for="available">Next Available</label>
                                     <br/>
-                                    <h4><input type="date" t-att-value="consultant.available"/></h4>
+                                    <h4><input type="date" name="next_available" t-att-value="consultant.available"/></h4>
                                 </div>
                             </div>
                             
                             <div class="row">
                             	<!-- Main Roles - Upto 5 choices -->
-                            	<div t-attf-class="form-group col-lg-4">
+                            	<div id="main_role_selections" t-attf-class="form-group col-lg-4">
                                     <label class="control-label" for="main_roles">Main Roles</label>
 
-                                    <select name="main_role1" class="form-control" >
-                                        <option value="">Role 1</option>
+                                    <select id="main_role1" name="main_role1" class="form-control" >
+                                        <option value="">Select Main Role...</option>
                                         <t t-foreach="main_roles or []" t-as="role">
-                                            <option t-att-value="role.id" > 
+                                            <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('1'))"> 
                                                 <t t-esc="role.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_role2" class="form-control" >
-                                        <option value="">Role 2</option>
+                                        <option value="">Select Main Role...</option>
                                         <t t-foreach="main_roles or []" t-as="role">
-                                        	<option t-att-value="role.id" > 
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('2'))"> 
                                                 <t t-esc="role.name" />
 	                                        </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_role3" class="form-control" >
-                                        <option value="">Role 3</option>
+                                        <option value="">Select Main Role...</option>
                                         <t t-foreach="main_roles or []" t-as="role">
-                                        	<option t-att-value="role.id" > 
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('3'))"> 
                                                 <t t-esc="role.name" />
 	                                        </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_role4" class="form-control" >
-                                        <option value="">Role 4</option>
+                                        <option value="">Select Main Role...</option>
                                         <t t-foreach="main_roles or []" t-as="role">
-                                        	<option t-att-value="role.id" > 
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('4'))"> 
                                                 <t t-esc="role.name" />
 	                                        </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_role5" class="form-control" >
-                                        <option value="">Role 5</option>
+                                        <option value="">Select Main Role...</option>
                                         <t t-foreach="main_roles or []" t-as="role">
-                                        	<option t-att-value="role.id" > 
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('5'))"> 
                                                 <t t-esc="role.name" />
 	                                        </option>
                                         </t>
@@ -244,45 +251,45 @@
                                     <label class="control-label" for="main_competence">Main Competence</label>
 
                                     <select name="main_competence1" class="form-control" >
-                                        <option value="">Competence 1</option>
+                                        <option value="">Select Main Competence...</option>
                                         <t t-foreach="main_competence or []" t-as="competence">
-                                            <option t-att-value="competence.id" > 
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('1'))"> 
                                                 <t t-esc="competence.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_competence2" class="form-control" >
-                                        <option value="">Competence 2</option>
+                                        <option value="">Select Main Competence...</option>
                                         <t t-foreach="main_competence or []" t-as="competence">
-                                            <option t-att-value="competence.id" > 
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('2'))"> 
                                                 <t t-esc="competence.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_competence3" class="form-control" >
-                                        <option value="">Competence 3</option>
+                                        <option value="">Select Main Competence...</option>
                                         <t t-foreach="main_competence or []" t-as="competence">
-                                            <option t-att-value="competence.id" > 
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('3'))"> 
                                                 <t t-esc="competence.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_competence4" class="form-control" >
-                                        <option value="">Competence 4</option>
+                                        <option value="">Select Main Competence...</option>
                                         <t t-foreach="main_competence or []" t-as="competence">
-                                            <option t-att-value="competence.id" > 
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('4'))"> 
                                                 <t t-esc="competence.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="main_competence5" class="form-control" >
-                                        <option value="">Competence 5</option>
+                                        <option value="">Select Main Competence...</option>
                                         <t t-foreach="main_competence or []" t-as="competence">
-                                            <option t-att-value="competence.id" > 
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('5'))"> 
                                                 <t t-esc="competence.name" />
                                             </option>
                                         </t>
@@ -294,27 +301,27 @@
                                     <label class="control-label" for="future_roles">Future Roles</label>
 
                                     <select name="future_role1" class="form-control" >
-                                        <option value="">Future Role 1</option>
+                                        <option value="">Select Future Role...</option>
                                         <t t-foreach="future_roles or []" t-as="frole">
-                                            <option t-att-value="frole.id" > 
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('1'))"> 
                                                 <t t-esc="frole.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="future_role2" class="form-control" >
-                                        <option value="">Future Role 2</option>
+                                        <option value="">Select Future Role...</option>
                                         <t t-foreach="future_roles or []" t-as="frole">
-                                            <option t-att-value="frole.id" > 
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('2'))"> 
                                                 <t t-esc="frole.name" />
                                             </option>
                                         </t>
                                     </select>
                                     <br/>
                                     <select name="future_role3" class="form-control" >
-                                        <option value="">Future Role 3</option>
+                                        <option value="">Select Future Role...</option>
                                         <t t-foreach="future_roles or []" t-as="frole">
-                                            <option t-att-value="frole.id" > 
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('3'))"> 
                                                 <t t-esc="frole.name" />
                                             </option>
                                         </t>
