@@ -33,5 +33,6 @@ Manage Consultants Profile Online
   		'security/ir.model.access.csv',
   		
       'views/website_consultant_templates.xml',
+      'views/website_portal_templates.xml',
 	],
 }

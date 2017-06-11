@@ -1,0 +1,13 @@
+<odoo>
+
+	<!-- Remove Change button -->
+	<template inherit_id="website_portal.portal_layout" id="website_portal_hide_change_button">
+		<div class="o_my_details" position="replace">
+			<div class="o_my_details">
+                <h3 class="page-header">Your Details</h3>
+                <div t-field="user.partner_id" t-options='{"widget": "contact", "fields": ["email", "phone", "address", "name"]}'/>
+            </div>
+        </div>
+	</template>
+
+</odoo>
