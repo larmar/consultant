@@ -164,7 +164,7 @@
                         <ol class="breadcrumb mt8">
                             <li><a href="/my/home"><i class="fa fa-home"/></a></li>
                             <li>
-                              <a t-attf-href="/my/#consultants?{{ keep_query()}}">My Profiles</a>
+                              <a t-attf-href="/my/consultants">My Profiles</a>
                             </li>
                             <li>
                               Consultant
@@ -184,6 +184,14 @@
 							<span class="fa fa-long-arrow-right" />
 						</button>
 					</div>
+
+                    <div class="col-md-8" style="display: inline-block">
+                        <div class="pull-right">
+                            <label style="font-size:13px;"><i> By clicking "Confirm", I agree to NOX's <a href="#">Terms and Conditions.</a></i></label>
+                            <input type="checkbox" name="web_approved" value="True" checked="checked" t-if="consultant.web_approved"/>
+                            <input type="checkbox" name="web_approved" t-if="not consultant.web_approved"/>
+                        </div>
+                    </div>
 
                     <div class="row o_website_portal_details">
                         <div class="col-md-8">
