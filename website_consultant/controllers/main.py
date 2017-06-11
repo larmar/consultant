@@ -121,11 +121,14 @@ class website_account(website_account):
         main_competence = request.env['consultant.competence.main'].sudo().search([])
         future_roles = request.env['consultant.role.future'].sudo().search([])
 
+        nox_document = request.env['nox.document.url'].sudo().search([], limit=1)
+        nox_document_url = nox_document and nox_document.url or ''
         return request.render("website_consultant.consultants_profile_update", {
             'consultant': consultant.sudo(),
             'main_roles': main_roles,
             'future_roles': future_roles,
             'main_competence': main_competence,
+            'nox_document_url': nox_document_url,
         })
 
     def details_form_validate(self, data):

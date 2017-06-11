@@ -187,7 +187,11 @@
 
                     <div class="col-md-8" style="display: inline-block">
                         <div class="pull-right">
-                            <label style="font-size:13px;"><i> By clicking "Confirm", I agree to NOX's <a href="#">Terms and Conditions.</a></i></label>
+                            <label style="font-size:13px;">
+                                <i> By clicking "Confirm", I agree to NOX's 
+                                    <a t-attf-href="{{ nox_document_url }}" title="NOX Terms &amp; Conditions" target="_blank">Terms and Conditions.</a>
+                                </i>
+                            </label>
                             <input type="checkbox" name="web_approved" value="True" checked="checked" t-if="consultant.web_approved"/>
                             <input type="checkbox" name="web_approved" t-if="not consultant.web_approved"/>
                         </div>
