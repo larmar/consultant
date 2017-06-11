@@ -1,0 +1,8 @@
+<odoo>
+	<data noupdate="1">
+
+		<record id="default_nox_document" model="nox.document.url">
+		</record>
+
+	</data>
+</odoo>
