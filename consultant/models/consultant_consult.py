@@ -43,7 +43,7 @@ class consultant_consult(models.Model):
     main_role_ids = fields.Many2many('consultant.role.main', 'consultant_consult_role_main_rel', 'consultant_id', 'main_role_id', 'Main Roles')
     main_competence_ids = fields.Many2many('consultant.competence.main', 'consultant_consult_competence_main_rel', 'consultant_id', 'main_competence_id', 'Main Competence')
     future_role_ids = fields.Many2many('consultant.role.future', 'consultant_consult_role_future_rel', 'consultant_id', 'future_role_id', 'Future Roles')
-    web_approved = fields.Boolean('Web profile approved')
+    web_approved = fields.Boolean('Web profile approved', track_visibility='onchange')
     user_id = fields.Many2one('res.users', 'Related User')
 
     _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
