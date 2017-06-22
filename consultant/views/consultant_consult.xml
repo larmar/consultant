@@ -62,6 +62,7 @@
               <group name="group_right">
                 <field name="contact_id"/>
                 <field name="partner_id" />
+                <field name="user_id"/>
                 <field name="category_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags" invisible="1"/>
                 <field name="main_role_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
                 <field name="main_competence_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
