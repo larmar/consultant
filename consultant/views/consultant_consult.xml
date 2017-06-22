@@ -57,6 +57,7 @@
                 <field name="available" />
                 <field name="opportunity_ids" widget="many2many_tags"/>
                 <field name="priority" widget="priority" />
+                <field name="web_approved"/>
                 <field name="region_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
               </group>
               <group name="group_right">
@@ -67,7 +68,6 @@
                 <field name="main_role_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
                 <field name="main_competence_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
                 <field name="future_role_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
-                <field name="web_approved"/>
               </group>
             </group>
                     <notebook>
