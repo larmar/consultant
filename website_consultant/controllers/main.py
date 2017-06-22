@@ -19,11 +19,11 @@ class website_account(website_account):
     def account(self, **kw):
         """ Add consultant profiles to main account page """
         response = super(website_account, self).account(**kw)
-        partner = request.env.user.partner_id
+        user = request.env.user
 
         Consultant = request.env['consultant.consult']
         profiles_count = Consultant.sudo().search_count([
-            ('contact_id', '=', partner.id)
+            ('user_id', '=', user.id)
         ])
 
         response.qcontext.update({
@@ -34,10 +34,10 @@ class website_account(website_account):
     @http.route(['/my/consultants', '/my/consultants/page/<int:page>'], type='http', auth="user", website=True)
     def portal_my_consultants(self, page=1, date_begin=None, date_end=None, **kw):
         values = self._prepare_portal_layout_values()
-        partner = request.env.user.partner_id
+        user = request.env.user
         Consultant = request.env['consultant.consult']
 
-        domain = [('contact_id', '=', partner.id)]
+        domain = [('user_id', '=', user.id)]
 
         archive_groups = self._get_archive_groups('consultant.consult', domain)
         if date_begin and date_end:
