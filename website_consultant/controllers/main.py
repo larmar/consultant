@@ -67,9 +67,29 @@ class website_account(website_account):
         data = kw
         if data:
             consultant_id = data.get('consultant_id', False)
+            consultant = False
             if consultant_id: 
                 consultant = request.env['consultant.consult'].browse([int(consultant_id)])
             
+            #check if user selected Terms & Conditions check box otherwise show warning message:
+            if not data.get('web_approved'):
+                error_message = "You must accept Nox's Terms & Conditions to update Consultant Profile."
+        
+                main_roles = request.env['consultant.role.main'].sudo().search([])
+                main_competence = request.env['consultant.competence.main'].sudo().search([])
+                future_roles = request.env['consultant.role.future'].sudo().search([])
+
+                nox_document = request.env['nox.document.url'].sudo().search([], limit=1)
+                nox_document_url = nox_document and nox_document.url or ''
+                return request.render("website_consultant.consultants_profile_update", {
+                    'consultant': consultant.sudo(),
+                    'main_roles': main_roles,
+                    'future_roles': future_roles,
+                    'main_competence': main_competence,
+                    'nox_document_url': nox_document_url,
+                    'error_message': error_message,
+                })
+
             main_competence, main_roles, future_roles = [], [], []
             for i in range(1, 6):
                 competence_str = 'main_competence'+str(i)

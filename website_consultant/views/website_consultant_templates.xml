@@ -179,6 +179,10 @@
 
                     <h1><t t-esc="consultant.name"/></h1>
 
+                    <t t-if="error_message">
+                        <h4 class="text-danger" t-esc="error_message" />
+                    </t>
+
                     <div class="col-md-8" style="display: inline-block">
 						<button type="submit" class="btn btn-default btn-primary pull-right ">Confirm
 							<span class="fa fa-long-arrow-right" />
@@ -192,8 +196,7 @@
                                     <a t-attf-href="javascript:window.open('{{ nox_document_url }}', 'NOX Terms &amp; Conditions', 'width=900,height=600')">Terms and Conditions</a>
                                 </i>
                             </label>
-                            <input type="checkbox" name="web_approved" value="True" checked="checked" t-if="consultant.web_approved"/>
-                            <input type="checkbox" name="web_approved" t-if="not consultant.web_approved"/>
+                            <input type="checkbox" name="web_approved"/>
                         </div>
                     </div>
 
