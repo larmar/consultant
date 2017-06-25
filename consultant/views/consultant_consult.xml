@@ -33,6 +33,13 @@
         groups="base.group_consultant_manager"
         sequence="20"/>
 
+    <!-- Consultants Portal menus -->
+    <menuitem id="menu_consultant_configuration_portal"
+        name="Portal"
+        parent="menu_consultant_configuration"
+        groups="base.group_consultant_manager"
+        sequence="20"/>
+
 
     <!-- Consultant view -->
     <record id="view_form_consultant_consult" model="ir.ui.view">
