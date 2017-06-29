@@ -27,6 +27,8 @@ class crm_lead(models.Model):
     role_ids = fields.Many2many('consultant.role', string='Role')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
     competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
+    main_role_ids = fields.Many2many('consultant.role.main', string='Main Role')
+    main_competence_ids = fields.Many2many('consultant.competence.main', string='Main Competence')
 
     @api.multi
     def action_open_consultants(self):
@@ -70,7 +72,7 @@ class crm_lead(models.Model):
                 if not roles: f2 = True
                 if not competences: f3 = True
                 if not certificates: f4 = True
-                
+
                 for c_industry in consultant.industry_ids:
                     if c_industry.id in industries:
                         f1 = True
