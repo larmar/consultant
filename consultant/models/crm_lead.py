@@ -65,38 +65,29 @@ class crm_lead(models.Model):
         	
             consultants = self.env['consultant.consult'].search([('id','>',0)])        	
             for consultant in consultants:
-                flag = True
-                c_industries, c_roles, c_competences, c_certificates = [], [], [], []
-
+                f1, f2, f3, f4 = False, False, False, False
+                if not industries: f1 = True
+                if not roles: f2 = True
+                if not competences: f3 = True
+                if not certificates: f4 = True
+                
                 for c_industry in consultant.industry_ids:
-                    c_industries.append(c_industry.id)                    
-                for s_industry in industries:
-                    if s_industry not in c_industries:
-                        flag = False
-                        break
+                    if c_industry.id in industries:
+                        f1 = True
 
                 for c_role in consultant.role_ids:
-                    c_roles.append(c_role.id)
-                for s_role in roles:
-                    if s_role not in c_roles:
-                        flag = False
-                        break
+                    if c_role.id in roles:
+                        f2 = True
 
                 for c_competence in consultant.competence_ids:
-                    c_competences.append(c_competence.id)
-                for s_competence in competences:
-                    if s_competence not in c_competences:
-                        flag = False
-                        break
+                    if c_competence.id in competences:
+                        f3 = True
 
                 for c_certificate in consultant.certificate_ids:
-                    c_certificates.append(c_certificate.id)
-                for s_certificate in certificates:
-                    if s_certificate not in c_certificates:
-                        flag = False
-                        break
+                    if c_certificate.id in certificates:
+                        f4 = True
 
-                if flag is True:
+                if all([f1, f2, f3, f4]):
                     result.append(consultant.id)
         res['domain'] = [['id', 'in', result]]
         return res
