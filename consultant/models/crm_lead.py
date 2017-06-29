@@ -53,7 +53,7 @@ class crm_lead(models.Model):
         """Search Consultants by Industry | Role | Competence | Certificate & show in list view
         """
         res = self.env['ir.actions.act_window'].for_xml_id('consultant', 'action_consultant_consult')
-        industries, roles, competences, certificates = [], [], [], []
+        industries, roles, competences, certificates, mroles, mcompetences = [], [], [], [], [], []
         result = []
         for oppr in self:
             for industry in oppr.industry_ids:
@@ -64,14 +64,20 @@ class crm_lead(models.Model):
                 competences.append(competence.id)
             for certificate in oppr.certificate_ids:
                 certificates.append(certificate.id)
+            for role in oppr.main_role_ids:
+                mroles.append(role.id)
+            for competence in oppr.main_competence_ids:
+                mcompetences.append(competence.id)
         	
             consultants = self.env['consultant.consult'].search([('id','>',0)])        	
             for consultant in consultants:
-                f1, f2, f3, f4 = False, False, False, False
+                f1, f2, f3, f4, f5, f6 = False, False, False, False, False, False
                 if not industries: f1 = True
                 if not roles: f2 = True
                 if not competences: f3 = True
                 if not certificates: f4 = True
+                if not mroles: f5 = True
+                if not mcompetences: f6 = True
 
                 for c_industry in consultant.industry_ids:
                     if c_industry.id in industries:
@@ -89,7 +95,15 @@ class crm_lead(models.Model):
                     if c_certificate.id in certificates:
                         f4 = True
 
-                if all([f1, f2, f3, f4]):
+                for c_role in consultant.main_role_ids:
+                    if c_role.id in mroles:
+                        f5 = True
+
+                for c_competence in consultant.main_competence_ids:
+                    if c_competence.id in mcompetences:
+                        f6 = True
+
+                if all([f1, f2, f3, f4, f5, f6]):
                     result.append(consultant.id)
         res['domain'] = [['id', 'in', result]]
         return res
