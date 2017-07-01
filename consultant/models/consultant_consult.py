@@ -36,7 +36,7 @@ class consultant_consult(models.Model):
     color = fields.Integer('Color Index')
     #opportunity_id = fields.Many2one('crm.lead', 'Opportunity', domain="[('type','=','opportunity')]")
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
-    contact_id = fields.Many2one('res.partner', 'Contact', track_visibility='onchange')
+    contact_id = fields.Many2one('res.partner', 'Business Contact', track_visibility='onchange')
     contact_no = fields.Char(related="contact_id.mobile", string="Telephone")
     category_ids = fields.Many2many('res.partner.category', 'res_partner_category_consultant_rel', 'consultant_id', 'category_id', 'Tags')
 

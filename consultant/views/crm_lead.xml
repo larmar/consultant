@@ -30,10 +30,10 @@
                         <group col="4">
                             <field name="main_role_ids" widget="many2many_tags"/>
                             <field name="main_competence_ids" widget="many2many_tags"/>
-                            <field name="industry_ids" widget="many2many_tags"/>
                             <field name="role_ids" widget="many2many_tags"/>
-                            <field name="certificate_ids" widget="many2many_tags"/>
                             <field name="competence_ids" widget="many2many_tags"/>
+                            <field name="industry_ids" widget="many2many_tags"/>
+                            <field name="certificate_ids" widget="many2many_tags" invisible="1"/>
                         </group>
                     </page>
                 </notebook>

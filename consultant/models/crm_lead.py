@@ -23,10 +23,10 @@ class crm_lead(models.Model):
     consultant_count = fields.Integer(compute='_consultant_count', string='# Consultants', copy=False, default=0)
 
     #consultant profile search fields:
-    industry_ids = fields.Many2many('consultant.industry', string='Industry')
+    industry_ids = fields.Many2many('consultant.industry', string='Industry/Customers')
     role_ids = fields.Many2many('consultant.role', string='Role')
     certificate_ids = fields.Many2many('consultant.certificate', string='Certifications')
-    competence_ids = fields.Many2many('consultant.competence', string='IT Competence')
+    competence_ids = fields.Many2many('consultant.competence', string='Competence')
     main_role_ids = fields.Many2many('consultant.role.main', string='Main Role')
     main_competence_ids = fields.Many2many('consultant.competence.main', string='Main Competence')
 
