@@ -227,10 +227,12 @@
         <field name="arch" type="xml">
             <search string="Consultants">
                 <field name="name" />
+                <field name="main_role_ids"/>
+                <field name="main_competence_ids"/>
                 <field name="industry_ids"/>
                 <field name="role_ids"/>
-                <field name="certificate_ids"/>
-                <field name="competence_ids"/>
+                <field name="certificate_ids" invisible="1"/>
+                <field name="competence_ids" string="Competence"/>
                 <field name="stage_id"/>
                 <field name="available" />
                 <field name="priority" />
