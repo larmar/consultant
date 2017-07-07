@@ -449,7 +449,7 @@
                     <header><div class="popup-title">NOX's Terms &amp; Conditions</div></header>
                     <hr/>
                     <section>
-                        <p class="popup-text"><t t-esc="nox_terms"/></p>
+                        <p class="popup-text"><t t-raw="nox_terms"/></p>
                     </section>
                     <br/><br/>
                     <section class="popup-buttons">
