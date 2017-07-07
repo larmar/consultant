@@ -449,7 +449,11 @@
                     <header><div class="popup-title">NOX's Terms &amp; Conditions</div></header>
                     <hr/>
                     <section>
-                        <p class="popup-text"><t t-raw="nox_terms"/></p>
+                        <p class="popup-text">
+                            <div style="padding-left:20px;">
+                                <t t-raw="nox_terms"/>
+                            </div>
+                        </p>
                     </section>
                     <section class="popup-buttons">
                         <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
