@@ -72,24 +72,24 @@ class website_account(website_account):
                 consultant = request.env['consultant.consult'].browse([int(consultant_id)])
             
             #check if user selected Terms & Conditions check box otherwise show warning message:
-            if not data.get('web_approved'):
+            if not consultant.user_id.nox_terms_read:
                 error_message = "You must accept Nox's Terms & Conditions to update Consultant Profile."
         
                 main_roles = request.env['consultant.role.main'].sudo().search([])
                 main_competence = request.env['consultant.competence.main'].sudo().search([])
                 future_roles = request.env['consultant.role.future'].sudo().search([])
 
-                nox_document = request.env['nox.document.url'].sudo().search([], limit=1)
-                nox_document_url = nox_document and nox_document.url or ''
+                nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
                 return request.render("website_consultant.consultants_profile_update", {
                     'consultant': consultant.sudo(),
                     'main_roles': main_roles,
                     'future_roles': future_roles,
                     'main_competence': main_competence,
-                    'nox_document_url': nox_document_url,
+                    'nox_terms': nox_terms and nox_terms.description or '',
                     'error_message': error_message,
                 })
 
+            #update consultant profile:
             main_competence, main_roles, future_roles = [], [], []
             for i in range(1, 6):
                 competence_str = 'main_competence'+str(i)
@@ -141,16 +141,23 @@ class website_account(website_account):
         main_competence = request.env['consultant.competence.main'].sudo().search([])
         future_roles = request.env['consultant.role.future'].sudo().search([])
 
-        nox_document = request.env['nox.document.url'].sudo().search([], limit=1)
-        nox_document_url = nox_document and nox_document.url or ''
+        nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
         return request.render("website_consultant.consultants_profile_update", {
             'consultant': consultant.sudo(),
             'main_roles': main_roles,
             'future_roles': future_roles,
             'main_competence': main_competence,
-            'nox_document_url': nox_document_url,
+            'nox_terms': nox_terms and nox_terms.description or '',
         })
 
     def details_form_validate(self, data):
         error, error_message = super(website_account, self).details_form_validate(data)
         return error, error_message
+
+    @http.route(['/website/confirm-web-approved'], type='http', auth="user", website=True)
+    def confirmTermsConditions(self):
+        """Check if Portal User has accepted NOX's Terms & Conditions
+        """
+        currentUser = request.env['res.users'].sudo().browse(request.uid)
+        currentUser.write({'nox_terms_read': True})
+        return request.redirect('/my/consultants')

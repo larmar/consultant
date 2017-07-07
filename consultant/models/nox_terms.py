@@ -27,3 +27,8 @@ class NoxTerms(models.Model):
         except Exception, e:
             _logger.error("Rule to prevent deletion of record(s) from nox_terms already exists.")
             pass
+
+class ResUsers(models.Model):
+    _inherit = "res.users"
+
+    nox_terms_read = fields.Boolean('NOX terms read')

@@ -2,7 +2,8 @@
 
     <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website Consultant Profiles">
       <xpath expr="." position="inside">
-          <link rel='stylesheet' href='/website_consultant/static/src/less/website_consultant.less'/>
+            <link rel='stylesheet' type="text/css" href='/website_consultant/static/src/css/website_consultant.css'/>
+            <script type="text/javascript" src="/website_consultant/static/src/js/website_consultant.js"></script>
       </xpath>
     </template>
 
@@ -184,7 +185,7 @@
                     </t>
 
                     <div class="col-md-8" style="display: inline-block">
-						<button type="submit" class="btn btn-default btn-primary pull-right ">Confirm
+						<button type="submit" class="btn btn-default btn-primary pull-right a-submit">Confirm
 							<span class="fa fa-long-arrow-right" />
 						</button>
 					</div>
@@ -193,14 +194,15 @@
                         <div class="pull-right">
                             <label style="font-size:13px;">
                                 <i> By clicking "Confirm", I agree to NOX's 
-                                    <a t-attf-href="javascript:window.open('{{ nox_document_url }}', 'NOX Terms &amp; Conditions', 'width=900,height=600')">Terms and Conditions</a>
+                                    <a href="javascript:confirmTerms()">Terms and Conditions</a>
                                 </i>
                             </label>
-                            <input type="checkbox" name="web_approved"/>
+                            <input t-if="consultant.user_id.nox_terms_read" type="checkbox" name="web_approved_status" checked="checked" disabled="disabled"/>
+                            <input t-if="not consultant.user_id.nox_terms_read" type="checkbox" name="web_approved_status_no" disabled="disabled"/>
                         </div>
                     </div>
 
-                    <div class="row o_website_portal_details">
+                    <div class="row o_website_portal_details" t-if="consultant.user_id.nox_terms_read">
                         <div class="col-md-8">
                             <div class="row">
                                 <div t-attf-class="form-group col-lg-6">
@@ -349,12 +351,132 @@
 
                         </div>
                     </div>
+
+
+                    <div class="row o_website_portal_details" t-if="not consultant.user_id.nox_terms_read">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+                                    <label class="control-label" for="available">Next Available</label>
+                                    <br/>
+                                    <h4><input type="date" name="next_available" t-att-value="consultant.available" readonly="readonly"/></h4>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <!-- Main Roles - Upto 5 choices -->
+                                <div id="main_role_selections" t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_roles">Main Roles</label>
+
+                                    <select id="main_role1" name="main_role1" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role2" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role3" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role4" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role5" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Role...</option>
+                                    </select>
+                                </div>
+
+                                <!-- Main Competence - Upto 5 choices -->
+                                <div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_competence">Main Competence</label>
+
+                                    <select name="main_competence1" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Competence...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence2" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Competence...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence3" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Competence...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence4" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Competence...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence5" class="form-control" readonly="readonly">
+                                        <option value="">Select Main Competence...</option>
+                                    </select>
+                                </div>
+
+                                <!-- Future Roles - Upto 3 choices -->
+                                <div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="future_roles">Future Roles</label>
+
+                                    <select name="future_role1" class="form-control" readonly="readonly">
+                                        <option value="">Select Future Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role2" class="form-control" readonly="readonly">
+                                        <option value="">Select Future Role...</option>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role3" class="form-control" readonly="readonly">
+                                        <option value="">Select Future Role...</option>
+                                    </select>
+                                </div>
+
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+
+                            </div>
+
+                        </div>
+                    </div>
                 </form>
 
-              </div>
+            </div>
               
-              </div>
-              <div class="oe_structure mb32"/>
+            </div>
+            <div class="oe_structure mb32"/>
+              
+            <xpath expr="//div['@id=wrap']" position="inside">
+                <div class="confirm-popup">
+                    <header><div class="popup-title">NOX's Terms &amp; Conditions</div></header>
+                    <hr/>
+                    <section>
+                        <p class="popup-text"><t t-esc="nox_terms"/></p>
+                    </section>
+                    <br/><br/>
+                    <section class="popup-buttons">
+                        <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
+                        <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept</button>
+                        <button t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-popup-reject">Reject</button>
+                        <button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-popup-reject">Close</button>
+
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    </section>
+                </div>
+                <script>
+                    $('.btn-popup-reject').on('click', function (e) {
+                        $('.confirm-popup').hide();
+                    });
+                    $('.btn-popup-update').on('click', function (e) {
+                        $('.confirm-popup').hide();
+
+                        $.get("/website/confirm-web-approved", function(data){
+                            var consultantid = document.getElementById('consultantid');
+                            window.location.href = '/my/consultants/edit/' + consultantid.value; 
+                        });
+
+                    });
+                </script>
+            </xpath>
+
           </div>
       </t>
     </template>
