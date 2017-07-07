@@ -451,7 +451,6 @@
                     <section>
                         <p class="popup-text"><t t-raw="nox_terms"/></p>
                     </section>
-                    <br/><br/>
                     <section class="popup-buttons">
                         <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
                         <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept</button>
