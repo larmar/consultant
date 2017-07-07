@@ -403,7 +403,7 @@
     </record>
 
     <act_window id="action_consultant_industry"
-      name="Industry"
+      name="Industry/Customers"
       res_model="consultant.industry"
       view_mode="tree,form" />
 
@@ -464,7 +464,7 @@
     </record>
 
     <act_window id="action_consultant_role"
-      name="Role"
+      name="Roles"
       res_model="consultant.role"
       view_mode="tree,form" />
 
@@ -564,10 +564,10 @@
             parent="menu_consultant_configuration_role_config"
             sequence="3"/>
 
-    <menuitem id="menu_consultant_configuration_certificate"
+    <!--menuitem id="menu_consultant_configuration_certificate"
         action="action_consultant_certificate"
         parent="menu_consultant_configuration"
-        sequence="5"/>
+        sequence="5"/-->
 
     <menuitem id="menu_consultant_configuration_industry"
         action="action_consultant_industry"
