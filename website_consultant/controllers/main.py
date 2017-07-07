@@ -73,13 +73,12 @@ class website_account(website_account):
             
             #check if user selected Terms & Conditions check box otherwise show warning message:
             if not consultant.user_id.nox_terms_read:
-                error_message = "You must accept Nox's Terms & Conditions to update Consultant Profile."
-        
                 main_roles = request.env['consultant.role.main'].sudo().search([])
                 main_competence = request.env['consultant.competence.main'].sudo().search([])
                 future_roles = request.env['consultant.role.future'].sudo().search([])
 
                 nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+                error_message = nox_terms and nox_terms.error_text or ''
                 return request.render("website_consultant.consultants_profile_update", {
                     'consultant': consultant.sudo(),
                     'main_roles': main_roles,
