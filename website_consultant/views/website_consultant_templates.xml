@@ -197,8 +197,8 @@
                                     <a href="javascript:confirmTerms()">Terms and Conditions</a>
                                 </i>
                             </label>
-                            <input t-if="consultant.user_id.nox_terms_read" type="checkbox" name="web_approved_status" checked="checked" disabled="disabled"/>
-                            <input t-if="not consultant.user_id.nox_terms_read" type="checkbox" name="web_approved_status_no" disabled="disabled"/>
+                            <input t-if="consultant.user_id.nox_terms_read" type="checkbox" checked="checked" disabled="disabled"/>
+                            <input t-if="not consultant.user_id.nox_terms_read" type="checkbox" disabled="disabled"/>
                         </div>
                     </div>
 

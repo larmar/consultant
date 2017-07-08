@@ -108,7 +108,7 @@ class website_account(website_account):
             vals['main_role_ids'] = [[6, 0, main_roles]]
             vals['future_role_ids'] = [[6, 0, future_roles]]
             vals['available'] = data.get('next_available')
-            vals['web_approved'] = data.get('web_approved', False)
+            vals['web_approved'] = True
             consultant.write(vals)
             return request.redirect('/my/consultants/%s'%(str(consultant_id)))
         return request.render("website_consultant.portal_my_consultants", values)
