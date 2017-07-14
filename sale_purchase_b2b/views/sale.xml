@@ -1,0 +1,29 @@
+<odoo>
+	<data>
+
+		<record id="view_order_form_po_b2b" model="ir.ui.view">
+            <field name="name">sale.order.po.b2b.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<button name="action_done" position="after">
+            		<button name="action_create_draft_po" type="object" string="Create Purchase Order" states="sale"/>
+            	</button>
+            	
+            	<notebook position="inside">
+            		<page name="purchase_order_lines" string="Back to Back Purchase Order">
+            			<group>
+            				<label string="Purchase Orders" attrs="{'invisible': [('purchase_line_check','=',False)]}" colspan="4"/>
+            				<label string="There are no Purchase Orders associated with this Sales Order." attrs="{'invisible': [('purchase_line_check','=',True)]}" colspan="4"/>
+            			</group>
+            			<group>
+            				<field name="purchase_line_check" invisible="1" colspan="4"/>
+            				<field name="purchase_line_ids" nolabel="1" colspan="4" attrs="{'invisible': [('purchase_line_check','=',False)]}" readonly="1"/>
+            			</group>
+            		</page>
+            	</notebook>
+            </field>
+        </record>
+
+	</data>
+</odoo>

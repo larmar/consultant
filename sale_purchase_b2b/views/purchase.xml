@@ -1,0 +1,20 @@
+<odoo>
+	<data>
+
+		<record id="purchase_order_po_b2b_form" model="ir.ui.view">
+            <field name="name">purchase.order.po.b2b.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+       			<field name="invoice_status" position="after">
+       				<field name="project_id"/>
+       			</field>
+                <field name="sequence" position="after">
+                    <field name="sale_id" invisible="1"/>
+                    <field name="account_analytic_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+	</data>
+</odoo>
