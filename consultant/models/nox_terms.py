@@ -17,7 +17,6 @@ class NoxTerms(models.Model):
 
     name = fields.Char('Name', default="NOX Terms & Conditions")
     description = fields.Html("Terms & Conditions")
-    error_text = fields.Text('Error Description')
 
     @api.model_cr
     def init(self):

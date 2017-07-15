@@ -16,9 +16,6 @@
 							<page string="Terms">
 								<field name="description" colspan="4"/>
 							</page>
-							<page string="Warning Message">
-								<field name="error_text" colspan="4"/>
-							</page>
 						</notebook>
 					</sheet>
 				</form>

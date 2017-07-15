@@ -78,14 +78,12 @@ class website_account(website_account):
                 future_roles = request.env['consultant.role.future'].sudo().search([])
 
                 nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
-                error_message = nox_terms and nox_terms.error_text or ''
                 return request.render("website_consultant.consultants_profile_update", {
                     'consultant': consultant.sudo(),
                     'main_roles': main_roles,
                     'future_roles': future_roles,
                     'main_competence': main_competence,
                     'nox_terms': nox_terms and nox_terms.description or '',
-                    'error_message': error_message,
                 })
 
             #update consultant profile:
@@ -122,11 +120,9 @@ class website_account(website_account):
         except AccessError:
             return request.render("website.403")
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
-        error_message = nox_terms and nox_terms.error_text or ''
         return request.render("website_consultant.consultants_followup", {
             'consultant': consultant.sudo(),
             'nox_terms': nox_terms and nox_terms.description or '',
-            'error_message': error_message,
         })
 
     @http.route(['/my/consultants/edit/<int:consultant>'], type='http', auth="user", website=True)
