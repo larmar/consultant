@@ -41,4 +41,4 @@ class NoxTerms(models.Model):
 class ResUsers(models.Model):
     _inherit = "res.users"
 
-    nox_terms_read = fields.Boolean('NOX terms read')
+    nox_terms_read = fields.Boolean('NOX Terms Accepted?')

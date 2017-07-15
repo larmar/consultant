@@ -38,5 +38,17 @@
 	        action="action_nox_terms"
 	        sequence="40"/>
 
+	    <!-- Nox Terms check box on Users -->
+	    <record id="view_users_nox_terms_form" model="ir.ui.view">
+            <field name="name">res.users.simplified.nox.terms.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_simple_form"/>
+            <field name="arch" type="xml">
+            	<field name="fax" position="after">
+            		<field name="nox_terms_read"/>
+            	</field>
+            </field>
+        </record>
+
 	</data>
 </odoo>
