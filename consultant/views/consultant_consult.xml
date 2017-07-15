@@ -64,7 +64,6 @@
                 <field name="available" />
                 <field name="opportunity_ids" widget="many2many_tags"/>
                 <field name="priority" widget="priority" />
-                <field name="web_approved"/>
                 <field name="region_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
               </group>
               <group name="group_right">
@@ -237,6 +236,8 @@
                 <field name="available" />
                 <field name="priority" />
                 <field name="opportunity_ids"/>
+                <field name="web_profile_viewed"/>
+                <field name="web_profile_edited"/>
                 <newline/>
                 <group expand="0" string="Group By">
                     <filter name="group_by_stage" string="Stages" context="{'group_by': 'stage_id'}"/>
