@@ -121,8 +121,12 @@ class website_account(website_account):
             consultant.check_access_rule('read')
         except AccessError:
             return request.render("website.403")
+        nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+        error_message = nox_terms and nox_terms.error_text or ''
         return request.render("website_consultant.consultants_followup", {
             'consultant': consultant.sudo(),
+            'nox_terms': nox_terms and nox_terms.description or '',
+            'error_message': error_message,
         })
 
     @http.route(['/my/consultants/edit/<int:consultant>'], type='http', auth="user", website=True)
