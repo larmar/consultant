@@ -236,8 +236,9 @@
                 <field name="available" />
                 <field name="priority" />
                 <field name="opportunity_ids"/>
-                <field name="web_profile_viewed"/>
-                <field name="web_profile_edited"/>
+
+                <filter name="web_profile_viewed" string="Web profile viewed" domain="[('web_profile_viewed','=',True)]"/>
+                <filter name="web_profile_edited" string="Web profile edited" domain="[('web_profile_edited','=',True)]"/>
                 <newline/>
                 <group expand="0" string="Group By">
                     <filter name="group_by_stage" string="Stages" context="{'group_by': 'stage_id'}"/>
