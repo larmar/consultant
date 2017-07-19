@@ -93,13 +93,13 @@
 
                         <label style="font-size:14px; color:#4490F7;" t-if="not consultant.user_id.nox_terms_read">
                             To EDIT, you must agree to NOX
-                            <a href="javascript:confirmTerms()" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
+                            <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
                         </label>
                         
                         <label style="font-size:14px; color:#4490F7; background-color:#DCDCDC; padding-right:300px; padding-top:8px; padding-bottom:8px;" t-if="consultant.user_id.nox_terms_read">
                             <input type="checkbox" name="nox_terms_accepted" checked="checked" disabled="disabled"/>
                             I accepted NOX's 
-                            <a href="javascript:confirmTerms()" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
+                            <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
                         </label>
                 	</div>
                 </div>
@@ -166,31 +166,30 @@
               <div class="oe_structure mb32"/>
 
               <xpath expr="//div['@id=wrap']" position="inside">
-                <div class="confirm-popup">
-                    <header><div class="popup-title">NOX's Terms &amp; Conditions</div></header>
-                    <hr/>
-                    <section>
-                        <p class="popup-text">
-                            <div style="padding-left:20px;">
-                                <t t-raw="nox_terms"/>
-                            </div>
-                        </p>
-                    </section>
-                    <section class="popup-buttons">
-                        <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
-                        <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept and Edit now</button>
-                        <button t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-popup-reject">Reject</button>
-                        <button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-reject">Close</button>
+                <div id="openTerms" class="modalDialog">
+                    <div>  
+                        <a href="#close" title="Close" class="close">X</a>
 
-                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                    </section>
+                        <h2>NOX Terms &amp; Conditions</h2>
+                        <div style="z-index: 5; overflow-y: scroll; max-height:370px;">
+                            <t t-raw="nox_terms"/>
+                        </div>
+                        <section class="popup-buttons">
+	                        <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
+	                        <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept and Edit now</button>
+	                        <button t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-popup-reject">Reject</button>
+	                        <button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-reject">Close</button>
+
+	                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    	</section>
+                    </div>
                 </div>
                 <script>
                     $('.btn-popup-reject').on('click', function (e) {
-                        $('.confirm-popup').hide();
+                        $('.modalDialog').hide();
                     });
                     $('.btn-popup-update').on('click', function (e) {
-                        $('.confirm-popup').hide();
+                        $('.modalDialog').hide();
 
                         $.get("/website/confirm-web-approved", function(data){
                             var consultantid = document.getElementById('consultantid');
@@ -237,7 +236,7 @@
                     <label style="font-size:14px; color:#4490F7; background-color:#DCDCDC; padding-right:300px; padding-top:8px; padding-bottom:8px;" t-if="consultant.user_id.nox_terms_read">
                         <input type="checkbox" name="nox_terms_accepted" checked="checked" disabled="disabled"/>
                             I accepted NOX's 
-                            <a href="javascript:confirmTerms()" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
+                            <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
                     </label>
                     <br/><br/>
 
@@ -408,18 +407,17 @@
               
             </div>
             <div class="oe_structure mb32"/>
-              
-            <xpath expr="//div['@id=wrap']" position="inside">
-                <div class="confirm-popup">
-                    <header><div class="popup-title">NOX's Terms &amp; Conditions</div></header>
-                    <hr/>
-                    <section>
-                        <p class="popup-text">
-                            <div style="padding-left:20px;">
-                                <t t-raw="nox_terms"/>
-                            </div>
-                        </p>
-                    </section>
+
+              <xpath expr="//div['@id=wrap']" position="inside">
+                <div id="openTerms" class="modalDialog">
+                    <div>  
+                        <a href="#close" title="Close" class="close">X</a>
+
+                        <h2>NOX Terms &amp; Conditions</h2>
+                        <div style="z-index: 5; overflow-y: scroll; max-height:370px;">
+                            <t t-raw="nox_terms"/>
+                        </div>
+                    </div>
                     <section class="popup-buttons">
                         <button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-reject">Close</button>
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -427,7 +425,7 @@
                 </div>
                 <script>
                     $('.btn-popup-reject').on('click', function (e) {
-                        $('.confirm-popup').hide();
+                        $('.modalDialog').hide();
                     });
                 </script>
             </xpath>
