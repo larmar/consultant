@@ -24,6 +24,7 @@ Manage Consultants Profile Online
   'depends': [
   		'consultant',  
   		'website_portal',
+      'website_mail',
   		],
   'application': False,
   'auto_install': False,

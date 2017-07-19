@@ -11,6 +11,7 @@ from odoo.exceptions import AccessError
 from odoo.http import request
 
 from odoo.addons.website_portal.controllers.main import website_account
+from odoo.addons.website_mail.controllers.main import _message_post_helper
 
 
 class website_account(website_account):
@@ -108,6 +109,11 @@ class website_account(website_account):
             vals['available'] = data.get('next_available')
             vals['web_approved'] = True
             consultant.write(vals)
+            
+            #Log message:
+            body = _('Web profile was edited by %s'%(user.name))
+            _message_post_helper(res_model='consultant.consult', res_id=consultant.id, message=body, token='', token_field='', message_type='notification', subtype="mail.mt_note", partner_ids=consultant.user_id.partner_id.ids)
+            
             return request.redirect('/my/consultants/%s'%(str(consultant_id)))
         return request.render("website_consultant.portal_my_consultants", values)
 
@@ -120,6 +126,12 @@ class website_account(website_account):
         except AccessError:
             return request.render("website.403")
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+        
+        #Log message:
+        user = request.env.user
+        body = _('Web profile was viewed by %s'%(user.name))
+        _message_post_helper(res_model='consultant.consult', res_id=consultant.id, message=body, token='', token_field='', message_type='notification', subtype="mail.mt_note", partner_ids=consultant.user_id.partner_id.ids)
+        
         return request.render("website_consultant.consultants_followup", {
             'consultant': consultant.sudo(),
             'nox_terms': nox_terms and nox_terms.description or '',
