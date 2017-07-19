@@ -107,7 +107,7 @@ class website_account(website_account):
             vals['main_role_ids'] = [[6, 0, main_roles]]
             vals['future_role_ids'] = [[6, 0, future_roles]]
             vals['available'] = data.get('next_available')
-            vals['web_approved'] = True
+            vals['web_profile_edited'] = True
             consultant.write(vals)
             
             #Log message:
@@ -153,6 +153,9 @@ class website_account(website_account):
         user = request.env.user
         body = _('Web profile was viewed by %s'%(user.name))
         _message_post_helper(res_model='consultant.consult', res_id=consultant.id, message=body, token='', token_field='', message_type='notification', subtype="mail.mt_note", partner_ids=consultant.user_id.partner_id.ids)
+        vals = {}
+        vals['web_profile_viewed'] = True
+        consultant.write(vals)
 
         return request.render("website_consultant.consultants_profile_update", {
             'consultant': consultant.sudo(),
