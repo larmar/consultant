@@ -126,12 +126,7 @@ class website_account(website_account):
         except AccessError:
             return request.render("website.403")
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
-        
-        #Log message:
-        user = request.env.user
-        body = _('Web profile was viewed by %s'%(user.name))
-        _message_post_helper(res_model='consultant.consult', res_id=consultant.id, message=body, token='', token_field='', message_type='notification', subtype="mail.mt_note", partner_ids=consultant.user_id.partner_id.ids)
-        
+
         return request.render("website_consultant.consultants_followup", {
             'consultant': consultant.sudo(),
             'nox_terms': nox_terms and nox_terms.description or '',
@@ -153,6 +148,12 @@ class website_account(website_account):
         future_roles = request.env['consultant.role.future'].sudo().search([])
 
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+
+        #Log message:
+        user = request.env.user
+        body = _('Web profile was viewed by %s'%(user.name))
+        _message_post_helper(res_model='consultant.consult', res_id=consultant.id, message=body, token='', token_field='', message_type='notification', subtype="mail.mt_note", partner_ids=consultant.user_id.partner_id.ids)
+
         return request.render("website_consultant.consultants_profile_update", {
             'consultant': consultant.sudo(),
             'main_roles': main_roles,
