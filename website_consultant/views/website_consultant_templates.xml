@@ -177,17 +177,11 @@
                         <section class="popup-buttons">
 	                        <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
 	                        <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept and Edit now</button>
-	                        <button t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-popup-reject">Reject</button>
-	                        <button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-reject">Close</button>
-
 	                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     	</section>
                     </div>
                 </div>
                 <script>
-                    $('.btn-popup-reject').on('click', function (e) {
-                        $('.modalDialog').hide();
-                    });
                     $('.btn-popup-update').on('click', function (e) {
                         $('.modalDialog').hide();
 
@@ -419,7 +413,6 @@
                             <t t-raw="nox_terms"/>
                         </div>
                         <section class="popup-buttons">
-                        	<button t-if="consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-reject">Close</button>
                         	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     	</section>
                     </div>
