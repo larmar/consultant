@@ -1,6 +1,36 @@
 <odoo>
 	<data>
 
+		<record id="view_sale_nox_opportunity_order_form" model="ir.ui.view">
+            <field name="name">sale.nox.opportunity.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<notebook position="before">
+            		<group>
+            			<div class="row">
+            				<h3 style="padding-left:15px;">NOX Order Info</h3>
+            			</div>
+            			<newline/>
+
+            			<group name="nox_opportunity_left">
+            				<field name="nox_is_startdate"/>
+		            		<field name="nox_is_enddate"/>
+		            		<field name="nox_sum_hours"/>
+		            		<field name="nox_contract_signed"/>
+		    			</group>
+		    			<group name="nox_opportunity_right">
+		    				<field name="nox_sales_hourly_rate"/>
+		            		<field name="nox_cost_hourly_rate"/>
+							
+							<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
+		    				<label string="" colspan="1"/>
+		    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1"/>
+		    			</group>
+	    			</group>
+            	</notebook>
+            </field>
+        </record>
 
 	</data>
 </odoo>
