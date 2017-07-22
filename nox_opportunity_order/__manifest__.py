@@ -28,7 +28,7 @@
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['sale', 'crm', 'nox_crm_lead'],
+  'depends': ['sale_crm', 'nox_crm_lead'],
   'data': [ 
   		'views/crm_lead.xml',
   		'views/sale.xml',
