@@ -1,12 +1,27 @@
 <odoo>
 	<data>
 
+		<!-- change layout defined in module nox_crm_lead -->
+        <record id="nox_crm_case_form_view_oppor_inherit" model="ir.ui.view">
+			<field name="name">crm opportunity - NOX opportunity order</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="nox_crm_lead.nox_crm_case_form_view_oppor_inherit"/>
+			<field name="arch" type="xml">
+				<field name="nox_is_startdate" position="replace"/>
+				<field name="nox_is_enddate" position="replace"/>
+				<field name="nox_is_hourlyrate" position="replace"/>
+			</field>
+		</record>
+
+		<!-- Nox Opportunity Order view -->
 		<record id="crm_lead_nox_opportunity_order_form" model="ir.ui.view">
             <field name="name">crm.lead.nox.opportunity.order.form</field>
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
             <field name="arch" type="xml">
             	<label for="next_activity_id" position="before">
+            		<field name="nox_is_startdate"/>
+            		<field name="nox_is_enddate"/>
             		<field name="nox_sales_hourly_rate"/>
             		<field name="nox_cost_hourly_rate"/>
 					<field name="nox_sum_hours"/>
