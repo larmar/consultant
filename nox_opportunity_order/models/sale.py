@@ -21,6 +21,26 @@ class SaleOrder(models.Model):
 
     nox_contract_signed = fields.Boolean('Contract Signed')
 
+    @api.model
+    def default_get(self, fields):
+        """Set default values on NOX Order fields if Quotation is created from Opportunity
+        """
+        context = self._context
+        res = super(SaleOrder, self).default_get(fields)
+        opportunity_id = context.get('default_opportunity_id', False)
+        if opportunity_id:
+            Opportunity = self.env['crm.lead'].browse([opportunity_id])
+            res.update({
+                    'nox_is_startdate': Opportunity.nox_is_startdate,
+                    'nox_is_enddate': Opportunity.nox_is_enddate,
+                    'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
+                    'nox_ftepercent': Opportunity.nox_ftepercent,
+                    'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
+                    'nox_sum_hours': Opportunity.nox_sum_hours,
+                    'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
+                })
+        return res
+
     @api.multi
     def write(self, vals):
         if 'nox_ftepercent_temp' in vals:
