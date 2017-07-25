@@ -81,11 +81,13 @@ class Sale(models.Model):
                 'default_order_line': purchase_line_vals,
                 'default_sale_id': sale.id,
                 }
+            form_view_id = self.env['ir.model.data'].xmlid_to_res_id('purchase.purchase_order_form')
             return {
                 'name': 'Request for Quotation',
                 'type': 'ir.actions.act_window',   
                 'res_model': 'purchase.order',
                 'view_type': 'form',
+                'view_id': form_view_id or False,
                 'view_mode': 'form',
                 'context': purchase_vals,
                 'target': 'current',
