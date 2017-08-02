@@ -69,6 +69,7 @@ class Sale(models.Model):
                     'date_planned': datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                     'taxes_id': [[6, 0, taxes]],
                     'sale_id': sale.id,
+                    'state': 'draft',
                 }
                 purchase_line_vals.append(line_vals)
 
