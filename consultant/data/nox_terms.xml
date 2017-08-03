@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data noupdate="1">
 
-		<record id="default_nox_terms" model="nox.terms">
+		<record forcecreate="True" id="default_nox_terms" model="nox.terms">
+			<field name="description"/>
 		</record>
 
 	</data>
