@@ -11,7 +11,7 @@
             	</button>
             	
             	<notebook position="inside">
-            		<page name="purchase_order_lines" string="Back to Back Purchase Order">
+            		<page name="purchase_order_lines" string="Purchase Orders">
             			<group>
             				<label string="Purchase Orders" attrs="{'invisible': [('purchase_line_check','=',False)]}" colspan="4"/>
             				<label string="There are no Purchase Orders associated with this Sales Order." attrs="{'invisible': [('purchase_line_check','=',True)]}" colspan="4"/>
