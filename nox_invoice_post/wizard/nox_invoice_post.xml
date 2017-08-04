@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="nox_invoice_post_form" model="ir.ui.view">
+			<field name="name">nox.invoice.post.form</field>
+			<field name="model">nox.invoice.post</field>
+			<field name="arch" type="xml">
+				<form string="Invoice Posted to Customer">
+					<p>
+						Click on Post to Mark selected Invoice(s) as Posted.
+					</p>
+					<footer>
+						<button name="action_mark_posted" type="object" string="Post" class="oe_highlight"/>
+						<button string="Cancel" special="cancel" class="btn-default"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<act_window id="action_account_invoice_posted"
+            multi="True"
+            key2="client_action_multi" 
+            name="Invoice Posted to Customer"
+            res_model="nox.invoice.post" 
+            src_model="account.invoice"
+            view_mode="form"
+            view_type="form"
+            target="new"/>
+
+	</data>
+</odoo>
