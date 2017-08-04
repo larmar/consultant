@@ -12,7 +12,7 @@ from odoo.tools.translate import _
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    nox_invoice_posted = fields.Boolean('Invoice Posted to Customer')
+    nox_invoice_posted = fields.Boolean('Invoice Posted')
 
     @api.model
     def create(self, vals):
