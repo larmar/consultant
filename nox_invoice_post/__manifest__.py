@@ -10,13 +10,13 @@
     'name': 'NOX Invoice Posted',
     'version': '10.0.0.1',
     'category': 'Invoicing',
-    'summary': 'NOX - Post Customer Invoice(s)',
+    'summary': 'NOX - Set Posted to Customer on Customer Invoice(s) ',
     'description': """
 ##############################################################
-                NOX - Post Customer Invoice(s)
+        NOX - Set Posted to Customer on Customer Invoice(s) 
 ##############################################################
-    * This module adds a check box field "Invoice Posted to Customer" in Customer Invoices
-    * It adds an window action to mark selected Invoices as Posted
+    * This module adds a check box field "Posted to Customer" in Customer Invoices
+    * It adds window action to mark selected Invoices as Posted
   """,
     'author': 'Linserv AB',
     'website': 'www.linserv.se/en/',
