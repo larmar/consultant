@@ -18,11 +18,16 @@ class NoxInvoicePost(models.TransientModel):
         invoice_ids = self.env.context.get('active_ids', [])
         if invoice_ids:
             flag = False
+            open_invoice_check = False
             for invoice in self.env['account.invoice'].browse(invoice_ids):
                 if invoice.type != 'out_invoice':
                     flag = True
+                if invoice.state == 'open':
+                    open_invoice_check = True
             if flag:
                 raise UserError('Only Customer Invoice(s) can be marked as Posted.')
+            if open_invoice_check is False:
+                raise UserError('Please select at least one Open Invoice to mark as Posted.\n\nOnly Open Invoice(s) can be marked as Posted.')
         return super(NoxInvoicePost, self).fields_view_get(view_id, view_type, toolbar, submenu)
 
     @api.multi
