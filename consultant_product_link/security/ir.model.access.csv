@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_order_consultant_user,sale.order.consultant.user,sale.model_sale_order,base.group_consultant_user,1,0,0,0
+access_sale_order_consultant_manager,sale.order.consultant.manager,purchase.model_purchase_order,base.group_consultant_manager,1,0,0,0
+,,,,,,,
+access_sale_order_line_consultant_user,sale.order.line.consultant.user,sale.model_sale_order_line,base.group_consultant_user,1,0,0,0
+access_sale_order_line_consultant_manager,sale.order.line.consultant.manager,purchase.model_purchase_order_line,base.group_consultant_manager,1,0,0,0
+,,,,,,,
+access_product_product_consultant_user,product.product.consultant.user,product.model_product_product,base.group_consultant_user,1,0,0,0
+access_product_product_consultant_manager,product.product.consultant.manager,product.model_product_product,base.group_consultant_manager,1,0,1,0

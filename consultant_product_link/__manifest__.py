@@ -25,6 +25,8 @@ Link Standard Hour Product with Consultants
   'depends': ['consultant', 'sale', 'purchase'],
   'data': [ 
     'views/consultant.xml',
+
+    'securiyt/ir.model.access.csv',
 	],
 
   'application': False,
