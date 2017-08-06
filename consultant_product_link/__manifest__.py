@@ -20,7 +20,7 @@ Link Standard Hour Product with Consultants
   """,
 
   'author': 'Linserv AB',
-  'contributors': ['Riyaj Pathan <rjpathan19@gmail.com'],
+  'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
   'depends': ['consultant', 'sale', 'purchase'],
   'data': [ 
