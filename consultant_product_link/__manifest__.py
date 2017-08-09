@@ -26,7 +26,7 @@ Link Standard Hour Product with Consultants
   'data': [ 
     'views/consultant.xml',
 
-    'securiyt/ir.model.access.csv',
+    'security/ir.model.access.csv',
 	],
 
   'application': False,
