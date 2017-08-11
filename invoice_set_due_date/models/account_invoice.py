@@ -6,7 +6,7 @@
 #
 ##############################################################################
 
-from odoo import models, api
+from odoo import models, api, fields
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
