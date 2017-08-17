@@ -18,3 +18,11 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
     sale_id = fields.Many2one('sale.order', 'Sales Order')
+
+    @api.onchange('sale_id')
+    def _onchange_sale_id(self):
+        """Set Sales order reference on PO lines 
+        """
+        if self.order_id and self.order_id.sale_id:
+            self.sale_id = self.order_id.sale_id
+            
