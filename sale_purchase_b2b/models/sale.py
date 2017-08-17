@@ -81,6 +81,7 @@ class Sale(models.Model):
                 'default_currency_id': currency_id,
                 'default_order_line': purchase_line_vals,
                 'default_sale_id': sale.id,
+                'default_origin': sale.name,
                 }
             form_view_id = self.env['ir.model.data'].xmlid_to_res_id('purchase.purchase_order_form')
             return {
