@@ -36,6 +36,21 @@ class AccountInvoice(models.Model):
             invoice_date = invoice_date.strftime('%Y-%m-%d')
 
             res.update({'date_invoice': invoice_date})
+
+            #set due date based on payment term
+            pterm = res.get('payment_term_id', False)
+            partner_id = False
+            if not pterm:
+                if 'purchase_id' in res:
+                    partner_id = self.env['purchase.order'].browse([res['purchase_id']])[0].partner_id
+                if 'partner_id' in res:
+                    partner_id = self.env['res.partner'].browse([res['partner_id']])
+                if partner_id:
+                    pterm = partner_id.property_supplier_payment_term_id
+            if pterm:
+                currency_id = res.get('currency_id', False)
+                pterm_list = pterm.with_context(currency_id=currency_id).compute(value=1, date_ref=invoice_date)[0]
+                res.update({'date_due': max(line[0] for line in pterm_list)})
         return res
 
 class AccountInvoiceLine(models.Model):
