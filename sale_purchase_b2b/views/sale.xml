@@ -30,6 +30,7 @@
 				                    <field name="taxes_id"/>
 				                    <field name="price_subtotal" widget="monetary"/>
 				                    <field name="date_planned"  widget="date"/>
+				                    <field name="state"/>
 				                </tree>
             				</field>
             			</group>
