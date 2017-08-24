@@ -16,7 +16,6 @@
             			<group name="nox_opportunity_left">
             				<field name="nox_is_startdate"/>
 		            		<field name="nox_is_enddate"/>
-		            		<field name="nox_sum_hours"/>
 		            		<field name="nox_contract_signed"/>
 		    			</group>
 		    			<group name="nox_opportunity_right">
@@ -26,6 +25,7 @@
 							<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
 		    				<label string="" colspan="1"/>
 		    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1"/>
+		            		<field name="nox_sum_hours"/>
 		    			</group>
 	    			</group>
             	</notebook>
