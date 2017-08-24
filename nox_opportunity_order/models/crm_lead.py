@@ -49,3 +49,8 @@ class CrmLead(models.Model):
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
         self.nox_ftepercent = self.nox_ftepercent_temp
+
+    @api.multi
+    def compute_nox_expected_revenue(self):
+        for oppr in self:
+            oppr.write({'planned_revenue': oppr.nox_sales_hourly_rate * oppr.nox_sum_hours})

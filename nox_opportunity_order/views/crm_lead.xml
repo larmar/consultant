@@ -34,6 +34,9 @@
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
             <field name="arch" type="xml">
+            	<xpath expr="//header[1]" position="inside">
+            		<button name="compute_nox_expected_revenue" type="object" string="Calculate Expected Revenue"/>
+            	</xpath>
             	<label for="next_activity_id" position="before">
             		<field name="nox_is_startdate"/>
             		<field name="nox_is_enddate"/>
