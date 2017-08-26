@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="report_invoice_document_inherit_customer_po_ref" inherit_id="account.report_invoice_document">
+			<xpath expr="//div[@name='reference']" position="after">
+	            <div class="col-xs-3" t-if="o.get_sale_customer_po_ref()">
+	                <strong>Customer PO Number:</strong>
+	                <p t-esc="o.get_sale_customer_po_ref()"/>
+	            </div>
+        	</xpath>
+		</template>
+
+	</data>
+</odoo>
