@@ -17,6 +17,8 @@
               Consultant Product Link
 ##############################################################                    
 Link Standard Hour Product with Consultants
+  * Auto set Consultant stage based on related sales order's Expiration Date
+    * If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready"
   """,
 
   'author': 'Linserv AB',
