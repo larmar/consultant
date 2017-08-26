@@ -24,6 +24,7 @@
 			*	Contract Signed
 	*	When an Quote is created from an Opportunity the initial values of the above five fields will be taken from the Opportunity. 
 	*	When an Quote is created directly without associated opportunity the initial values will be null.
+  * It adds a computation button "Calculate Expected Revenue" on Opportunity form header to set Expected Revenue as [[ Expected Revenue = Sales hourly rate x Total hours ]]
   """,
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
