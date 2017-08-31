@@ -37,16 +37,34 @@
             	<xpath expr="//header[1]" position="inside">
             		<button name="compute_nox_expected_revenue" type="object" string="Calculate Expected Revenue"/>
             	</xpath>
+                
+                <field name="user_id" position="replace"/>
+                <field name="team_id" position="replace"/>
+
             	<label for="next_activity_id" position="before">
             		<field name="nox_is_startdate"/>
             		<field name="nox_is_enddate"/>
-            		<field name="nox_sales_hourly_rate"/>
-            		<field name="nox_cost_hourly_rate"/>
-					<field name="nox_sum_hours"/>
+                    <field name="nox_cost_hourly_rate"/>
+                    <label colspan="2" string=""/>
+
+                    <field name="nox_product1"/>
+            		<field name="nox_sales_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+					<field name="nox_sum_hours" attrs="{'invisible': [('nox_product1','=',False)]}"/>
             		
-    				<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
+    				<field name="nox_ftepercent" widget="progressbar" readonly="1" attrs="{'invisible': [('nox_product1','=',False)]}"/>
     				<label string="" colspan="1"/>
-    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1"/>
+    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+
+                    <label colspan="2" string=""/>
+
+                    <field name="nox_product2" domain="[('id', '!=', nox_product1)]"/>
+                    <field name="nox_sales_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    <field name="nox_sum_hours2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    
+                    <field name="nox_ftepercent2" widget="progressbar" readonly="1" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    <label string="" colspan="1"/>
+                    <field name="nox_ftepercent_temp2" nolabel="1" class="oe_edit_only" colspan="1" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+
             	</label>
 
             	<label for="next_activity_id" position="replace"/>
@@ -58,6 +76,8 @@
             	<field name="date_deadline" position="replace"/>
 
             	<field name="phone" position="after">
+                    <label colspan="2" string=""/>
+                    
             		<label for="next_activity_id"/>
                     <div>
                         <div class="o_row mr16">
@@ -74,6 +94,10 @@
                         </div>
                     </div>
                     <field name="date_deadline"/>
+
+                    <label colspan="2" string=""/>
+                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'sales_team.group_sale_salesman_all_leads'], 'team_id': team_id}" domain="[('share', '=', False)]"/>
+                    <field name="team_id" widget="selection"/>
                 </field>
 
             </field>
