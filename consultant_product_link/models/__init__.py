@@ -6,4 +6,4 @@
 #
 ##############################################################################
 from . import consultant
-from . import sale_crm
+#from . import sale_crm
