@@ -7,6 +7,8 @@
 ##############################################################################
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+from odoo.tools.translate import _
 
 from datetime import datetime
 
@@ -98,7 +100,39 @@ class SaleOrder(models.Model):
             vals['nox_ftepercent'] = vals['nox_ftepercent_temp']
         if 'nox_ftepercent_temp2' in vals:
             vals['nox_ftepercent2'] = vals['nox_ftepercent_temp2']
-        return super(SaleOrder, self).write(vals)
+        
+        #check & match Related Product, Total Hours & Sales hourly rate with respective Order line product, Ordered Quantity & Unit price in Order lines:
+        res = super(SaleOrder, self).write(vals)
+
+        if self.nox_product1:
+            self.validate_related_product_with_orderline(self.nox_product1, self.nox_sum_hours, self.nox_sales_hourly_rate, 1)
+        if self.nox_product2:
+            self.validate_related_product_with_orderline(self.nox_product2, self.nox_sum_hours2, self.nox_sales_hourly_rate2, 2)
+        return res
+
+    @api.multi
+    def validate_related_product_with_orderline(self, product=False, sum_hours=0.0, unit_price=0.0, line_counter=1):
+        product_matching_flag, qty_flag, unit_price_flag = False, True, True
+        for line in self.order_line:
+            if line.product_id.id == product.id:
+                product_matching_flag = True
+                if line.product_uom_qty != sum_hours:
+                    qty_flag = False
+                    break
+                if line.price_unit != unit_price:
+                    unit_price_flag = False
+                    break
+
+        if not product_matching_flag:
+            raise ValidationError(_('Missing Related Product in Order Lines!\n\n\
+                                    Please add Order line item with Related Product %s - %s'%(str(line_counter), product.name)))
+        if not qty_flag:
+            raise ValidationError(_('Ordered Quantity Mismatch with Total Hours!\n\n\
+                                    Ordered Quantity in Order lines for Product %s should be same as Total hours for related Product %s.'%(product.name, str(line_counter))))
+        if not unit_price_flag:
+            raise ValidationError(_('Unit Price Mismatch with Sales hourly rate!\n\n\
+                                    Unit Price in Order lines for Product %s should be same as Sales hourly rate for related Product %s.'%(product.name, str(line_counter))))
+        return True
 
     @api.multi
     @api.onchange('partner_id')
