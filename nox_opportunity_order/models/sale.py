@@ -70,6 +70,7 @@ class SaleOrder(models.Model):
         opportunity_id = context.get('default_opportunity_id', False)
         if opportunity_id:
             Opportunity = self.env['crm.lead'].browse([opportunity_id])
+            
             res.update({
                     'nox_is_startdate': Opportunity.nox_is_startdate,
                     'nox_is_enddate': Opportunity.nox_is_enddate,
@@ -98,6 +99,35 @@ class SaleOrder(models.Model):
         if 'nox_ftepercent_temp2' in vals:
             vals['nox_ftepercent2'] = vals['nox_ftepercent_temp2']
         return super(SaleOrder, self).write(vals)
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """Set default order lines with Consultants Product (from Opportunity)
+        """
+        res = super(SaleOrder, self).onchange_partner_id()
+        context = self.env.context
+        order_lines = []
+        if 'active_model' in context and context['active_model'] == 'crm.lead' and context.get('default_opportunity_id', False):
+            Opportunity = self.env['crm.lead'].browse(context['default_opportunity_id'])
+            if Opportunity.nox_product1:
+                order_lines.append({
+                        'product_id': Opportunity.nox_product1.id,
+                        'price_unit': Opportunity.nox_sales_hourly_rate,
+                        'product_uom': Opportunity.nox_product1.uom_id.id,
+                        'product_uom_qty': Opportunity.nox_sum_hours,
+                        'name': Opportunity.nox_product1.name_get()[0][1],
+                    })
+            if Opportunity.nox_product2:
+                order_lines.append({
+                        'product_id': Opportunity.nox_product2.id,
+                        'price_unit': Opportunity.nox_sales_hourly_rate2,
+                        'product_uom': Opportunity.nox_product2.uom_id.id,
+                        'product_uom_qty': Opportunity.nox_sum_hours2,
+                        'name': Opportunity.nox_product2.name_get()[0][1],
+                    })
+        if order_lines:
+            self.update({'order_line': order_lines})
 
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
