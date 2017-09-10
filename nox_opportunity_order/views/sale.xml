@@ -19,13 +19,23 @@
 		            		<field name="nox_contract_signed"/>
 		    			</group>
 		    			<group name="nox_opportunity_right">
-		    				<field name="nox_sales_hourly_rate"/>
-		            		<field name="nox_cost_hourly_rate"/>
-							
-							<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
+		    				<field name="nox_product1"/>
+		    				<field name="nox_sales_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+                    		<field name="nox_cost_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+                    		<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
 		    				<label string="" colspan="1"/>
-		    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1"/>
-		            		<field name="nox_sum_hours"/>
+		    				<field name="nox_ftepercent_temp" nolabel="1" class="oe_edit_only" colspan="1" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+							<field name="nox_sum_hours" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+							
+							<label colspan="2" string=""/>
+
+							<field name="nox_product2"/>
+		    				<field name="nox_sales_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    		<field name="nox_cost_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    		<field name="nox_ftepercent2" widget="progressbar" readonly="1"/>
+		    				<label string="" colspan="1"/>
+		    				<field name="nox_ftepercent_temp2" nolabel="1" class="oe_edit_only" colspan="1" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+							<field name="nox_sum_hours2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
 		    			</group>
 	    			</group>
             	</notebook>
