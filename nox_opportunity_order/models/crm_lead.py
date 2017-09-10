@@ -53,6 +53,7 @@ class CrmLead(models.Model):
     nox_sum_hours = fields.Float(string='Total Hours', compute='_compute_nox_sum_hours', store=True)
     nox_sales_hourly_rate = fields.Float('Sales hourly rate')
 
+    nox_cost_hourly_rate2 = fields.Float('Cost hourly rate')
     nox_ftepercent2 = fields.Float('Avg FTE (%)')
     nox_ftepercent_temp2 = fields.Float('Avg FTE (%)')
     nox_sum_hours2 = fields.Float(string='Total Hours', compute='_compute_nox_sum_hours2', store=True)
