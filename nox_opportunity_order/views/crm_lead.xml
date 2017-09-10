@@ -44,11 +44,11 @@
             	<label for="next_activity_id" position="before">
             		<field name="nox_is_startdate"/>
             		<field name="nox_is_enddate"/>
-                    <field name="nox_cost_hourly_rate"/>
                     <label colspan="2" string=""/>
 
                     <field name="nox_product1"/>
             		<field name="nox_sales_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
+                    <field name="nox_cost_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
 					<field name="nox_sum_hours" attrs="{'invisible': [('nox_product1','=',False)]}"/>
             		
     				<field name="nox_ftepercent" widget="progressbar" readonly="1" attrs="{'invisible': [('nox_product1','=',False)]}"/>
@@ -59,6 +59,7 @@
 
                     <field name="nox_product2" domain="[('id', '!=', nox_product1)]"/>
                     <field name="nox_sales_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
+                    <field name="nox_cost_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     <field name="nox_sum_hours2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     
                     <field name="nox_ftepercent2" widget="progressbar" readonly="1" attrs="{'invisible': [('nox_product2','=',False)]}"/>
