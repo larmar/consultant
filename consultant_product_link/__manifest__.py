@@ -27,7 +27,7 @@ If any related sales order has valid expiry date (in future); set consultant sta
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['consultant', 'sale', 'purchase'],
+  'depends': ['consultant', 'sale_expense', 'purchase'],
   'data': [ 
     'views/consultant.xml',
 
