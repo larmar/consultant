@@ -11,14 +11,17 @@
   'sequence': 20,
   'version': '10.0.0.1',
   'category': 'Consultant',
-  'summary': 'Link Standard Hour Product with Consultants',
+  'summary': 'Auto Link Standard Hour Product with Consultants',
   'description': """
 ##############################################################
               Consultant Product Link
 ##############################################################                    
-Link Standard Hour Product with Consultants
-  * Auto set Consultant stage based on related sales order's Expiration Date
-    * If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready"
+Auto Link Standard Hour Product with Consultants
+	* When a new Consultant created; auto create & link a Product with Consultant 
+
+Auto set Consultant stage based on related sales order's Expiration Date.
+
+If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready".
   """,
 
   'author': 'Linserv AB',
