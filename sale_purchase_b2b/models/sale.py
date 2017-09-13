@@ -51,13 +51,14 @@ class Sale(models.Model):
             
             #purchase order lines :
             for line in sale.order_line:
-                taxes = []
+                price_unit, taxes = 0, []
                 for tax in line.product_id.supplier_taxes_id:
                     taxes.append(tax.id)
 
-                price_unit = line.product_id and line.product_id.standard_price or 0.0
-                if line.product_id and line.product_id.id == vendor_product_id:
-                    price_unit = vendor_price
+                #get Vendor price as Unit price in PO line:
+                for seller in line.product_id.seller_ids:
+                    if not price_unit:
+                        price_unit = seller.price
 
                 line_vals = {
                     'name': line.name,
