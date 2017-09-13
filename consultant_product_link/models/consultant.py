@@ -19,17 +19,6 @@ class ConsultantConsult(models.Model):
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
 
     @api.multi
-    def action_link_product(self):
-        for consultant in self:
-            if consultant.product_id:
-                raise ValidationError(_('Consultant %s already has Linked Product.')%(consultant.name))
-            product_id = self.env['product.product'].create({
-                                                        'name': consultant.name,
-                                                        'type': 'consu',
-                                                    })
-            consultant.write({'product_id': product_id.id})
-
-    @api.multi
     def _get_orders(self):
         for consultant in self:
             if consultant.product_id:

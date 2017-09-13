@@ -7,10 +7,6 @@
 			<field name="model">consultant.consult</field>
 			<field name="inherit_id" ref="consultant.view_form_consultant_consult"/>
 			<field name="arch" type="xml">
-				<field name="stage_id" position="before">
-					<button name="action_link_product" type="object" string="Link Product" class="oe_highlight" attrs="{'invisible':[('product_id','!=',False)]}" groups="base.group_consultant_manager"/>
-				</field>
-
 				<xpath expr="//group[@name='group_right']/field[@name='partner_id']" position="after">
 					<field name="product_id" readonly="1"/>
 				</xpath>
