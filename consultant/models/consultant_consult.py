@@ -99,9 +99,9 @@ class consultant_consult(models.Model):
         #keep only 5 main roles:
         if 'main_role_ids' in vals and vals['main_role_ids']:
             vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
-        #keep only 2 future roles:
+        #keep only 3 future roles:
         if 'future_role_ids' in vals and vals['future_role_ids']:
-            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-2:] ]]
+            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-3:] ]]
         #keep only 10 main competences:
         if 'main_competence_ids' in vals and vals['main_competence_ids']:
             vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
@@ -132,9 +132,9 @@ class consultant_consult(models.Model):
         #keep only 5 main roles:
         if 'main_role_ids' in vals and vals['main_role_ids']:
             vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
-        #keep only 2 future roles:
+        #keep only 3 future roles:
         if 'future_role_ids' in vals and vals['future_role_ids']:
-            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-2:] ]]
+            vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-3:] ]]
         #keep only 10 main competences:
         if 'main_competence_ids' in vals and vals['main_competence_ids']:
             vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
