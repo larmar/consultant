@@ -18,6 +18,55 @@ class ConsultantConsult(models.Model):
     sale_order_ids = fields.Many2many('sale.order', string='Sales Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
 
+    @api.model
+    def create(self, vals):
+        if not vals:
+            vals = {}
+
+        vendor_id = vals.get('partner_id', False)
+        consultant_name = vals.get('name', '')
+
+        # Create product
+        Product = self.env['product.product'].create({
+                                                'name': consultant_name,
+                                                'sale_ok': True,
+                                                'purchase_ok': True,
+                                                'type': 'service',
+                                                'list_price': 0.0,
+                                                'standard_price': 0.0,
+                                                
+                                                'can_be_expensed': True,
+                                                'invoice_policy': 'delivery',
+                                                'expense_policy': 'sales_price',
+                                                'track_service': 'manual',
+
+
+                                            })
+        # Link Product on Consultant
+        vals['product_id'] = Product.id
+
+        # Update UOM, Purchase UOM and Internal Category of Product
+        update_vals = {}
+        hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
+        if hour_uom:
+            update_vals = {'uom_id': hour_uom, 'uom_po_id': hour_uom}
+
+        categ_id = self.env['product.category'].search([('name', '=', 'Consultancy')])
+        if categ_id:
+            categ_id = categ_id[0].id
+        else:
+            categ_id = self.env['ir.model.data'].xmlid_to_res_id('product.product_category_1')
+        if categ_id:
+            update_vals['categ_id'] = categ_id
+
+        Product.write(update_vals)
+
+        # Set Vendor on Product
+        if vendor_id:
+            self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id})
+
+        return super(ConsultantConsult, self).create(vals)
+
     @api.multi
     def _get_orders(self):
         for consultant in self:
