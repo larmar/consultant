@@ -20,6 +20,7 @@ class ConsultantConsult(models.Model):
 
     @api.model
     def create(self, vals):
+        User = self.env['res.users'].browse([self._uid])
         if not vals:
             vals = {}
 
@@ -58,6 +59,11 @@ class ConsultantConsult(models.Model):
             categ_id = self.env['ir.model.data'].xmlid_to_res_id('product.product_category_1')
         if categ_id:
             update_vals['categ_id'] = categ_id
+
+        # Set Default Purchase tax as Vendor tax on Product:
+        product_vendor_tax = self.env['ir.values'].get_default('product.template', 'supplier_taxes_id', company_id = User.company_id.id)
+        if product_vendor_tax:
+            update_vals['supplier_taxes_id'] = [[6, 0, product_vendor_tax]]
 
         Product.write(update_vals)
 
