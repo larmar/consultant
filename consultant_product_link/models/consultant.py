@@ -74,6 +74,24 @@ class ConsultantConsult(models.Model):
         return super(ConsultantConsult, self).create(vals)
 
     @api.multi
+    def write(self, vals):
+        """Update related Product name and/or Vendor
+        """
+        if not vals: vals = {}
+
+        if 'name' in vals and vals['name']:
+            if self.product_id:
+                self.product_id.write({'name': vals['name']})
+        if 'partner_id' in vals and vals['partner_id']:
+            if self.product_id:
+                #delete existing Product Vendor(s):
+                for Seller in self.product_id.seller_ids:
+                    Seller.unlink()
+                #create new Product Vendor:
+                self.env['product.supplierinfo'].create({'name': vals['partner_id'], 'product_tmpl_id': self.product_id.product_tmpl_id.id})
+        return super(ConsultantConsult, self).write(vals)
+
+    @api.multi
     def _get_orders(self):
         for consultant in self:
             if consultant.product_id:
