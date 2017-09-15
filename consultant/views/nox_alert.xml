@@ -1,0 +1,38 @@
+<odoo>
+	<data>
+		<record id="nox_alert_form" model="ir.ui.view">
+			<field name="name">nox.alert.form</field>
+			<field name="model">nox.alert</field>
+			<field name="arch" type="xml">
+				<form string="NOX Alert &amp; Information" create="0" delete="0">
+					<sheet>
+						<div style="margin-bottom: 20px">
+							<h2><field name="yourProfilesTitle" readonly="1"/></h2>
+							<field name="yourProfilesMessage" colspan="6"/>
+						</div>
+
+						<div style="margin-bottom: 20px">
+							<h2><field name="profileTitle" readonly="1"/></h2>
+							<field name="profileMessage" colspan="6"/>
+						</div>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_nox_alert">
+			<field name="name">NOX Alert &amp; Information</field>
+			<field name="res_model">nox.alert</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="res_id" ref="consultant.default_nox_alert"/>
+		</record>
+
+		<menuitem id="menu_consultant_portal_alert" 
+			parent="menu_consultant_configuration_portal" 
+			name="Nox Alert" 
+			sequence="50" 
+			action="action_nox_alert"/>
+
+	</data>
+</odoo>

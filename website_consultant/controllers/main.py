@@ -56,6 +56,7 @@ class website_account(website_account):
         )
         # search the count to display, according to the pager data
         consultants = Consultant.search(domain, limit=self._items_per_page, offset=pager['offset'])
+        nox_alert = request.env['nox.alert'].sudo().search([], limit=1)
 
         values.update({
             'date': date_begin,
@@ -63,6 +64,7 @@ class website_account(website_account):
             'pager': pager,
             'archive_groups': archive_groups,
             'default_url': '/my/consultants',
+            'nox_alert': nox_alert,
         })
 
         data = kw
@@ -77,14 +79,15 @@ class website_account(website_account):
                 main_roles = request.env['consultant.role.main'].sudo().search([])
                 main_competence = request.env['consultant.competence.main'].sudo().search([])
                 future_roles = request.env['consultant.role.future'].sudo().search([])
+                nox_terms = request.env['nox.terms'].sudo().search([], limit=1)        
 
-                nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
                 return request.render("website_consultant.consultants_profile_update", {
                     'consultant': consultant.sudo(),
                     'main_roles': main_roles,
                     'future_roles': future_roles,
                     'main_competence': main_competence,
                     'nox_terms': nox_terms and nox_terms.description or '',
+                    'nox_alert': nox_alert,
                 })
 
             #update consultant profile:
@@ -107,6 +110,7 @@ class website_account(website_account):
             vals['main_role_ids'] = [[6, 0, main_roles]]
             vals['future_role_ids'] = [[6, 0, future_roles]]
             vals['available'] = data.get('next_available')
+            vals['sf_partner'] = data.get('sf_partner')
             vals['web_profile_edited'] = True
             consultant.write(vals)
             
@@ -125,11 +129,14 @@ class website_account(website_account):
             consultant.check_access_rule('read')
         except AccessError:
             return request.render("website.403")
+
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+        nox_alert = request.env['nox.alert'].sudo().search([], limit=1)
 
         return request.render("website_consultant.consultants_followup", {
             'consultant': consultant.sudo(),
             'nox_terms': nox_terms and nox_terms.description or '',
+            'nox_alert': nox_alert,
         })
 
     @http.route(['/my/consultants/edit/<int:consultant>'], type='http', auth="user", website=True)
@@ -148,6 +155,7 @@ class website_account(website_account):
         future_roles = request.env['consultant.role.future'].sudo().search([])
 
         nox_terms = request.env['nox.terms'].sudo().search([], limit=1)
+        nox_alert = request.env['nox.alert'].sudo().search([], limit=1)
 
         #Log message:
         user = request.env.user
@@ -163,6 +171,7 @@ class website_account(website_account):
             'future_roles': future_roles,
             'main_competence': main_competence,
             'nox_terms': nox_terms and nox_terms.description or '',
+            'nox_alert': nox_alert,
         })
 
     def details_form_validate(self, data):

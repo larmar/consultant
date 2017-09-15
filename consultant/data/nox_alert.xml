@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+
+		<record forcecreate="True" id="default_nox_alert" model="nox.alert">
+			<field name="yourProfilesMessage"/>
+			<field name="profileMessage"/>
+		</record>
+
+	</data>
+</odoo>

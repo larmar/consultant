@@ -30,10 +30,12 @@ Manage consultants and search for knowledge
 
     'data/consultant.xml',
     'data/nox_terms.xml',
+    'data/nox_alert.xml',
 
 		'views/consultant_consult.xml',
 		'views/crm_lead.xml',
     'views/nox_terms.xml',
+    'views/nox_alert.xml',
 
     'wizard/consultant_opportunity_link.xml',
     'wizard/mass_mail_view.xml',

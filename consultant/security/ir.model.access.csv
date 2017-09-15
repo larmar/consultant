@@ -26,3 +26,6 @@ access_consultant_region_manager,consultant.region.manager,model_consultant_regi
 ,,,,,,,
 access_nox_terms_user,nox.terms.user,model_nox_terms,base.group_consultant_user,1,0,0,0
 access_nox_terms_manager,nox.terms.manager,model_nox_terms,base.group_consultant_manager,1,1,1,1
+,,,,,,,
+access_nox_alert_user,nox.alert.user,model_nox_alert,base.group_consultant_user,1,0,0,0
+access_nox_alert_manager,nox.alert.manager,model_nox_alert,base.group_consultant_manager,1,1,1,1
