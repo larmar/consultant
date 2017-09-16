@@ -1,8 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_consultant_consult website_portal,consultant.consult website,consultant.model_consultant_consult,website_consultant.group_portal_consultant,1,1,0,0
-access_consultant_cometence_main website_portal,consultant.competence.main website,consultant.model_consultant_competence_main,website_consultant.group_portal_consultant,1,1,0,0
-access_consultant_role_main website_portal,consultant.role.main website,consultant.model_consultant_role_main,website_consultant.group_portal_consultant,1,1,0,0
-access_consultant_role_future website_portal,consultant.role.future website,consultant.model_consultant_role_future,website_consultant.group_portal_consultant,1,1,0,0
-access_consultant_region website_portal,consultant.region website,consultant.model_consultant_region,website_consultant.group_portal_consultant,1,0,0,0
-access_consultant_stage website_portal,consultant.stage website,consultant.model_consultant_stage,website_consultant.group_portal_consultant,1,0,0,0
-access_crm_lead website_portal,crm.lead website,crm.model_crm_lead,website_consultant.group_portal_consultant,1,0,0,0
+access_consultant_consult website_portal,consultant.consult website,consultant.model_consultant_consult,base.group_portal,1,1,0,0
+access_consultant_cometence_main website_portal,consultant.competence.main website,consultant.model_consultant_competence_main,base.group_portal,1,1,0,0
+access_consultant_role_main website_portal,consultant.role.main website,consultant.model_consultant_role_main,base.group_portal,1,1,0,0
+access_consultant_role_future website_portal,consultant.role.future website,consultant.model_consultant_role_future,base.group_portal,1,1,0,0
+access_consultant_region website_portal,consultant.region website,consultant.model_consultant_region,base.group_portal,1,0,0,0
+access_consultant_stage website_portal,consultant.stage website,consultant.model_consultant_stage,base.group_portal,1,0,0,0
+access_crm_lead website_portal,crm.lead website,crm.model_crm_lead,base.group_portal,1,0,0,0

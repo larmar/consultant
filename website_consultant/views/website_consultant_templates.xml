@@ -1,28 +1,27 @@
 <odoo>
+
     <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website Consultant Profiles">
-        <xpath expr="." position="inside">
-            <link rel='stylesheet' type="text/css" href='/website_consultant/static/src/css/website_consultant.less'/>
+      <xpath expr="." position="inside">
+            <link rel='stylesheet' type="text/css" href='/website_consultant/static/src/css/website_consultant.css'/>
             <script type="text/javascript" src="/website_consultant/static/src/js/website_consultant.js"></script>
-        </xpath>
+      </xpath>
     </template>
-    
+
     <template id="portal_my_home_menu_consultant_profile" name="Portal layout : consultant menu entries" inherit_id="website_portal.portal_layout" priority="25">
         <xpath expr="//ul[contains(@class,'o_portal_submenu')]" position="inside">
-            <li groups="website_consultant.group_portal_consultant">
+            <li groups="base.group_portal">
                 <a href="/my/consultants">Profiles</a>
             </li>
         </xpath>
     </template>
-    
+
     <template id="portal_my_home_consultants" name="Portal My Home : consultant entries" inherit_id="website_portal.portal_my_home" priority="25">
         <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside">
-            <h3 class="page-header" groups="website_consultant.group_portal_consultant">
+            <h3 class="page-header" groups="base.group_portal">
                 <a href="/my/consultants">Your Profiles
                     <small class="ml8">
                         <t t-if="profiles_count">
-                            <span class='badge'>
-                                <t t-esc="profiles_count"/>
-                            </span>
+                            <span class='badge'><t t-esc="profiles_count"/></span>
                         </t>
                         <t t-if="not profiles_count">
                             There are currently no consultant profiles linked to your account.
@@ -34,197 +33,139 @@
     </template>
 
     <template id="portal_my_consultants" name="My Profiles">
-        
-        <!-- Alert content -->
-        <!-- <xpath expr="//div[@id=wrap]" position="inside">
-            <div class="container" groups="website_consultant.group_portal_consultant">
-                <div class="well m0">
-                    <t t-esc="nox_alert.yourProfilesMessage" />
-                </div>   
-            </div>
-        </xpath> -->
-
-        <t t-call="website_portal.portal_layout">
-
-            <h3 class="page-header">Your Profiles</h3>
-            <t t-if="not consultants">
-                <p>There are currently no consultant profiles linked to your account.</p>
-            </t>
-            <t t-if="consultants">
-                <table class="table table-hover o_my_status_table">
-                    <thead>
-                        <tr class="active">
-                            <th>Consultant Name</th>
-                            <th>Next Available</th>
-                        </tr>
-                    </thead>
-                    <t t-foreach="consultants" t-as="consultant">
-                        <tr>
-                            <td>
-                                <a t-attf-href="/my/consultants/#{consultant.id}?#{keep_query()}">
-                                    <t t-esc="consultant.name"/>
-                                </a>
-                            </td>
-                            <td>
-                                <span t-field="consultant.available"/>
-                            </td>
-                        </tr>
-                    </t>
-                </table>
-                <div t-if="pager" class="o_portal_pager text-center">
-                    <t t-call="website.pager"/>
-                </div>
-            </t>
-
-            <div class="hidden" id="hidProfilesInfo">
-                <t t-esc="nox_alert.yourProfilesMessage" />
-            </div>
-
-            <script type="text/javascript">
-                    $(function(){
-                        var info = $('#hidProfilesInfo').text().trim();
-                        if(info !== '') {
-                            $('#wrap').prepend('<div class="container"><div class="well m0">'+ info +'</div></div>');
-                        }
-                        
-                    });
-            </script>
-
+      <t t-call="website_portal.portal_layout">
+        <h3 class="page-header">Your Profiles</h3>
+        <t t-if="not consultants">
+            <p>There are currently no consultant profiles linked to your account.</p>
         </t>
-
+        <t t-if="consultants">
+            <table class="table table-hover o_my_status_table">
+                <thead>
+                    <tr class="active">
+                        <th>Consultant Name</th>
+                        <th>Next Available</th>
+                    </tr>
+                </thead>
+                <t t-foreach="consultants" t-as="consultant">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/consultants/#{consultant.id}?#{keep_query()}"><t t-esc="consultant.name"/></a>
+                        </td>
+                        <td>
+                            <span t-field="consultant.available"/>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+            <div t-if="pager" class="o_portal_pager text-center">
+              <t t-call="website.pager"/>
+            </div>
+        </t>
+      </t>
     </template>
-    
+
     <template id="consultants_followup" name="Consultant">
-        <t t-call="website.layout">
-
-            <div class="container mtb20">
-
-                <!-- breadcrumb -->
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="/my/home">
-                            <i class="fa fa-home"/>
-                        </a>
-                    </li>
-                    <li>
-                        <a t-attf-href="/my/consultants">My Profiles</a>
-                    </li>
-                    <li class="active">Consultant</li>
-                </ol>
-
-                <!-- Alert content -->
-                <div class="well" t-if="not nox_alert.profileMessage == false">
-                    <t t-esc="nox_alert.profileMessage" />
-                </div>
-
-                <!-- Header -->
-                <div class="row consultants-header mb20">
-                    <div class="col-md-12">
-                        <!-- Consultant Name -->
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-8">
-                                <h1 class="m0">
-                                    <t t-esc="consultant.name"/>
-                                </h1>
-                            </div>
-                            <!-- Next Available -->
-                            <div class="col-xs-4 col-sm-4 text-right consultants-nextAvailable">
-                                <div t-if="consultant.available" class="text-right">
-                                    <p class="m0">Next Available</p>
-                                    <p class="m0 t-large">
-                                        <strong t-field="consultant.available"></strong>
-                                    </p>
-                                </div>
-                                <p t-if="not consultant.available">Availability Not Set</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="row">
-                    <div class="col-sm-12">
-                        <div t-if="consultant.available" class="text-right">
-                            <p class="m0">Next Available</p>
-                            <p class="m0 t-large">
-                                <strong t-field="consultant.available"></strong>
-                            </p>
-                        </div>
-                        <p t-if="not consultant.available">Availability Not Set</p>
-                    </div>
-                </div> -->
-
-                <!-- Body Content -->
-                <div class="row mtb40">
-                    <div class="col-sm-12">
-                        <!-- Competences -->
-                        <div class="row competences-list">
-
-                            <!-- Main Roles -->
-                            <div class="col-xs-12 col-sm-3 ">
-                                <label class="control-label" for="main_role_ids">Main Roles</label>
-                                <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role">
-                                    <div class="oe_kanban_details">
-                                        <span t-attf-class="label #{'label-primary'}" t-esc="main_role.name"/>
-                                    </div>
-                                </t>
-                                <t t-if="not consultant.main_role_ids">Not Defined</t>
-                            </div>
-
-                            <!-- Main Competence -->
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="control-label" for="main_competence_ids">Main Competence</label>
-                                <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence">
-                                    <div class="oe_kanban_details">
-                                        <span t-attf-class="label #{'label-primary'}" t-esc="main_competence.name"/>
-                                    </div>
-                                </t>
-                                <t t-if="not consultant.main_competence_ids">Not Defined</t>
-                            </div>
-
-                            <!-- Future Roles -->
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="control-label" for="future_role_ids">Future Roles</label>
-                                <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role">
-                                    <div class="oe_kanban_details">
-                                        <span t-attf-class="label #{'label-primary'}" t-esc="future_role.name"/>
-                                    </div>
-                                </t>
-                                <t t-if="not consultant.future_role_ids">Not Defined</t>
-                            </div>
-
-                            <!-- Existing customer -->
-                            <div class="col-xs-12 col-sm-3">
-                                <label class="control-label" for="consultant.sf_partner">Existing Customer</label>
-                                <div class="oe_kanban_details">
-                                    <span t-attf-class="label #{'label-primary'}" t-esc="consultant.sf_partner"/>
-                                </div>
-                                <t t-if="not consultant.sf_partner">Not Defined</t>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Body Footer -->
+      <t t-call="website.layout">
+        <div id="wrap">
+            <div class="container">
+              <div class="oe_structure">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 text-right">
-                        <div t-if="not consultant.user_id.nox_terms_read">
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb mt8">
+                            <li><a href="/my/home"><i class="fa fa-home"/></a></li>
+                            <li>
+                              <a t-attf-href="/my/consultants">My Profiles</a>
+                            </li>
+                            <li>
+                              Consultant
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="row">
+                	<div class="col-md-12" style="display: inline-block;">
+                		<!--a class="btn btn-info" t-att-href="'/web#return_label=Website&amp;model=consultant.consult&amp;id=%s&amp;view_type=form' % (consultant.id)">Edit</a-->
+                		<!--a t-attf-href="/my/consultants/edit/#{consultant.id}?#{keep_query()}" class="btn btn-default">Edit</a>
+                		<h1><t t-esc="consultant.name"/></h1-->
+                        
+                        <h1><t t-esc="consultant.name"/></h1>
+                        <br/>
+
+                        <label style="font-size:14px; color:#4490F7;" t-if="not consultant.user_id.nox_terms_read">
                             To EDIT, you must agree to NOX
                             <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
-                        </div>
-                        <div t-if="consultant.user_id.nox_terms_read">
-                            <a class="terms" href="#openTerms">
-                                <i>Terms and Conditions.</i>
-                            </a>
-                            <a t-attf-href="/my/consultants/edit/#{consultant.id}?#{keep_query()}" class="btn btn-default btn-primary">Edit</a>
-                        </div>
-                    </div>
+                        </label>
+                        
+                        <label style="font-size:14px; color:#4490F7; background-color:#DCDCDC; padding-right:300px; padding-top:8px; padding-bottom:8px;" t-if="consultant.user_id.nox_terms_read">
+                            <input type="checkbox" name="nox_terms_accepted" checked="checked" disabled="disabled"/>
+                            I accepted NOX's 
+                            <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
+                        </label>
+                	</div>
                 </div>
 
-            </div>
+                <br t-if="consultant.user_id.nox_terms_read"/>
 
+                <a t-if="consultant.user_id.nox_terms_read" t-attf-href="/my/consultants/edit/#{consultant.id}?#{keep_query()}" class="btn btn-default btn-primary">Edit</a>
 
+                <br/><br/>
+                
+                <form action="/my/consultants/#{consultant.id}?#{keep_query()}" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_website_portal_details">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+                                    <label class="control-label" for="available">Next Available</label>
+                                    <h3 t-if="consultant.available"><i><span t-field="consultant.available"/></i></h3>
+                                    <span t-if="not consultant.available" style="padding-left:10px;">Availability Not Set</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_role_ids">Main Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_role.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.main_role_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="main_competence_ids">Main Competence</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="main_competence.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.main_competence_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+                                <div t-attf-class="form-group col-xs-4">
+                                    <label class="control-label" for="future_role_ids">Future Roles</label><br/>
+                                    <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role"> 
+                                        <div class="oe_kanban_details" style="display: inline-block;">
+                                            <span t-attf-class="label #{'label-primary'}" t-esc="future_role.name" style="padding-right:15px;"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="not consultant.future_role_ids">
+                                        Not Defined
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-            <xpath expr="//div['@id=wrap']" position="inside">
+              </div>
+              
+              </div>
+              <div class="oe_structure mb32"/>
+
+              <xpath expr="//div['@id=wrap']" position="inside">
                 <div id="openTerms" class="modalDialog">
                     <div>  
                         <a href="#close" title="Close" class="close">X</a>
@@ -234,10 +175,10 @@
                             <t t-raw="nox_terms"/>
                         </div>
                         <section class="popup-buttons">
-                            <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
-                            <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept and Edit now</button>
-                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                        </section>
+	                        <input type="hidden" id="consultantid" t-att-value="consultant.id"/>
+	                        <button id="button_accept" t-if="not consultant.user_id.nox_terms_read" class="btn btn-default btn-primary btn-popup-update">Accept and Edit now</button>
+	                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    	</section>
                     </div>
                 </div>
                 <script>
@@ -253,253 +194,238 @@
                 </script>
             </xpath>
 
-            <!-- <div aria-hidden="false" class="modal in" data-backdrop="static" role="dialog" tabindex="-1" id="modal_7" style="display: block;">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
-                            <h4 class="modal-title">Create: Teacher<span class="o_subtitle text-muted small"></span></h4>
-                        </div>
-                        <div class="modal-body o_act_window"><div class="o_form_view o_form_editable">
-                </div></div>
-                        <div class="modal-footer"><button type="button" class="btn btn-sm btn-primary">
-                    
-                    <span>Save</span>
-                </button><button type="button" class="btn btn-sm btn-default o_form_button_cancel">
-                    
-                    <span>Discard</span>
-                </button></div>
-                    </div>
-                </div>
-            </div> -->
-
-
-        </t>
+          </div>
+      </t>
     </template>
 
-    <!-- TODO Consultant Profile - Edit mode -->
+
+	<!-- TODO Consultant Profile - Edit mode -->
     <template id="consultants_profile_update" name="Consultant Profile Update">
-        <t t-call="website.layout">
-            <div id="wrap">
-                <div class="container">
-                    <div class="oe_structure">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <ol class="breadcrumb mt8">
-                                    <li>
-                                        <a href="/my/home">
-                                            <i class="fa fa-home"/>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a t-attf-href="/my/consultants">My Profiles</a>
-                                    </li>
-                                    <li>
-                              Consultant EDIT MODE
+      <t t-call="website.layout">
+        <div id="wrap">
+            <div class="container">
+              <div class="oe_structure">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <ol class="breadcrumb mt8">
+                            <li><a href="/my/home"><i class="fa fa-home"/></a></li>
+                            <li>
+                              <a t-attf-href="/my/consultants">My Profiles</a>
                             </li>
-                                </ol>
-                            </div>
-                        </div>
-                        <form action="/my/consultants/" method="post">
-                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            <input name="consultant_id" type="hidden" t-att-value="consultant.id"/>
-                            <h1>
-                                <t t-esc="consultant.name"/>
-                            </h1>
-                            <br/>
-                            <!-- <label style="font-size:14px; color:#4490F7; background-color:#DCDCDC; padding-right:300px; padding-top:8px; padding-bottom:8px;" t-if="consultant.user_id.nox_terms_read">
-                                <input type="checkbox" name="nox_terms_accepted" checked="checked" disabled="disabled"/>
-                            I accepted NOX's                             
-                                <a href="#openTerms" style="text-decoration: underline;">
-                                    <i>Terms and Conditions.</i>
-                                </a>
-                            </label> <br/> <br/>-->
-                            
-                            
-                            <div class="row o_website_portal_details" t-if="consultant.user_id.nox_terms_read">
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div t-attf-class="form-group col-sm-12 col-lg-4">
-                                            <label class="control-label" for="available">Next Available</label>
-                                            <br/>
-                                            <h4>
-                                                <input type="date" name="next_available" t-att-value="consultant.available"/>
-                                            </h4>
-                                        </div>
-                                        <div t-attf-class="form-group col-sm-12 col-lg-8">
-                                            <label class="control-label" for="available">Existing Customer</label>
-                                            <br/>
-                                            <h4>
-                                                <input type="text" name="sf_partner" t-att-value="consultant.sf_partner"/>
-                                            </h4>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <!-- Main Roles - Upto 5 choices -->
-                                        <div id="main_role_selections" t-attf-class="form-group col-lg-4">
-                                            <label class="control-label" for="main_roles">Main Roles</label>
-                                            <select id="main_role1" name="main_role1" class="form-control">
-                                                <option value="">Select Main Role...</option>
-                                                <t t-foreach="main_roles or []" t-as="role">
-                                                    <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('1'))">
-                                                        <t t-esc="role.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_role2" class="form-control">
-                                                <option value="">Select Main Role...</option>
-                                                <t t-foreach="main_roles or []" t-as="role">
-                                                    <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('2'))">
-                                                        <t t-esc="role.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_role3" class="form-control">
-                                                <option value="">Select Main Role...</option>
-                                                <t t-foreach="main_roles or []" t-as="role">
-                                                    <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('3'))">
-                                                        <t t-esc="role.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_role4" class="form-control">
-                                                <option value="">Select Main Role...</option>
-                                                <t t-foreach="main_roles or []" t-as="role">
-                                                    <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('4'))">
-                                                        <t t-esc="role.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_role5" class="form-control">
-                                                <option value="">Select Main Role...</option>
-                                                <t t-foreach="main_roles or []" t-as="role">
-                                                    <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('5'))">
-                                                        <t t-esc="role.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                        </div>
-                                        <!-- Main Competence - Upto 5 choices -->
-                                        <div t-attf-class="form-group col-lg-4">
-                                            <label class="control-label" for="main_competence">Main Competence</label>
-                                            <select name="main_competence1" class="form-control">
-                                                <option value="">Select Main Competence...</option>
-                                                <t t-foreach="main_competence or []" t-as="competence">
-                                                    <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('1'))">
-                                                        <t t-esc="competence.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_competence2" class="form-control">
-                                                <option value="">Select Main Competence...</option>
-                                                <t t-foreach="main_competence or []" t-as="competence">
-                                                    <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('2'))">
-                                                        <t t-esc="competence.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_competence3" class="form-control">
-                                                <option value="">Select Main Competence...</option>
-                                                <t t-foreach="main_competence or []" t-as="competence">
-                                                    <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('3'))">
-                                                        <t t-esc="competence.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_competence4" class="form-control">
-                                                <option value="">Select Main Competence...</option>
-                                                <t t-foreach="main_competence or []" t-as="competence">
-                                                    <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('4'))">
-                                                        <t t-esc="competence.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="main_competence5" class="form-control">
-                                                <option value="">Select Main Competence...</option>
-                                                <t t-foreach="main_competence or []" t-as="competence">
-                                                    <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('5'))">
-                                                        <t t-esc="competence.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                        </div>
-                                        <!-- Future Roles - Upto 3 choices -->
-                                        <div t-attf-class="form-group col-lg-4">
-                                            <label class="control-label" for="future_roles">Future Roles</label>
-                                            <select name="future_role1" class="form-control">
-                                                <option value="">Select Future Role...</option>
-                                                <t t-foreach="future_roles or []" t-as="frole">
-                                                    <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('1'))">
-                                                        <t t-esc="frole.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="future_role2" class="form-control">
-                                                <option value="">Select Future Role...</option>
-                                                <t t-foreach="future_roles or []" t-as="frole">
-                                                    <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('2'))">
-                                                        <t t-esc="frole.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                            <br/>
-                                            <select name="future_role3" class="form-control">
-                                                <option value="">Select Future Role...</option>
-                                                <t t-foreach="future_roles or []" t-as="frole">
-                                                    <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('3'))">
-                                                        <t t-esc="frole.name" />
-                                                    </option>
-                                                </t>
-                                            </select>
-                                        </div>
-                                        <input type="hidden" name="redirect" t-att-value="redirect"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <br/>
-                            <div class="row o_website_portal_details">
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div t-attf-class="form-group col-lg-6">
-                                            <button type="submit" class="btn btn-default btn-primary a-submit">Save</button>
-                                            <a t-attf-href="/my/consultants" class="btn btn-default">Cancel</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            <li>
+                              Consultant
+                            </li>
+                        </ol>
                     </div>
                 </div>
-                <div class="oe_structure mb32"/>
-                <xpath expr="//div['@id=wrap']" position="inside">
-                    <div id="openTerms" class="modalDialog">
-                        <div>
-                            <a href="#close" title="Close" class="close">X</a>
-                            <h2>NOX Terms &amp; Conditions</h2>
-                            <div style="z-index: 5; overflow-y: scroll; max-height:370px;">
-                                <t t-raw="nox_terms"/>
+
+                <form action="/my/consultants/" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input name="consultant_id" type="hidden" t-att-value="consultant.id"/>
+
+                    <h1><t t-esc="consultant.name"/></h1>
+
+                    <br/>
+            
+                    <label style="font-size:14px; color:#4490F7; background-color:#DCDCDC; padding-right:300px; padding-top:8px; padding-bottom:8px;" t-if="consultant.user_id.nox_terms_read">
+                        <input type="checkbox" name="nox_terms_accepted" checked="checked" disabled="disabled"/>
+                            I accepted NOX's 
+                            <a href="#openTerms" style="text-decoration: underline;"><i>Terms and Conditions.</i></a>
+                    </label>
+                    <br/><br/>
+
+                    <div class="row o_website_portal_details" t-if="consultant.user_id.nox_terms_read">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+                                    <label class="control-label" for="available">Next Available</label>
+                                    <br/>
+                                    <h4><input type="date" name="next_available" t-att-value="consultant.available"/></h4>
+                                </div>
                             </div>
-                            <section class="popup-buttons">
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                            </section>
+                            
+                            <div class="row">
+                            	<!-- Main Roles - Upto 5 choices -->
+                            	<div id="main_role_selections" t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_roles">Main Roles</label>
+
+                                    <select id="main_role1" name="main_role1" class="form-control" >
+                                        <option value="">Select Main Role...</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                            <option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('1'))"> 
+                                                <t t-esc="role.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role2" class="form-control" >
+                                        <option value="">Select Main Role...</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('2'))"> 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role3" class="form-control" >
+                                        <option value="">Select Main Role...</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('3'))"> 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role4" class="form-control" >
+                                        <option value="">Select Main Role...</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('4'))"> 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_role5" class="form-control" >
+                                        <option value="">Select Main Role...</option>
+                                        <t t-foreach="main_roles or []" t-as="role">
+                                        	<option t-att-value="role.id" t-att-selected="role.id == int(consultant.portal_get_main_roles('5'))"> 
+                                                <t t-esc="role.name" />
+	                                        </option>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <!-- Main Competence - Upto 5 choices -->
+                            	<div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="main_competence">Main Competence</label>
+
+                                    <select name="main_competence1" class="form-control" >
+                                        <option value="">Select Main Competence...</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('1'))"> 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence2" class="form-control" >
+                                        <option value="">Select Main Competence...</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('2'))"> 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence3" class="form-control" >
+                                        <option value="">Select Main Competence...</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('3'))"> 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence4" class="form-control" >
+                                        <option value="">Select Main Competence...</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('4'))"> 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="main_competence5" class="form-control" >
+                                        <option value="">Select Main Competence...</option>
+                                        <t t-foreach="main_competence or []" t-as="competence">
+                                            <option t-att-value="competence.id" t-att-selected="competence.id == int(consultant.portal_get_main_competence('5'))"> 
+                                                <t t-esc="competence.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <!-- Future Roles - Upto 3 choices -->
+                            	<div t-attf-class="form-group col-lg-4">
+                                    <label class="control-label" for="future_roles">Future Roles</label>
+
+                                    <select name="future_role1" class="form-control" >
+                                        <option value="">Select Future Role...</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('1'))"> 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role2" class="form-control" >
+                                        <option value="">Select Future Role...</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('2'))"> 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                    <br/>
+                                    <select name="future_role3" class="form-control" >
+                                        <option value="">Select Future Role...</option>
+                                        <t t-foreach="future_roles or []" t-as="frole">
+                                            <option t-att-value="frole.id" t-att-selected="frole.id == int(consultant.portal_get_future_roles('3'))"> 
+                                                <t t-esc="frole.name" />
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+
+                            </div>
+
                         </div>
                     </div>
-                    <script>
+
+                    <br/>
+                    <div class="row o_website_portal_details">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div t-attf-class="form-group col-lg-6">
+									<button type="submit" class="btn btn-default btn-primary a-submit">Save</button>
+									<a t-attf-href="/my/consultants" class="btn btn-default">Cancel</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                </form>
+
+            </div>
+              
+            </div>
+            <div class="oe_structure mb32"/>
+
+              <xpath expr="//div['@id=wrap']" position="inside">
+                <div id="openTerms" class="modalDialog">
+                    <div>  
+                        <a href="#close" title="Close" class="close">X</a>
+
+                        <h2>NOX Terms &amp; Conditions</h2>
+                        <div style="z-index: 5; overflow-y: scroll; max-height:370px;">
+                            <t t-raw="nox_terms"/>
+                        </div>
+                        <section class="popup-buttons">
+                        	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    	</section>
+                    </div>
+                </div>
+                <script>
                     $('.btn-popup-reject').on('click', function (e) {
                         $('.modalDialog').hide();
                     });
                 </script>
-                </xpath>
-            </div>
-        </t>
+            </xpath>
+
+          </div>
+      </t>
     </template>
+
 </odoo>
