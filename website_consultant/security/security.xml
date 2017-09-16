@@ -9,4 +9,7 @@
         </record>
 
 	</data>
+	<data>
+		<delete model="res.groups" id="website_consultant.group_portal_consultant"/>
+	</data>
 </odoo>
