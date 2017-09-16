@@ -11,6 +11,9 @@ from datetime import datetime
 
 from odoo.tools.translate import _
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class ConsultantConsult(models.Model):
     _inherit = "consultant.consult"
 
@@ -20,12 +23,55 @@ class ConsultantConsult(models.Model):
 
     @api.model
     def create(self, vals):
-        User = self.env['res.users'].browse([self._uid])
-        if not vals:
-            vals = {}
+        res = super(ConsultantConsult, self).create(vals)
 
-        vendor_id = vals.get('partner_id', False)
-        consultant_name = vals.get('name', '')
+        #link Product on Consultant Card
+        self.link_consultant_related_product(res)
+        
+        return res
+
+    @api.multi
+    def write(self, vals):
+        """Update related Product name and/or Vendor
+        """
+        if not vals: vals = {}
+
+        if 'name' in vals and vals['name']:
+            if self.product_id:
+                self.product_id.write({'name': vals['name']})
+        if 'partner_id' in vals and vals['partner_id']:
+            if self.product_id:
+                #delete existing Product Vendor(s):
+                for Seller in self.product_id.seller_ids:
+                    Seller.unlink()
+                #create new Product Vendor:
+                self.env['product.supplierinfo'].create({'name': vals['partner_id'], 'product_tmpl_id': self.product_id.product_tmpl_id.id})
+        return super(ConsultantConsult, self).write(vals)
+
+    @api.model
+    def set_consultant_product(self):
+        """This function creates & links Product with all Consultant cards that have missing related Product
+        It is executed on module *consultant_product_link* installation.
+        """
+        Consultants = []
+        all_consultants = self.search_read([('id', '>', 0)], ['product_id', 'id'])
+        for x in all_consultants:
+            if not x['product_id']:
+                Consultants.append(self.browse([x['id']]))
+
+        for consultant in Consultants:
+            consultant.link_related_product_with_consultant(consultant)
+        
+        return True
+
+    @api.multi
+    def link_related_product_with_consultant(self, Consultant):
+        """This function creates and links a Product with given Consultant Card
+        """
+        User = self.env['res.users'].browse([self._uid])
+
+        vendor_id = Consultant.partner_id and Consultant.partner_id.id or False
+        consultant_name = Consultant.name
 
         # Create product
         Product = self.env['product.product'].create({
@@ -44,7 +90,8 @@ class ConsultantConsult(models.Model):
 
                                             })
         # Link Product on Consultant
-        vals['product_id'] = Product.id
+        Consultant.write({'product_id': Product.id})
+        _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(Consultant.id, Consultant.name))
 
         # Update UOM, Purchase UOM and Internal Category of Product
         update_vals = {}
@@ -71,25 +118,8 @@ class ConsultantConsult(models.Model):
         if vendor_id:
             self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id})
 
-        return super(ConsultantConsult, self).create(vals)
+        return True
 
-    @api.multi
-    def write(self, vals):
-        """Update related Product name and/or Vendor
-        """
-        if not vals: vals = {}
-
-        if 'name' in vals and vals['name']:
-            if self.product_id:
-                self.product_id.write({'name': vals['name']})
-        if 'partner_id' in vals and vals['partner_id']:
-            if self.product_id:
-                #delete existing Product Vendor(s):
-                for Seller in self.product_id.seller_ids:
-                    Seller.unlink()
-                #create new Product Vendor:
-                self.env['product.supplierinfo'].create({'name': vals['partner_id'], 'product_tmpl_id': self.product_id.product_tmpl_id.id})
-        return super(ConsultantConsult, self).write(vals)
 
     @api.multi
     def _get_orders(self):

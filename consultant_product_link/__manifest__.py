@@ -31,6 +31,8 @@ If any related sales order has valid expiry date (in future); set consultant sta
   'data': [ 
     'views/consultant.xml',
 
+    'data/data.xml',
+
     'security/ir.model.access.csv',
 	],
 
