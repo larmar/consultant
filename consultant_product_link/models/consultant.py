@@ -26,8 +26,10 @@ class ConsultantConsult(models.Model):
         res = super(ConsultantConsult, self).create(vals)
 
         #link Product on Consultant Card
-        self.link_consultant_related_product(res)
-        
+        Product = self.link_related_product_with_consultant(res)
+        res.write({'product_id': Product.id})
+        _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(res.id, res.name))
+
         return res
 
     @api.multi
@@ -60,8 +62,11 @@ class ConsultantConsult(models.Model):
                 Consultants.append(self.browse([x['id']]))
 
         for consultant in Consultants:
-            consultant.link_related_product_with_consultant(consultant)
-        
+            Product = consultant.link_related_product_with_consultant(consultant)
+            # Link Product on Consultant
+            consultant.write({'product_id': Product.id})
+            _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(consultant.id, consultant.name))
+
         return True
 
     @api.multi
@@ -89,9 +94,6 @@ class ConsultantConsult(models.Model):
 
 
                                             })
-        # Link Product on Consultant
-        Consultant.write({'product_id': Product.id})
-        _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(Consultant.id, Consultant.name))
 
         # Update UOM, Purchase UOM and Internal Category of Product
         update_vals = {}
