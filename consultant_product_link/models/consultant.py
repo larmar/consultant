@@ -118,7 +118,7 @@ class ConsultantConsult(models.Model):
         if vendor_id:
             self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id})
 
-        return True
+        return Product
 
 
     @api.multi
