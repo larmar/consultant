@@ -26,7 +26,7 @@ class ConsultantConsult(models.Model):
         res = super(ConsultantConsult, self).create(vals)
 
         #link Product on Consultant Card
-        Product = self.link_related_product_with_consultant(res)
+        Product = self.create_consultant_product(res)
         res.write({'product_id': Product.id})
         _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(res.id, res.name))
 
@@ -62,7 +62,7 @@ class ConsultantConsult(models.Model):
                 Consultants.append(self.browse([x['id']]))
 
         for consultant in Consultants:
-            Product = consultant.link_related_product_with_consultant(consultant)
+            Product = consultant.create_consultant_product(consultant)
             # Link Product on Consultant
             consultant.write({'product_id': Product.id})
             _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(consultant.id, consultant.name))
@@ -70,7 +70,7 @@ class ConsultantConsult(models.Model):
         return True
 
     @api.multi
-    def link_related_product_with_consultant(self, Consultant):
+    def create_consultant_product(self, Consultant):
         """This function creates and links a Product with given Consultant Card
         """
         User = self.env['res.users'].browse([self._uid])
