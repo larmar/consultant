@@ -46,7 +46,7 @@
             		<field name="nox_is_enddate"/>
                     <label colspan="2" string=""/>
 
-                    <field name="nox_product1"/>
+                    <field name="nox_product1" options="{'no_create': 1}"/>
             		<field name="nox_sales_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
                     <field name="nox_cost_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
 					<field name="nox_sum_hours" attrs="{'invisible': [('nox_product1','=',False)]}"/>
@@ -57,7 +57,7 @@
 
                     <label colspan="2" string=""/>
 
-                    <field name="nox_product2" domain="[('id', '!=', nox_product1)]"/>
+                    <field name="nox_product2" domain="[('id', '!=', nox_product1)]" options="{'no_create': 1}"/>
                     <field name="nox_sales_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     <field name="nox_cost_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     <field name="nox_sum_hours2" attrs="{'invisible': [('nox_product2','=',False)]}"/>

@@ -29,7 +29,7 @@
 
 	    			<group>
             			<group name="nox_opportunity_left">
-            				<field name="nox_product1"/>
+            				<field name="nox_product1" options="{'no_create': 1}"/>
 		    				<field name="nox_sales_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
                     		<field name="nox_cost_hourly_rate" attrs="{'invisible': [('nox_product1','=',False)]}"/>
                     		<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
@@ -38,7 +38,7 @@
 							<field name="nox_sum_hours" attrs="{'invisible': [('nox_product1','=',False)]}"/>
 		    			</group>
 		    			<group name="nox_opportunity_right">
-							<field name="nox_product2"/>
+							<field name="nox_product2" options="{'no_create': 1}"/>
 		    				<field name="nox_sales_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     		<field name="nox_cost_hourly_rate2" attrs="{'invisible': [('nox_product2','=',False)]}"/>
                     		<field name="nox_ftepercent2" widget="progressbar" readonly="1"/>
