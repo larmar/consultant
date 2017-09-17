@@ -17,6 +17,8 @@
           Consultant Product - Products Filter
 ##############################################################                    
 This module filters Product in SO & PO if Consultant Product has ongoing SO or PO.
+
+It also removes "Create and Edit.." option from Products drop down from Sale Order lines & Purchase Order lines.
   """,
 
   'author': 'Linserv AB',
