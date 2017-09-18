@@ -7,33 +7,27 @@
 ##############################################################################
 
 {
-  'name': 'Consultant Product Link',
+  'name': 'Consultant Product - Products Filter',
   'sequence': 20,
   'version': '10.0.0.1',
   'category': 'Consultant',
-  'summary': 'Auto Link Standard Hour Product with Consultants',
+  'summary': 'Filter consultant Products in Sales Order & Purchase Order',
   'description': """
 ##############################################################
-              Consultant Product Link
+          Consultant Product - Products Filter
 ##############################################################                    
-Auto Link Standard Hour Product with Consultants
-	* When a new Consultant created; auto create & link a Product with Consultant 
+This module filters Product in SO & PO if Consultant Product has ongoing SO or PO.
 
-Auto set Consultant stage based on related sales order's Expiration Date.
-
-If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready".
+It also removes "Create and Edit.." option from Products drop down from Sale Order lines & Purchase Order lines.
   """,
 
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['consultant', 'sale_expense', 'purchase'],
+  'depends': ['consultant_product_link_extra', 'nox_opportunity_order'],
   'data': [ 
-    'views/consultant.xml',
-
-    'data/data.xml',
-
-    'security/ir.model.access.csv',
+    'views/sale.xml',
+    'views/purchase.xml',
 	],
 
   'application': False,

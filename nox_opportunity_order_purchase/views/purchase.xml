@@ -1,0 +1,26 @@
+<odoo>
+	<data>
+
+        <record id="purchase_order_nox_contract_form" model="ir.ui.view">
+            <field name="name">purchase.order.nox.contract.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//sheet[1]/group[1]" position="after">
+                    <group name="nox_contract">
+                        <group>
+                            <field name="nox_contract_signed"/>
+                        </group>
+                        <group>
+                            <field name="nox_is_startdate"/>
+                            <field name="nox_is_enddate"/>
+                        </group>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+	</data>
+</odoo>

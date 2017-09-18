@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+
+        <record id="crm_oppor_form_nox_commission_payment" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.nox.commission.payment</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+
+            	<field name="team_id" position="after">
+            		<label string="" colspan="4"/>
+            		<field name="nox_commission_payment"/>
+            		<field name="nox_commission_payment_vendor" attrs="{'invisible':[('nox_commission_payment','=',False)]}"/>
+            		<field name="nox_commission_payment_amount" attrs="{'invisible':[('nox_commission_payment','=',False)]}"/>
+            	</field>
+
+            </field>
+        </record>
+
+	</data>
+</odoo>

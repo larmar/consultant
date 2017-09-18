@@ -7,33 +7,30 @@
 ##############################################################################
 
 {
-  'name': 'Consultant Product Link',
+  'name': 'Consultant Product Link - Extra',
   'sequence': 20,
   'version': '10.0.0.1',
   'category': 'Consultant',
-  'summary': 'Auto Link Standard Hour Product with Consultants',
+  'summary': 'Link Upto 3 Related Products with Consultants',
   'description': """
 ##############################################################
-              Consultant Product Link
+          Consultant Product Link - Extra Products
 ##############################################################                    
-Auto Link Standard Hour Product with Consultants
-	* When a new Consultant created; auto create & link a Product with Consultant 
+This module adds 2 extra fields to link Related Product on the Consultant Card.
+	* Related Product 2
+	* Related Product 3
 
-Auto set Consultant stage based on related sales order's Expiration Date.
+**When a Consultant Card is created, a new product with Consultant name as Product name and other default settings, is auto created and set on a Consultant Card (consultant_product_link app).**
 
-If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready".
+**This module extends Related Product link on Consultant Card and allows to link upto 2 more Related Products on Consultant Card; on demand; manually by clicking on button Link Product 2 & Link Product 3.**
   """,
 
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['consultant', 'sale_expense', 'purchase'],
+  'depends': ['consultant_product_link'],
   'data': [ 
     'views/consultant.xml',
-
-    'data/data.xml',
-
-    'security/ir.model.access.csv',
 	],
 
   'application': False,
