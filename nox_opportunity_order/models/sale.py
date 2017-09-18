@@ -82,15 +82,6 @@ class SaleOrder(models.Model):
                     'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
                     'nox_sum_hours': Opportunity.nox_sum_hours,
                     'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
-
-                    'nox_cost_hourly_rate2': Opportunity.nox_cost_hourly_rate2,
-                    'nox_ftepercent2': Opportunity.nox_ftepercent2,
-                    'nox_ftepercent_temp2': Opportunity.nox_ftepercent_temp2,
-                    'nox_sum_hours2': Opportunity.nox_sum_hours2,
-                    'nox_sales_hourly_rate2': Opportunity.nox_sales_hourly_rate2,
-
-                    'nox_product1': Opportunity.nox_product1 and Opportunity.nox_product1.id or False,
-                    'nox_product2': Opportunity.nox_product2 and Opportunity.nox_product2.id or False,
                 })
         return res
 
