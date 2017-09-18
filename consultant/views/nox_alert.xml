@@ -30,7 +30,7 @@
 
 		<menuitem id="menu_consultant_portal_alert" 
 			parent="menu_consultant_configuration_portal" 
-			name="Nox Alert" 
+			name="NOX Alert &amp; Information" 
 			sequence="50" 
 			action="action_nox_alert"/>
 
