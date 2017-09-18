@@ -21,13 +21,15 @@ Auto Link Standard Hour Product with Consultants
 
 Auto set Consultant stage based on related sales order's Expiration Date.
 
+Auto populate Quotation Lines when created from Opportunity with linked Consultant(s).
+
 If any related sales order has valid expiry date (in future); set consultant stage as "On NOX Contract"; otherwise "Sale ready".
   """,
 
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['consultant', 'sale_expense', 'purchase'],
+  'depends': ['consultant', 'sale_expense', 'purchase', 'nox_opportunity_order'],
   'data': [ 
     'views/consultant.xml',
 
