@@ -22,7 +22,6 @@ class SaleOrder(models.Model):
             for line in order.order_line:
                 analytic_account_name.append(line.product_id.name)
 
-            analytic_account_name.append(order.partner_id.name)
             analytic_account_name = ' / '.join(analytic_account_name)
 
             analytic_account_id = self.env['account.analytic.account'].create({'name': analytic_account_name, 'partner_id': order.partner_id.id})
