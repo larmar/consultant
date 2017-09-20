@@ -77,21 +77,39 @@ class SaleOrder(models.Model):
                     'nox_is_startdate': Opportunity.nox_is_startdate,
                     'nox_is_enddate': Opportunity.nox_is_enddate,
                     
-                    'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
-                    'nox_ftepercent': Opportunity.nox_ftepercent,
-                    'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
-                    'nox_sum_hours': Opportunity.nox_sum_hours,
-                    'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
-
-                    'nox_cost_hourly_rate2': Opportunity.nox_cost_hourly_rate2,
-                    'nox_ftepercent2': Opportunity.nox_ftepercent2,
-                    'nox_ftepercent_temp2': Opportunity.nox_ftepercent_temp2,
-                    'nox_sum_hours2': Opportunity.nox_sum_hours2,
-                    'nox_sales_hourly_rate2': Opportunity.nox_sales_hourly_rate2,
-
-                    'nox_product1': Opportunity.nox_product1 and Opportunity.nox_product1.id or False,
-                    'nox_product2': Opportunity.nox_product2 and Opportunity.nox_product2.id or False,
                 })
+
+            self._cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
+                                where opportunity_id=%s """%(opportunity_id))
+            result = self._cr.fetchall()
+            consultants = []
+            for r in result:
+                consultants.append(r[0])
+
+            #set Related Product on Quotation:
+            if consultants:
+                consultant1_product = self.env['consultant.consult'].browse([consultants[0]])[0].product_id
+                res.update({
+                        'nox_product1': consultant1_product and consultant1_product.id or False,
+                        'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
+                        'nox_ftepercent': Opportunity.nox_ftepercent,
+                        'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
+                        'nox_sum_hours': Opportunity.nox_sum_hours,
+                        'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
+                    })
+                
+                #set Related Product 2 and related fields if more than one consutant is linked with Opportunity:
+                if len(consultants) > 1:
+                    consultant2_product = self.env['consultant.consult'].browse([consultants[1]])[0].product_id
+                    res.update({
+                            'nox_product2': consultant2_product and consultant2_product.id or False,
+                            'nox_cost_hourly_rate2': Opportunity.nox_cost_hourly_rate,
+                            'nox_ftepercent2': Opportunity.nox_ftepercent,
+                            'nox_ftepercent_temp2': Opportunity.nox_ftepercent_temp,
+                            'nox_sum_hours2': Opportunity.nox_sum_hours,
+                            'nox_sales_hourly_rate2': Opportunity.nox_sales_hourly_rate,
+                        })
+
         return res
 
     @api.multi
@@ -133,35 +151,6 @@ class SaleOrder(models.Model):
             raise ValidationError(_('Unit Price Mismatch with Sales hourly rate!\n\n\
                                     Unit Price in Order lines for Product %s should be same as Sales hourly rate for related Product %s.'%(product.name, str(line_counter))))
         return True
-
-    @api.multi
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """Set default order lines with Consultants Product (from Opportunity)
-        """
-        res = super(SaleOrder, self).onchange_partner_id()
-        context = self.env.context
-        order_lines = []
-        if 'active_model' in context and context['active_model'] == 'crm.lead' and context.get('default_opportunity_id', False):
-            Opportunity = self.env['crm.lead'].browse(context['default_opportunity_id'])
-            if Opportunity.nox_product1:
-                order_lines.append({
-                        'product_id': Opportunity.nox_product1.id,
-                        'price_unit': Opportunity.nox_sales_hourly_rate,
-                        'product_uom': Opportunity.nox_product1.uom_id.id,
-                        'product_uom_qty': Opportunity.nox_sum_hours,
-                        'name': Opportunity.nox_product1.name_get()[0][1],
-                    })
-            if Opportunity.nox_product2:
-                order_lines.append({
-                        'product_id': Opportunity.nox_product2.id,
-                        'price_unit': Opportunity.nox_sales_hourly_rate2,
-                        'product_uom': Opportunity.nox_product2.uom_id.id,
-                        'product_uom_qty': Opportunity.nox_sum_hours2,
-                        'name': Opportunity.nox_product2.name_get()[0][1],
-                    })
-        if order_lines:
-            self.update({'order_line': order_lines})
 
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):

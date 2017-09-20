@@ -34,8 +34,8 @@ class SaleOrder(models.Model):
                 line_data = {
                     'product_id': product.id,
                     'product_uom': product.uom_id and product.uom_id.id or False,
-                    'price_unit': product.lst_price,
-                    'product_uom_qty': 1,
+                    'price_unit': Opportunity.nox_sales_hourly_rate,
+                    'product_uom_qty': Opportunity.nox_sum_hours,
                     'tax_id': [[6, 0, taxes]],
                     'name': name,
                 }
