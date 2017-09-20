@@ -30,69 +30,80 @@ class Sale(models.Model):
     def action_create_draft_po(self):
         """Create Purchase Order from Sales Order
         """
-        purchase_vals, purchase_line_vals = {}, []
+        purchase_vals, purchase_ids = {}, []
         for sale in self:
             #purchase order :
             fiscal_position_id = self.env['account.fiscal.position'].with_context(company_id=self.create_uid.company_id.id).get_fiscal_position(sale.partner_id.id)
             payment_term_id = sale.partner_id.property_supplier_payment_term_id.id
             currency_id = sale.partner_id.property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
 
-            #get vendor from first sale order line products Vendors setting
-            flag, vendor_id, vendor_product_id = True, False, False
-            vendor_price = 0.0
+            #create PO by Vendor:
+            lines_by_vendor = {}
             for line in sale.order_line:
-                if flag and line.product_id:
-                    for seller in line.product_id.seller_ids:
-                        vendor_product_id = line.product_id.id
-                        vendor_id = seller.name.id
-                        vendor_price = seller.price
-                        break
-                flag = False
-            
-            #purchase order lines :
+                for seller in line.product_id.seller_ids:
+                    lines_by_vendor[seller.name.id] = []
+                    break
+
             for line in sale.order_line:
-                price_unit, taxes = 0, []
+                taxes = []
                 for tax in line.product_id.supplier_taxes_id:
                     taxes.append(tax.id)
 
-                #get Vendor price as Unit price in PO line:
+                #TODO: recheck if product line with product which has no Vendors defined to include in any PO
+                #if line.product_id and and not line.product_id.seller_ids:
+                #    lines_by_vendor[line_val].append([line.product_id, line.product_id.uom_po_id.id or line.product_id.uom_id.id, line.name, line.product_uom_qty, 0, taxes])
+
                 for seller in line.product_id.seller_ids:
-                    if not price_unit:
-                        price_unit = seller.price
+                    lines_by_vendor[seller.name.id].append([line.product_id, line.product_id.uom_po_id.id or line.product_id.uom_id.id, line.name, line.product_uom_qty, seller.price, taxes])
+                    break
 
-                line_vals = {
-                    'name': line.name,
-                    'product_id': line.product_id and line.product_id.id or False,
-                    'product_qty': line.product_uom_qty,
-                    'price_unit': price_unit,
-                    'account_analytic_id': sale.related_project_id and sale.related_project_id.id or False,
-                    'product_uom': line.product_id.uom_po_id.id or line.product_id.uom_id.id,
-                    'date_planned': datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                    'taxes_id': [[6, 0, taxes]],
+            for vendor in lines_by_vendor:
+                purchase_vals = {
+                    'partner_id': vendor,
+                    'project_id': sale.related_project_id and sale.related_project_id.id or False,
+                    'fiscal_position_id': fiscal_position_id,
+                    'payment_term_id': payment_term_id,
+                    'currency_id': currency_id,
                     'sale_id': sale.id,
-                    'state': 'draft',
-                }
-                purchase_line_vals.append(line_vals)
+                    'origin': sale.name,
+                    }
+                
+                purchase_id = self.env['purchase.order'].create(purchase_vals)
+                purchase_ids.append(purchase_id.id)
 
-            purchase_vals = {
-                'default_partner_id': vendor_id,
-                'default_project_id': sale.related_project_id and sale.related_project_id.id or False,
-                'default_fiscal_position_id': fiscal_position_id,
-                'default_payment_term_id': payment_term_id,
-                'default_currency_id': currency_id,
-                'default_order_line': purchase_line_vals,
-                'default_sale_id': sale.id,
-                'default_origin': sale.name,
-                }
-            form_view_id = self.env['ir.model.data'].xmlid_to_res_id('purchase.purchase_order_form')
+                for line in lines_by_vendor[vendor]:
+                    line_vals = {
+                        'product_id': line[0] and line[0].id or False,
+                        'product_uom': line[1],
+                        'name': line[2],
+                        'product_qty': line[3],
+                        'price_unit': line[4],
+                        'account_analytic_id': sale.related_project_id and sale.related_project_id.id or False,
+                        'date_planned': datetime.today().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                        'taxes_id': [[6, 0, line[5]]],
+                        'sale_id': sale.id,
+                        'state': 'draft',
+                        'order_id': purchase_id.id
+                    }
+                    purchase_line_id = self.env['purchase.order.line'].create(line_vals)
+
+            res_id, domain = False, []
+
+            if len(purchase_ids) == 1:
+                view_mode = 'form'
+                res_id = purchase_ids[0]
+            elif purchase_ids:
+                view_mode = 'tree,form'
+                domain = [['id','in',purchase_ids]]
+
             return {
                 'name': 'Request for Quotation',
                 'type': 'ir.actions.act_window',   
                 'res_model': 'purchase.order',
                 'view_type': 'form',
-                'view_id': form_view_id or False,
-                'view_mode': 'form',
-                'context': purchase_vals,
+                'view_mode': view_mode,
+                'res_id': res_id,
+                'domain': domain,
                 'target': 'current',
                 }
 
