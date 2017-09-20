@@ -20,6 +20,7 @@
             				<field name="purchase_line_check" invisible="1" colspan="4"/>
             				<field name="purchase_line_ids" nolabel="1" colspan="4" attrs="{'invisible': [('purchase_line_check','=',False)]}" readonly="1">
             					<tree string="Purchase Order Lines" create="false">
+                                            <button name="action_open_po" type="object" string="View Purchase Order" icon="fa-hand-pointer-o"/>
 				                    <field name="order_id"/>
 				                    <field name="name"/>
 				                    <field name="partner_id" string="Vendor" />
