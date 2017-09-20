@@ -8,12 +8,12 @@
 					<sheet>
 						<div style="margin-bottom: 20px">
 							<h2><field name="yourProfilesTitle" readonly="1"/></h2>
-							<field name="yourProfilesMessage" colspan="6"/>
+							<field name="yourProfilesMessage"  widget="html" colspan="6"/>
 						</div>
 
 						<div style="margin-bottom: 20px">
 							<h2><field name="profileTitle" readonly="1"/></h2>
-							<field name="profileMessage" colspan="6"/>
+							<field name="profileMessage"  widget="html" colspan="6"/>
 						</div>
 					</sheet>
 				</form>

@@ -14,7 +14,7 @@
 						</div>
 						<notebook>
 							<page string="Terms">
-								<field name="description" colspan="4"/>
+								<field name="description" widget="html" colspan="4"/>
 							</page>
 						</notebook>
 					</sheet>

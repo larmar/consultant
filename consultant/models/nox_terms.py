@@ -16,7 +16,7 @@ class NoxTerms(models.Model):
     _description = "NOX terms & conditions"
 
     name = fields.Char('Name', default="NOX Terms & Conditions")
-    description = fields.Html("Terms & Conditions")
+    description = fields.Html("Terms & Conditions", translate=True)
 
     @api.model_cr
     def init(self):

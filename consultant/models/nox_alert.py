@@ -12,11 +12,11 @@ class NoxAlert(models.Model):
 
     # Alert/Information on my/consultants
     yourProfilesTitle = fields.Char('yourProfilesTitle', default="Your profiles alert.")
-    yourProfilesMessage = fields.Text()
+    yourProfilesMessage = fields.Text(translate=True)
 
     # Alert/Information on my/consultants/[userId]
     profileTitle = fields.Char('profilesAlertTitle', default="Profile alert.")
-    profileMessage = fields.Text()
+    profileMessage = fields.Text(translate=True)
 
     @api.model_cr
     def init(self):

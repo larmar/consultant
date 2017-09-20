@@ -1,6 +1,6 @@
 .modalDialog {
     position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
+    // font-family: Arial, Helvetica, sans-serif;
     top: 0;
     right: 0;
     bottom: 0;
@@ -12,47 +12,33 @@
     -moz-transition: opacity 400ms ease-in;
     transition: opacity 400ms ease-in;
     pointer-events: none;
-}
 
-.modalDialog:target {
-    opacity:1;
-    pointer-events: auto;
-}
-.modalDialog > div {
-    width: 75%;
-    position: relative;
-    margin: 10% auto;
-    padding: 5px 20px 13px 20px;
-    border-radius: 10px;
-    background: #fff;
-    // background: -moz-linear-gradient(#fff, #999);
-    // background: -webkit-linear-gradient(#fff, #999);
-    // background: -o-linear-gradient(#fff, #999);
-}
-.close {
-    // background: #ffffff;
-    line-height: 25px;
-    position: absolute;
-    right: 10px;
-    text-align: center;
-    top: 10px;
-    width: 24px;
-    text-decoration: none;
-    font-weight: bold;
-    // -webkit-border-radius: 12px;
-    // -moz-border-radius: 12px;
-    // border-radius: 12px;
-    // -moz-box-shadow: 1px 1px 3px #000;
-    // -webkit-box-shadow: 1px 1px 3px #000;
-    // box-shadow: 1px 1px 3px #000;
-}
-.close:hover {
-    // background: #ffffff;
-}
-
-.popup-buttons {
-    padding: 20px;
-    text-align: left;
+    &:target {
+        opacity:1;
+        pointer-events: auto;
+    }
+    & > div {
+        width: 60%;
+        position: relative;
+        margin: 10% auto;
+        padding: 5px 20px 13px 20px;
+        border-radius: 2px;
+        background: #fff;
+    }
+    .close {
+        position: absolute;
+        text-align: center;
+        right: 0.8em;
+        top: 0.6em;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    
+    .popup-buttons {
+        padding: 20px;
+        text-align: center;
+    }
 }
 
 .m0{
