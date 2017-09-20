@@ -171,16 +171,16 @@ class consultant_consult(models.Model):
 
     @api.onchange('future_role_ids')
     def onchange_future_roles(self):
-        if len(self.future_role_ids) > 2:
+        if len(self.future_role_ids) > 3:
             roles = []
             for role in self.future_role_ids:
                 roles.append(role.id)
-            roles = roles[-5:]
+            roles = roles[-3:]
             self.future_role_ids = [[6, 0, roles]]
 
             warning = {
                 'title': 'Maximum Selection Exceeded.',
-                'message': 'You can only select up to 2 Future Roles. Options selected more than 2 will be removed.'
+                'message': 'You can only select up to 3 Future Roles. Options selected more than 3 will be removed.'
             }
             return {'warning': warning}
 
