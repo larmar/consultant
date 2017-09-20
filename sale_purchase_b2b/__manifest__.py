@@ -15,7 +15,7 @@
 ##############################################################
                 Back to Back Purchase Orders
 ##############################################################
-	*	This module adds a button in Sales Order screen "Create Draft Purchase Order" which creates a new Purchase order in RFQ state with all sale order line items.
+	*	This module adds a button in Sales Order screen "Create Draft Purchase Order" which creates Purchase order(s) by Vendors in RFQ state with all sale order line items having Products for which Vendor is set.
 	*	This button is available only if Sales Order is confirmed.
 	*	A new field "Analytic Account" is also added in Purchase Order.
   """,
