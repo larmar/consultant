@@ -28,7 +28,7 @@ class Sale(models.Model):
 
     @api.multi
     def action_create_draft_po(self):
-        """Create Purchase Order from Sales Order
+        """Create Purchase Order(s) from Sales Order; by Vendors
         """
         purchase_vals, purchase_ids = {}, []
         for sale in self:
