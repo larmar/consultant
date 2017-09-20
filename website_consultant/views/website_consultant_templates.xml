@@ -8,7 +8,7 @@
     
     <template id="portal_my_home_menu_consultant_profile" name="Portal layout : consultant menu entries" inherit_id="website_portal.portal_layout" priority="25">
         <xpath expr="//ul[contains(@class,'o_portal_submenu')]" position="inside">
-            <li groups="website_consultant.group_portal_consultant">
+            <li groups="base.group_portal">
                 <a href="/my/consultants">Profiles</a>
             </li>
         </xpath>
@@ -16,7 +16,7 @@
     
     <template id="portal_my_home_consultants" name="Portal My Home : consultant entries" inherit_id="website_portal.portal_my_home" priority="25">
         <xpath expr="//div[contains(@class,'o_my_home_content')]" position="inside">
-            <h3 class="page-header" groups="website_consultant.group_portal_consultant">
+            <h3 class="page-header" groups="base.group_portal">
                 <a href="/my/consultants">Your Profiles
                     <small class="ml8">
                         <t t-if="profiles_count">
