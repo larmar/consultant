@@ -125,10 +125,10 @@ class SaleOrder(models.Model):
         #Validate Start Date & End Date
         start_date = self.nox_is_startdate
         end_date = self.nox_is_enddate
-        if 'start_date' in vals:
-            start_date = vals['start_date']
-        if 'end_date' in vals:
-            end_date = vals['end_date']
+        if 'nox_is_startdate' in vals:
+            start_date = vals['nox_is_startdate']
+        if 'nox_is_enddate' in vals:
+            end_date = vals['nox_is_enddate']
 
         if start_date and end_date and start_date > end_date:
             raise ValidationError(_('Invalid Start Date!\n\nContract Start Date cannot be greater than End Date!'))
