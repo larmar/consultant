@@ -122,10 +122,22 @@ class SaleOrder(models.Model):
         #check & match Related Product, Total Hours & Sales hourly rate with respective Order line product, Ordered Quantity & Unit price in Order lines:
         res = super(SaleOrder, self).write(vals)
 
+        #Validate Start Date & End Date
+        start_date = self.nox_is_startdate
+        end_date = self.nox_is_enddate
+        if 'start_date' in vals:
+            start_date = vals['start_date']
+        if 'end_date' in vals:
+            end_date = vals['end_date']
+
+        if start_date and end_date and start_date > end_date:
+            raise ValidationError(_('Invalid Start Date!\n\nContract Start Date cannot be greater than End Date!'))
+
         if self.nox_product1:
             self.validate_related_product_with_orderline(self.nox_product1, self.nox_sum_hours, self.nox_sales_hourly_rate, 1)
         if self.nox_product2:
             self.validate_related_product_with_orderline(self.nox_product2, self.nox_sum_hours2, self.nox_sales_hourly_rate2, 2)
+
         return res
 
     @api.multi
