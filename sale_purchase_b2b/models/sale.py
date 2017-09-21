@@ -68,7 +68,7 @@ class Sale(models.Model):
                     'origin': sale.name,
                     }
                 
-                purchase_id = self.env['purchase.order'].create(purchase_vals)
+                purchase_id = self.create_purchase_order(sale, purchase_vals)
                 purchase_ids.append(purchase_id.id)
 
                 for line in lines_by_vendor[vendor]:
@@ -108,3 +108,6 @@ class Sale(models.Model):
                 }
 
         
+    @api.multi
+    def create_purchase_order(self, order_id, vals):
+        return self.env['purchase.order'].create(vals)
