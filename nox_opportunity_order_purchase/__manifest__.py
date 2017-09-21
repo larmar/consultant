@@ -26,7 +26,7 @@ If Purchase Order is created from Sales Order; Start Date & End Date are auto se
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['nox_opportunity_order'],
+  'depends': ['nox_opportunity_order', 'sale_purchase_b2b'],
   'data': [ 
   		'views/purchase.xml',
 	],
