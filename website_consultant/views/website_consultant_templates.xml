@@ -79,7 +79,7 @@
     <template id="consultants_followup" name="Consultant">
         <t t-call="website.layout">
 
-            <div class="container mtb20">
+            <div class="container mt20b40">
 
                 <!-- breadcrumb -->
                 <ol class="breadcrumb">
@@ -126,26 +126,14 @@
                     </div>
                 </div>
 
-                <!-- <div class="row">
-                    <div class="col-sm-12">
-                        <div t-if="consultant.available" class="text-right">
-                            <p class="m0">Next Available</p>
-                            <p class="m0 t-large">
-                                <strong t-field="consultant.available"></strong>
-                            </p>
-                        </div>
-                        <p t-if="not consultant.available">Availability Not Set</p>
-                    </div>
-                </div> -->
-
                 <!-- Body Content -->
-                <div class="row mtb20">
+                <div class="row mtb40">
                     <div class="col-sm-12">
                         <!-- Competences -->
                         <div class="row competences-list">
 
                             <!-- Main Roles -->
-                            <div class="col-xs-12 col-sm-5 mb20">
+                            <div class="col-xs-12 col-sm-5 mb40">
                                 <label class="control-label" for="main_role_ids">Main Roles</label>
                                 <t t-name="kanban-box" t-foreach="consultant.main_role_ids" t-as="main_role">
                                     <div class="oe_kanban_details">
@@ -156,7 +144,7 @@
                             </div>
 
                             <!-- Main Competence -->
-                            <div class="col-xs-12 col-sm-5 mb20">
+                            <div class="col-xs-12 col-sm-5 mb40">
                                 <label class="control-label" for="main_competence_ids">Main Competence</label>
                                 <t t-name="kanban-box" t-foreach="consultant.main_competence_ids" t-as="main_competence">
                                     <div class="oe_kanban_details">
@@ -167,7 +155,7 @@
                             </div>
 
                             <!-- Future Roles -->
-                            <div class="col-xs-12 col-sm-5 mb20">
+                            <div class="col-xs-12 col-sm-5 mb40">
                                 <label class="control-label" for="future_role_ids">Future Roles</label>
                                 <t t-name="kanban-box" t-foreach="consultant.future_role_ids" t-as="future_role">
                                     <div class="oe_kanban_details">
@@ -178,7 +166,7 @@
                             </div>
 
                             <!-- Existing customer -->
-                            <div class="col-xs-12 col-sm-5 mb20">
+                            <div class="col-xs-12 col-sm-5 mb40">
                                 <label class="control-label" for="consultant.sf_partner">Existing Customer</label>
                                 <div class="oe_kanban_details">
                                     <span t-attf-class="label #{'label-primary'}" t-esc="consultant.sf_partner"/>
