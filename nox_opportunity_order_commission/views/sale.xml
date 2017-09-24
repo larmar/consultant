@@ -13,6 +13,7 @@
             		<group name="nox_commission_payment">
             			<group>
             				<field name="nox_commission_payment"/>
+                                    <field name="has_commission_order" invisible="1"/>
             			</group>
             			<group>
             				<field name="nox_commission_payment_vendor" attrs="{'invisible':[('nox_commission_payment','=',False)]}"/>
@@ -26,7 +27,7 @@
                   </field>
                   <notebook position="inside">
                         <page name="page_commission_payment" string="Commission Orders" attrs="{'invisible':[('nox_commission_payment','=',False)]}">
-                              
+                              <label string="There are no Commission Orders associated with this Sales Order." attrs="{'invisible': [('has_commission_order','=',True)]}" colspan="4"/>
                         </page>
                   </notebook>
             </field>

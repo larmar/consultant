@@ -17,6 +17,7 @@ class SaleOrder(models.Model):
     nox_commission_payment = fields.Boolean('Commission Payment?', copy=False)
     nox_commission_payment_vendor = fields.Many2one('res.partner', 'Pay To', copy=False, domain="[('supplier','=',True)]")
     nox_commission_payment_amount = fields.Float('Amount Per Hour', copy=False)
+    has_commission_order = fields.Boolean('Has Commission Order?', copy=False)
 
     @api.model_cr
     def init(self):
