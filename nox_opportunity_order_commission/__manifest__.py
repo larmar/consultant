@@ -29,6 +29,7 @@ If Commission Payment check box is ticked; "Create Commission Order" button and 
   'data': [ 
   		'views/crm_lead.xml',
   		'views/sale.xml',
+  		'views/product.xml',
 
   		'data/product_data.xml',
 	],

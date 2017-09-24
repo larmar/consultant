@@ -12,6 +12,7 @@
             <field name="type">service</field>
             <field name="uom_id" ref="product.product_uom_hour"/>
             <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="is_commission_product" eval="True"/>
         </record>
 
 		<record id="nox_commission_product" model="product.product">
@@ -24,7 +25,7 @@
             <field name="uom_id" ref="product.product_uom_hour"/>
             <field name="uom_po_id" ref="product.product_uom_hour"/>
             <field name="description">Commission Product</field>
-            <field name="default_code">COMM</field>            
+            <field name="default_code">COMM</field>
         </record>
 
 	</data>
