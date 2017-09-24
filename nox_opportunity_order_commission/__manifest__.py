@@ -9,7 +9,7 @@
 {
   'name': 'NOX Opportunity Order - Commission Payment',
   'version': '10.0.0.1',
-  'category': 'Tools',
+  'category': 'NOX',
   'summary': 'NOX Opportunity Order - Commission Payment',
   'description': """
 ##############################################################
@@ -20,6 +20,7 @@ This module adds following new fields in Opportunity & Quotation/Sales Order vie
     *	Pay to (Vendors list)
     *	Amount per hour
 
+If Commission Payment check box is ticked; "Create Commission Order" button and "Commission Order" tab shows up.
   """,
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
@@ -28,6 +29,8 @@ This module adds following new fields in Opportunity & Quotation/Sales Order vie
   'data': [ 
   		'views/crm_lead.xml',
   		'views/sale.xml',
+
+  		'data/product_data.xml',
 	],
 
   'application': False,
