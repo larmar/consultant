@@ -7,6 +7,9 @@
 ##############################################################################
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
+from odoo.tools.translate import _
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -14,6 +17,15 @@ class SaleOrder(models.Model):
     nox_commission_payment = fields.Boolean('Commission Payment?', copy=False)
     nox_commission_payment_vendor = fields.Many2one('res.partner', 'Pay To', copy=False, domain="[('supplier','=',True)]")
     nox_commission_payment_amount = fields.Float('Amount Per Hour', copy=False)
+
+    @api.model_cr
+    def init(self):
+        """drop required constraint from purchase_line_warn column to allow creation of Commission product from data file.
+        """
+        try:
+            self._cr.execute("""alter table product_template alter column purchase_line_warn drop not null;""")
+        except Exception:
+            pass
 
     @api.model
     def default_get(self, fields):
@@ -31,3 +43,12 @@ class SaleOrder(models.Model):
             		'nox_commission_payment_amount': Opportunity.nox_commission_payment_amount,
                 })
         return res
+
+    @api.multi
+    def action_create_commission_order(self):
+        for sale in self:
+            if not sale.nox_commission_payment_vendor:
+                raise ValidationError(_('Missing Vendor!\n\nPlease select Pay To (Vendor) to Create Commission Order.'))
+            if not sale.nox_commission_payment_amount or sale.nox_commission_payment_amount == 0:
+                raise ValidationError(_('Missing Price!\n\nPlease enter valid Amount Per Hour to Create Commission Order.'))
+            
