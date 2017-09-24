@@ -23,7 +23,15 @@
             <field name="search_view_id" ref="product.product_search_form_view"/>
             <field name="view_id" eval="False"/> <!-- Force empty -->
             <field name="domain">[('is_commission_product','=',True)]</field>
-            <field name="context">{'default_is_commission_product': 1, 'is_commission_product': 1}</field>
+            <field name="context">{
+                                    'default_is_commission_product': 1, 
+                                    'is_commission_product': 1, 
+                                    'default_purchase_method': 'receive', 
+                                    'default_type': 'service',
+                                    'default_standard_price': 1,
+                                    'default_sale_ok': 0,
+                                    }
+            </field>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to define a new Commission product.

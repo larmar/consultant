@@ -4,6 +4,7 @@
 
         <record id="product_category_commission" model="product.category">
             <field name="name">Commission</field>
+            <field name="parent_id" ref="product.product_category_all"/>
         </record>
 
 		<record id="nox_commission_product_template" model="product.template">
@@ -12,20 +13,23 @@
             <field name="type">service</field>
             <field name="uom_id" ref="product.product_uom_hour"/>
             <field name="uom_po_id" ref="product.product_uom_hour"/>
+            <field name="standard_price">1</field>
+            <field name="list_price">0</field>            
             <field name="is_commission_product" eval="True"/>
+            <field name="invoice_policy">delivery</field>
+            <field name="default_code">COMM</field>
+            <field name="sale_ok">False</field>
+            <field name="purchase_method">receive</field>
         </record>
 
 		<record id="nox_commission_product" model="product.product">
 			<field name="name">Commission</field>
             <field name="categ_id" ref="product_category_commission"/>
             <field name="product_tmpl_id" ref="nox_commission_product_template"/>
-            <field name="standard_price">0</field>
-            <field name="list_price">0</field>
             <field name="type">service</field>
             <field name="uom_id" ref="product.product_uom_hour"/>
             <field name="uom_po_id" ref="product.product_uom_hour"/>
             <field name="description">Commission Product</field>
-            <field name="default_code">COMM</field>
         </record>
 
 	</data>

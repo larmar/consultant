@@ -25,7 +25,7 @@ If Commission Payment check box is ticked; "Create Commission Order" button and 
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['sale_crm'],
+  'depends': ['sale_crm', 'purchase'],
   'data': [ 
   		'views/crm_lead.xml',
   		'views/sale.xml',
