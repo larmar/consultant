@@ -31,7 +31,7 @@
 
                               <field name="commission_order_lines" nolabel="1" colspan="4" attrs="{'invisible': [('has_commission_order','=',False)]}" readonly="1">
                                     <tree create="false" string="Commission Order Line">
-                                          <!--button name="action_open_po" type="object" string="View Purchase Order" icon="fa-hand-pointer-o"/-->
+                                          <button name="action_open_commission_order" type="object" string="View Commission Order" icon="fa-hand-pointer-o"/>
                                           <field name="commission_sale_id" invisible="1"/>
                                           <field name="order_id"/>
                                           <field name="name"/>

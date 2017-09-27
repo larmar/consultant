@@ -31,3 +31,16 @@ class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
     commission_sale_id = fields.Many2one('sale.order', 'Source Sales Order', copy=False)
+
+    @api.multi
+    def action_open_commission_order(self):
+        for pol in self:
+            return {
+                'name': 'Commission Order',
+                'type': 'ir.actions.act_window',   
+                'res_model': 'purchase.order',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_id': pol.order_id.id,
+                'target': 'current',
+                }
