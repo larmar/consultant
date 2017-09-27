@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="purchase_commission_order_form" model="ir.ui.view">
+            <field name="name">purchase.commission.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+            	<field name="company_id" position="before">
+            		<field name="commission_sale_id" readonly="1" invisible="1"/>
+            	</field>
+            	<xpath expr="//page[1]/field[@name='order_line']/tree[1]/field[@name='state']" position="after">
+                  <field name="commission_sale_id" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+	</data>
+</odoo>

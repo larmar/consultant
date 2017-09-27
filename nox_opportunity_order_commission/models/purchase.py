@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016-TODAY Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
+
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
+from odoo.tools.translate import _
+
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
+
+    commission_sale_id = fields.Many2one('sale.order', 'Source Sales Order', copy=False)
+
+    @api.model
+    def create(self, vals):
+        """Set Commission Order check on Sales Order if this is a Commission Order from SO.
+        """
+        if self.env.context and 'commission_order' in self.env.context:
+            sale_id = self.env.context.get('default_commission_sale_id', False)
+            if sale_id:
+                self.env['sale.order'].browse([sale_id]).write({'has_commission_order': True})
+
+        return super(PurchaseOrder, self).create(vals)
+
+class PurchaseOrderLine(models.Model):
+    _inherit = "purchase.order.line"
+
+    commission_sale_id = fields.Many2one('sale.order', 'Source Sales Order', copy=False)
