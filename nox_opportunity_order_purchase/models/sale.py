@@ -8,6 +8,9 @@
 
 from odoo import models, fields, api
 
+from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
