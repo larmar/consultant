@@ -60,8 +60,8 @@ class SaleOrder(models.Model):
     nox_sales_hourly_rate2 = fields.Float('Sales hourly rate')
     nox_cost_hourly_rate2 = fields.Float('Cost hourly rate')
 
-    nox_product1 = fields.Many2one('product.product', 'Related Product 1')
-    nox_product2 = fields.Many2one('product.product', 'Related Product 2')
+    nox_product1 = fields.Many2one('product.product', 'Consultant 1')
+    nox_product2 = fields.Many2one('product.product', 'Consultant 2')
 
     @api.model
     def default_get(self, fields):
