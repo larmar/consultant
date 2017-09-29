@@ -1,6 +1,7 @@
 <odoo>
 	<data>
 
+        <!-- Quotations list view -->
         <record id="view_sale_order_nox_tree" model="ir.ui.view">
             <field name="name">sale.order.nox.quotation.tree</field>
             <field name="model">sale.order</field>
@@ -31,6 +32,51 @@
         <record id="view_quotation_tree_date_nox" model="ir.ui.view">
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale_order_dates.view_quotation_tree_date"/>
+            <field name="arch" type="xml">
+                <field name="requested_date" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="commitment_date" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <!-- Sales Order list view -->
+        <record id="view_order_tree_nox" model="ir.ui.view">
+            <field name="name">sale.order.nox.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_order" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+                <field name="partner_id" position="after">
+                    <field name="consultant_names"/>
+                    <field name="nox_contract_signed"/>
+                    <field name="nox_is_startdate"/>
+                    <field name="nox_is_enddate"/>
+                </field>
+
+                <field name="amount_total" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+                <field name="state" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+                <field name="invoice_status" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                
+            </field>
+        </record>
+
+        <record id="view_order_tree_date_nox" model="ir.ui.view">
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_order_dates.view_order_tree_date"/>
             <field name="arch" type="xml">
                 <field name="requested_date" position="attributes">
                     <attribute name="invisible">True</attribute>
