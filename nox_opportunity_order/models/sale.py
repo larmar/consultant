@@ -62,6 +62,7 @@ class SaleOrder(models.Model):
 
     nox_product1 = fields.Many2one('product.product', 'Consultant 1')
     nox_product2 = fields.Many2one('product.product', 'Consultant 2')
+    consultant_names = fields.Char(compute='compute_consultant_names', string='Consultants', store=True)
 
     @api.model
     def default_get(self, fields):
@@ -163,6 +164,12 @@ class SaleOrder(models.Model):
             raise ValidationError(_('Unit Price Mismatch with Sales hourly rate!\n\n\
                                     Unit Price in Order lines for Product %s should be same as Sales hourly rate for related Product %s.'%(product.name, str(line_counter))))
         return True
+
+    @api.depends('nox_product1', 'nox_product2')
+    def compute_consultant_names(self):
+        for sale in self:
+            consultant_names = ', '.join(filter(bool, list(set([sale.nox_product1 and sale.nox_product1.name or False, sale.nox_product2 and sale.nox_product2.name or False]))))
+            sale.consultant_names = consultant_names
 
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
