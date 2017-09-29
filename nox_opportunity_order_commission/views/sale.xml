@@ -24,30 +24,38 @@
                   <field name="state" position="before">
                         <button name="action_create_commission_order" type="object" string="Create Commission Order" attrs="{'invisible':[('nox_commission_payment','=',False)]}"/>
                   </field>
-                  <notebook position="inside">
-                        <page name="page_commission_payment" string="Commission Orders" attrs="{'invisible':[('nox_commission_payment','=',False)]}">
-                              <label string="There are no Commission Orders associated with this Sales Order." attrs="{'invisible': [('has_commission_order','=',True)]}" colspan="4"/>
-                              <field name="has_commission_order" invisible="1"/>
+            </field>
+        </record>
 
-                              <field name="commission_order_lines" nolabel="1" colspan="4" attrs="{'invisible': [('has_commission_order','=',False)]}" readonly="1">
-                                    <tree create="false" string="Commission Order Line">
-                                          <button name="action_open_commission_order" type="object" string="View Commission Order" icon="fa-hand-pointer-o"/>
-                                          <field name="commission_sale_id" invisible="1"/>
-                                          <field name="order_id"/>
-                                          <field name="name"/>
-                                          <field name="partner_id" string="Vendor" />
-                                          <field name="product_id"/>
-                                          <field name="price_unit"/>
-                                          <field name="product_qty"/>
-                                          <field name="product_uom" string="Product UOM" groups="product.group_uom"/>
-                                          <field name="taxes_id"/>
-                                          <field name="price_subtotal" widget="monetary"/>
-                                          <field name="date_planned"  widget="date"/>
-                                          <field name="state"/>
-                                    </tree>
-                              </field>
-                        </page>
-                  </notebook>
+        <record id="view_order_form_po_b2b_commission" model="ir.ui.view">
+            <field name="name">sale.order.po.b2b.commission.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_purchase_b2b.view_order_form_po_b2b"/>
+            <field name="arch" type="xml">
+                <page name="purchase_order_lines" position="after">
+                    <page name="page_commission_payment" string="Commission Orders" attrs="{'invisible':[('nox_commission_payment','=',False)]}">
+                          <label string="There are no Commission Orders associated with this Sales Order." attrs="{'invisible': [('has_commission_order','=',True)]}" colspan="4"/>
+                          <field name="has_commission_order" invisible="1"/>
+
+                          <field name="commission_order_lines" nolabel="1" colspan="4" attrs="{'invisible': [('has_commission_order','=',False)]}" readonly="1">
+                                <tree create="false" string="Commission Order Line">
+                                      <button name="action_open_commission_order" type="object" string="View Commission Order" icon="fa-hand-pointer-o"/>
+                                      <field name="commission_sale_id" invisible="1"/>
+                                      <field name="order_id"/>
+                                      <field name="name"/>
+                                      <field name="partner_id" string="Vendor" />
+                                      <field name="product_id"/>
+                                      <field name="price_unit"/>
+                                      <field name="product_qty"/>
+                                      <field name="product_uom" string="Product UOM" groups="product.group_uom"/>
+                                      <field name="taxes_id"/>
+                                      <field name="price_subtotal" widget="monetary"/>
+                                      <field name="date_planned"  widget="date"/>
+                                      <field name="state"/>
+                                </tree>
+                          </field>
+                    </page>
+                </page>
             </field>
         </record>
 
