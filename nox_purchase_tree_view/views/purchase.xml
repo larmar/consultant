@@ -1,0 +1,51 @@
+<odoo>
+	<data>
+
+        <record id="purchase_order_nox_tree" model="ir.ui.view">
+            <field name="name">purchase.order.nox.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="string">Order Number</attribute>
+                </field>
+                
+                <field name="date_order" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+                <field name="date_planned" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+
+                <field name="origin" position="before">
+                    <field name="nox_contract_signed"/>
+                </field>
+
+                <field name="origin" position="after">
+                    <field name="nox_is_startdate"/>
+                    <field name="nox_is_enddate"/>
+                </field>
+
+                <field name="amount_untaxed" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="state" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="invoice_status" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                
+            </field>
+        </record>
+
+	</data>
+</odoo>
