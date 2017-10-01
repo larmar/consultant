@@ -15,6 +15,7 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     commission_sale_id = fields.Many2one('sale.order', 'Source Sales Order', copy=False)
+    is_commission_order = fields.Boolean(compute="_is_commission_order", string="Commission Order", store=True)
 
     @api.model
     def create(self, vals):
@@ -27,6 +28,14 @@ class PurchaseOrder(models.Model):
 
         return super(PurchaseOrder, self).create(vals)
 
+    @api.depends('commission_sale_id')
+    def _is_commission_order(self):
+        for po in self:
+            commission_order = False
+            if po.commission_sale_id:
+                commission_order = True
+            po.is_commission_order = commission_order
+            
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
