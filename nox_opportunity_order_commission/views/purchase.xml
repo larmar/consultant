@@ -28,5 +28,17 @@
             </field>
         </record>
 
+       <record id="view_purchase_nox_commission_filter" model="ir.ui.view">
+            <field name="name">request.quotation.nox.commission.select</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <filter name="to_approve" position="after">
+                    <separator/>
+                    <filter name="filter_is_commission_order" string="Is Commission Order" domain="[('is_commission_order', '=', True)]"/>
+                </filter>
+            </field>
+        </record>
+
 	</data>
 </odoo>
