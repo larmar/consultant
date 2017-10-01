@@ -8,3 +8,4 @@
 
 from . import crm_lead
 from . import product, sale, purchase
+from . import account_invoice
