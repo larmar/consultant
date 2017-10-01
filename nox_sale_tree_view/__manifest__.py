@@ -15,8 +15,12 @@
 ##############################################################
                 NOX Sale Order List view
 ##############################################################
-This module modifies and sets Quotation / Sales Order list view as :
-Order Number | Customer | Consultant | Contract signed | Start Date | End Date | Salesperson
+This module modifies and sets Quotation / Sales Order list views.
+Quotation List view :
+Order Number | Customer | Consultant | Contract signed | Start Date | End Date | Salesperson | Status
+
+Sales Order List view :
+Order Number | Customer | Consultant | Contract signed | Start Date | End Date | Salesperson | Invoice Status
 
   """,
   'author': 'Linserv AB',

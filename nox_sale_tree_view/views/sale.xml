@@ -22,10 +22,6 @@
                     <attribute name="invisible">True</attribute>
                 </field>
 
-                <field name="state" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </field>
-
             </field>
         </record>
 
@@ -64,10 +60,6 @@
                 </field>
 
                 <field name="state" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </field>
-
-                <field name="invoice_status" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </field>
                 
