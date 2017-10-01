@@ -16,16 +16,19 @@
                 NOX Purchase Order List view
 ##############################################################
 This module modifies and sets Request for Quotation / Purchase Order list view as :
+
 Request for Quotation list :
+
 Order Number | Customer | Vendor | Consultant | Contract signed | Source Document | Start Date | End Date | Status
 
 Purchase Orders list :
+
 Order Number | Customer | Vendor | Consultant | Contract signed | Source Document | Start Date | End Date | Billing Status
   """,
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['nox_opportunity_order', 'purchase'],
+  'depends': ['nox_opportunity_order_purchase'],
   'data': [ 
   		'views/purchase.xml',
 	],

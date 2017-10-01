@@ -9,6 +9,14 @@
                 <field name="name" position="attributes">
                     <attribute name="string">Order Number</attribute>
                 </field>
+
+                <field name="name" position="after">
+                    <field name="nox_sale_partner_id"/>
+                </field>
+
+                <field name="partner_id" position="after">
+                    <field name="nox_sale_consultants"/>
+                </field>
                 
                 <field name="date_order" position="attributes">
                     <attribute name="invisible">True</attribute>
