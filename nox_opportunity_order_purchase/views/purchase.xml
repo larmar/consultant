@@ -22,5 +22,20 @@
             </field>
         </record>
 
+        <!-- Purchase Order search view: add Not Started | Started | Ended filters -->
+       <record id="view_purchase_nox_order_filter" model="ir.ui.view">
+            <field name="name">request.quotation.nox.select</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <filter name="to_approve" position="after">
+                    <separator/>
+                    <filter name="nox_not_started" string="Not Started" context="{'nox_not_started': 1}"/>
+                    <filter name="nox_started" string="Started" context="{'nox_started': 1}"/>
+                    <filter name="nox_ended" string="Ended" context="{'nox_ended': 1}"/>
+                </filter>
+            </field>
+        </record>
+
 	</data>
 </odoo>

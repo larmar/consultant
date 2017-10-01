@@ -20,6 +20,11 @@ This module adds following new fields in Purchase Order view :
     *	Start Date
     *	End Date
 
+Add search filters on Purchase Orders :
+  * Not Started
+  * Started
+  * Ended
+  
 If Purchase Order is created from Sales Order; Start Date & End Date are auto set from Sales Order.
 
   """,

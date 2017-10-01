@@ -7,6 +7,7 @@
 ##############################################################################
 
 from odoo import models, fields, api
+from datetime import datetime
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -33,3 +34,45 @@ class PurchaseOrder(models.Model):
                     'nox_is_enddate': Sale.nox_is_enddate,
                 })
         return res
+
+    @api.model
+    def search(self, args, offset=0, limit=None, order=None, count=False):
+        """Search Filters: Not Started | Started | Ended
+        """
+        context = self.env.context or {}
+        filter_flag, ids = False, []
+        if context.get('nox_not_started', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from purchase_order 
+                                    where nox_is_startdate > '%s'"""%(now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+        
+        if context.get('nox_started', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from purchase_order 
+                                    where nox_is_startdate <= '%s' and
+                                    nox_is_enddate > '%s'"""%(now, now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+        
+        if context.get('nox_ended', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from purchase_order 
+                                    where nox_is_enddate <= '%s'"""%(now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+
+        if filter_flag:
+            ids = list(set(ids))
+            if not args:
+                args = [['id', 'in', ids]]
+            else:
+                args.append(['id', 'in', ids])
+        return super(PurchaseOrder, self).search(args, offset, limit, order, count)
