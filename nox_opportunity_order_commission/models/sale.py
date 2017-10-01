@@ -75,15 +75,11 @@ class SaleOrder(models.Model):
             vendor_price = sale.nox_commission_payment_amount or 0.0            
 
             #get quantity from related PO's Vendor Bills (PO created from sale_purchase_b2b app functionality
-            related_purchase_ids, qty = [], 0.0
-            for line in sale.purchase_line_ids:
-                related_purchase_ids.append(line.order_id)
-            related_purchase_ids = list(set(related_purchase_ids))
-
-            for po in related_purchase_ids:
-                for po_inv in po.invoice_ids:
-                    for inv_line in po_inv.invoice_line_ids:
-                        qty += inv_line.quantity
+            qty = 0.0
+            if sale.nox_product1:
+                qty += sale.nox_sum_hours
+            if sale.nox_product2:
+                qty += sale.nox_sum_hours2
 
             #purchase order lines :
 
