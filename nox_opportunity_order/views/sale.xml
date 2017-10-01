@@ -52,5 +52,21 @@
             </field>
         </record>
 
+        <!-- Sale Order search view -->
+        <record id="view_sales_nox_order_filter" model="ir.ui.view">
+            <field name="name">sale.order.nox.order.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <filter name="message_needaction" position="after">
+                    <separator/>
+                    <!-- Filter Orders in def search function using context -->
+                    <filter name="nox_not_started" string="Not Started" context="{'nox_not_started': 1}"/>
+                    <filter name="nox_started" string="Started" context="{'nox_started': 1}"/>
+                    <filter name="nox_ended" string="Ended" context="{'nox_ended': 1}"/>
+                </filter>
+            </field>
+        </record>
+
 	</data>
 </odoo>

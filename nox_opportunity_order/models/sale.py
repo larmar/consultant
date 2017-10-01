@@ -141,6 +141,48 @@ class SaleOrder(models.Model):
 
         return res
 
+    @api.model
+    def search(self, args, offset=0, limit=None, order=None, count=False):
+        """Filter Not Started | Started | Ended
+        """
+        context = self.env.context or {}
+        filter_flag, ids = False, []
+        if context.get('nox_not_started', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from sale_order 
+                                    where nox_is_startdate > '%s'"""%(now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+        
+        if context.get('nox_started', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from sale_order 
+                                    where nox_is_startdate <= '%s' and
+                                    nox_is_enddate > '%s'"""%(now, now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+        
+        if context.get('nox_ended', False):
+            filter_flag = True
+            now = datetime.now().date()
+            self._cr.execute("""select id from sale_order 
+                                    where nox_is_enddate <= '%s'"""%(now))
+            result = self._cr.fetchall()
+            for res in result:
+                ids.append(res[0])
+
+        if filter_flag:
+            ids = list(set(ids))
+            if not args:
+                args = [['id', 'in', ids]]
+            else:
+                args.append(['id', 'in', ids])
+        return super(SaleOrder, self).search(args, offset, limit, order, count)
+
     @api.multi
     def validate_related_product_with_orderline(self, product=False, sum_hours=0.0, unit_price=0.0, line_counter=1):
         product_matching_flag, qty_flag, unit_price_flag = False, True, True
