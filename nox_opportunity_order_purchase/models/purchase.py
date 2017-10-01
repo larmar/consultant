@@ -15,6 +15,8 @@ class PurchaseOrder(models.Model):
     nox_is_startdate = fields.Date("Start Date", copy=False)
     nox_is_enddate = fields.Date("End Date", copy=False)
 
+    nox_sale_partner_id = fields.Many2one(related="sale_id.partner_id", string="Customer", store=False)
+    nox_sale_consultants = fields.Char(related="sale_id.consultant_names", string="Consultants", store=False)
 
     @api.model
     def default_get(self, fields):
