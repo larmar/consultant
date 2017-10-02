@@ -6,10 +6,6 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-            	<button name="action_cancel" position="after">
-            		<button name="action_update_nox_product_price" type="object" string="Update Product Price" class="oe_highlight"/>
-            	</button>
-
             	<notebook position="before">
             		<group>
             			<div class="row">

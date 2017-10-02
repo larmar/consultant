@@ -220,24 +220,3 @@ class SaleOrder(models.Model):
     @api.onchange('nox_ftepercent_temp2')
     def onchange_nox_ftepercent2(self):
         self.nox_ftepercent2 = self.nox_ftepercent_temp2
-
-    @api.multi
-    def action_update_nox_product_price(self):
-        """Update Related Product 1 and 2's Sales price with their Sales hourly rate and Vendor Price with Cost hourly rate
-        """
-        for order in self:
-            if order.nox_product1:
-                if order.nox_product1.lst_price != order.nox_sales_hourly_rate:
-                    order.nox_product1.write({'lst_price': order.nox_sales_hourly_rate})
-
-                #update vendor's price
-                for seller in order.nox_product1.seller_ids:
-                    seller.write({'price': order.nox_cost_hourly_rate})
-
-            if order.nox_product2:
-                if order.nox_product2.lst_price != order.nox_sales_hourly_rate2:
-                    order.nox_product2.write({'lst_price': order.nox_sales_hourly_rate2})
-                    
-                #update vendor's price
-                for seller in order.nox_product2.seller_ids:
-                    seller.write({'price': order.nox_cost_hourly_rate2})
