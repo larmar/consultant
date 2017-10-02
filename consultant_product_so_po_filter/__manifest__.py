@@ -24,7 +24,7 @@ It also removes "Create and Edit.." option from Products drop down from Sale Ord
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['consultant_product_link_extra', 'nox_opportunity_order'],
+  'depends': ['consultant_product_link', 'nox_opportunity_order'],
   'data': [ 
     'views/sale.xml',
     'views/purchase.xml',
