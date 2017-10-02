@@ -56,7 +56,11 @@ class SaleOrder(models.Model):
             res.update({
                     'nox_is_startdate': Opportunity.nox_is_startdate,
                     'nox_is_enddate': Opportunity.nox_is_enddate,
-                    
+                    'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
+                    'nox_ftepercent': Opportunity.nox_ftepercent,
+                    'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
+                    'nox_sum_hours': Opportunity.nox_sum_hours,
+                    'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,                    
                 })
 
             self._cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
@@ -65,18 +69,7 @@ class SaleOrder(models.Model):
             consultants = []
             for r in result:
                 consultants.append(r[0])
-
-            #set Related Product on Quotation:
-            if consultants:
-                consultant1_product = self.env['consultant.consult'].browse([consultants[0]])[0].product_id
-                res.update({
-                        'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
-                        'nox_ftepercent': Opportunity.nox_ftepercent,
-                        'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
-                        'nox_sum_hours': Opportunity.nox_sum_hours,
-                        'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
-                    })
-                
+        
         return res
 
     @api.multi
