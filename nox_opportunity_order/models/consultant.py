@@ -1,0 +1,80 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution
+#    Copyright (C) 2016-TODAY Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
+#
+##############################################################################
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+from datetime import datetime
+
+from odoo.tools.translate import _
+
+import logging
+_logger = logging.getLogger(__name__)
+
+class ConsultantConsult(models.Model):
+    _inherit = "consultant.consult"
+
+    @api.multi
+    def create_order_line_product(self):
+        """This function creates and links a Product with Sales Order line
+        """
+        Consultant = self
+        User = self.env['res.users'].browse([self._uid])
+
+        vendor_id = Consultant.partner_id and Consultant.partner_id.id or False
+        consultant_name = Consultant.name
+        
+        consultant_product = self.env['product.product'].search([('consultant_id', '=', Consultant.id)], order="name desc", limit=1)
+        consultant_product_no = '1'
+        if consultant_product:
+            consultant_prod_name = consultant_product.name.split(' ')[-1]
+            if consultant_prod_name:
+                consultant_product_no = str(int(consultant_prod_name) + 1)
+
+        # Create product
+        Product = self.env['product.product'].create({
+                                                'name': ' '.join([consultant_name, consultant_product_no]),
+                                                'sale_ok': True,
+                                                'purchase_ok': True,
+                                                'type': 'service',
+                                                'list_price': 0.0,
+                                                'standard_price': 0.0,
+                                                
+                                                'can_be_expensed': True,
+                                                'invoice_policy': 'delivery',
+                                                'expense_policy': 'sales_price',
+                                                'track_service': 'manual',
+                                                'consultant_product': True,
+                                                'consultant_id': Consultant.id,
+
+                                            })
+
+        # Update UOM, Purchase UOM and Internal Category of Product
+        update_vals = {}
+        hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
+        if hour_uom:
+            update_vals = {'uom_id': hour_uom, 'uom_po_id': hour_uom}
+
+        categ_id = self.env['product.category'].search([('name', '=', 'Consultancy')])
+        if categ_id:
+            categ_id = categ_id[0].id
+        else:
+            categ_id = self.env['ir.model.data'].xmlid_to_res_id('product.product_category_1')
+        if categ_id:
+            update_vals['categ_id'] = categ_id
+
+        # Set Default Purchase tax as Vendor tax on Product:
+        product_vendor_tax = self.env['ir.values'].get_default('product.template', 'supplier_taxes_id', company_id = User.company_id.id)
+        if product_vendor_tax:
+            update_vals['supplier_taxes_id'] = [[6, 0, product_vendor_tax]]
+
+        Product.write(update_vals)
+
+        # Set Vendor on Product
+        if vendor_id:
+            self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id})
+
+        return Product

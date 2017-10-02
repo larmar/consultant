@@ -63,13 +63,8 @@ class SaleOrder(models.Model):
                     'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,                    
                 })
 
-            self._cr.execute(""" select consultant_id from consultant_consult_opportunity_rel
-                                where opportunity_id=%s """%(opportunity_id))
-            result = self._cr.fetchall()
-            consultants = []
-            for r in result:
-                consultants.append(r[0])
-        
+            #create Order line items for each Consultant in onchange_partner
+
         return res
 
     @api.multi
@@ -134,6 +129,43 @@ class SaleOrder(models.Model):
                 args.append(['id', 'in', ids])
         return super(SaleOrder, self).search(args, offset, limit, order, count)
 
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        """Set default order lines with Consultants Product (from Opportunity)
+        """
+        res = super(SaleOrder, self).onchange_partner_id()
+        context = self.env.context
+        if 'active_model' in context and context['active_model'] == 'crm.lead' and context.get('default_opportunity_id', False):
+            Opportunity = self.env['crm.lead'].browse([context['default_opportunity_id']])
+            consultants,  order_lines = [], []
+            temp = [consultants.append(consultant) for consultant in Opportunity.consultant_ids]
+
+            for consultant in consultants:
+                hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
+
+                User = self.env['res.users'].browse([self._uid])
+                taxes = []
+                customer_default_tax = self.env['ir.values'].get_default('product.template', 'taxes_id', company_id = User.company_id.id)
+                if customer_default_tax:
+                    taxes = customer_default_tax
+                
+                line_data = {
+                    'product_id': False,
+                    'name': consultant.name,
+                    'consultant_line_check': True,
+                    'consultant_id': consultant.id,
+                    'product_uom': hour_uom or False,
+                    'price_unit': Opportunity.nox_sales_hourly_rate,
+                    'product_uom_qty': Opportunity.nox_sum_hours,
+                    'tax_id': [[6, 0, taxes]],
+                }
+                order_lines.append(line_data)
+
+            if order_lines:
+                self.update({'order_line': order_lines})
+
     @api.depends('order_line')
     def compute_consultant_names(self):
         for sale in self:
@@ -142,3 +174,19 @@ class SaleOrder(models.Model):
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
         self.nox_ftepercent = self.nox_ftepercent_temp
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    consultant_line_check = fields.Boolean('Consultant Product Line?', help="If checked, Product and Description are not allowed to modify; Product is auto Created & set on Save.")
+    consultant_id = fields.Many2one('consultant.consult', 'Related Consultant', copy=False)
+
+    @api.model
+    def create(self, vals):
+        """Create & Set Product for Consultant Order lines
+        """
+        if vals.get('consultant_line_check', False) and vals.get('consultant_id', False):
+            product = self.env['consultant.consult'].browse([vals['consultant_id']]).create_order_line_product()
+            vals['product_id'] = product.id
+        return super(SaleOrderLine, self).create(vals)
+

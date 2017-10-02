@@ -8,3 +8,5 @@
 
 from . import crm_lead
 from . import sale
+from . import product
+from . import consultant
