@@ -31,19 +31,6 @@ class SaleOrder(models.Model):
                     nox_sum_hours = get_value_percent((len(diffDays) * 8), oppr.nox_ftepercent_temp)
                     oppr.nox_sum_hours = nox_sum_hours
 
-    @api.multi
-    @api.depends('nox_is_startdate', 'nox_is_enddate', 'nox_ftepercent_temp2')
-    def _compute_nox_sum_hours2(self):
-        for oppr in self:
-            oppr.nox_sum_hours2 = 0.0
-            if oppr.nox_is_startdate and oppr.nox_is_enddate and oppr.nox_ftepercent_temp2 and oppr.nox_is_enddate >= oppr.nox_is_startdate:
-                start_date = datetime.strptime(oppr.nox_is_startdate, "%Y-%m-%d").date()
-                end_date = datetime.strptime(oppr.nox_is_enddate, "%Y-%m-%d").date()
-                diffDays = get_weekdaysrange(start_date, end_date)
-                if diffDays:
-                    nox_sum_hours2 = get_value_percent((len(diffDays) * 8), oppr.nox_ftepercent_temp2)
-                    oppr.nox_sum_hours2 = nox_sum_hours2
-
     nox_is_startdate = fields.Date("Start Date")
     nox_is_enddate = fields.Date("End Date")
     nox_cost_hourly_rate = fields.Float('Cost hourly rate')
@@ -54,14 +41,6 @@ class SaleOrder(models.Model):
 
     nox_contract_signed = fields.Boolean('Contract Signed')
 
-    nox_ftepercent2 = fields.Float('Avg FTE (%)')
-    nox_ftepercent_temp2 = fields.Float('Avg FTE (%)')
-    nox_sum_hours2 = fields.Float(string='Total Hours', compute='_compute_nox_sum_hours2', store=True)
-    nox_sales_hourly_rate2 = fields.Float('Sales hourly rate')
-    nox_cost_hourly_rate2 = fields.Float('Cost hourly rate')
-
-    nox_product1 = fields.Many2one('product.product', 'Consultant 1')
-    nox_product2 = fields.Many2one('product.product', 'Consultant 2')
     consultant_names = fields.Char(compute='compute_consultant_names', string='Consultants', store=True)
 
     @api.model
@@ -91,7 +70,6 @@ class SaleOrder(models.Model):
             if consultants:
                 consultant1_product = self.env['consultant.consult'].browse([consultants[0]])[0].product_id
                 res.update({
-                        'nox_product1': consultant1_product and consultant1_product.id or False,
                         'nox_cost_hourly_rate': Opportunity.nox_cost_hourly_rate,
                         'nox_ftepercent': Opportunity.nox_ftepercent,
                         'nox_ftepercent_temp': Opportunity.nox_ftepercent_temp,
@@ -99,28 +77,13 @@ class SaleOrder(models.Model):
                         'nox_sales_hourly_rate': Opportunity.nox_sales_hourly_rate,
                     })
                 
-                #set Related Product 2 and related fields if more than one consutant is linked with Opportunity:
-                if len(consultants) > 1:
-                    consultant2_product = self.env['consultant.consult'].browse([consultants[1]])[0].product_id
-                    res.update({
-                            'nox_product2': consultant2_product and consultant2_product.id or False,
-                            'nox_cost_hourly_rate2': Opportunity.nox_cost_hourly_rate,
-                            'nox_ftepercent2': Opportunity.nox_ftepercent,
-                            'nox_ftepercent_temp2': Opportunity.nox_ftepercent_temp,
-                            'nox_sum_hours2': Opportunity.nox_sum_hours,
-                            'nox_sales_hourly_rate2': Opportunity.nox_sales_hourly_rate,
-                        })
-
         return res
 
     @api.multi
     def write(self, vals):
         if 'nox_ftepercent_temp' in vals:
             vals['nox_ftepercent'] = vals['nox_ftepercent_temp']
-        if 'nox_ftepercent_temp2' in vals:
-            vals['nox_ftepercent2'] = vals['nox_ftepercent_temp2']
-        
-        #check & match Related Product, Total Hours & Sales hourly rate with respective Order line product, Ordered Quantity & Unit price in Order lines:
+
         res = super(SaleOrder, self).write(vals)
 
         #Validate Start Date & End Date
@@ -133,11 +96,6 @@ class SaleOrder(models.Model):
 
         if start_date and end_date and start_date > end_date:
             raise ValidationError(_('Invalid Start Date!\n\nContract Start Date cannot be greater than End Date!'))
-
-        if self.nox_product1:
-            self.validate_related_product_with_orderline(self.nox_product1, self.nox_sum_hours, self.nox_sales_hourly_rate, 1)
-        if self.nox_product2:
-            self.validate_related_product_with_orderline(self.nox_product2, self.nox_sum_hours2, self.nox_sales_hourly_rate2, 2)
 
         return res
 
@@ -183,40 +141,11 @@ class SaleOrder(models.Model):
                 args.append(['id', 'in', ids])
         return super(SaleOrder, self).search(args, offset, limit, order, count)
 
-    @api.multi
-    def validate_related_product_with_orderline(self, product=False, sum_hours=0.0, unit_price=0.0, line_counter=1):
-        product_matching_flag, qty_flag, unit_price_flag = False, True, True
-        for line in self.order_line:
-            if line.product_id.id == product.id:
-                product_matching_flag = True
-                if line.product_uom_qty != sum_hours:
-                    qty_flag = False
-                    break
-                if line.price_unit != unit_price:
-                    unit_price_flag = False
-                    break
-
-        if not product_matching_flag:
-            raise ValidationError(_('Missing Related Product in Order Lines!\n\n\
-                                    Please add Order line item with Related Product %s - %s'%(str(line_counter), product.name)))
-        if not qty_flag:
-            raise ValidationError(_('Ordered Quantity Mismatch with Total Hours!\n\n\
-                                    Ordered Quantity in Order lines for Product %s should be same as Total hours for related Product %s.'%(product.name, str(line_counter))))
-        if not unit_price_flag:
-            raise ValidationError(_('Unit Price Mismatch with Sales hourly rate!\n\n\
-                                    Unit Price in Order lines for Product %s should be same as Sales hourly rate for related Product %s.'%(product.name, str(line_counter))))
-        return True
-
-    @api.depends('nox_product1', 'nox_product2')
+    @api.depends('order_line')
     def compute_consultant_names(self):
         for sale in self:
-            consultant_names = ', '.join(filter(bool, list(set([sale.nox_product1 and sale.nox_product1.name or False, sale.nox_product2 and sale.nox_product2.name or False]))))
-            sale.consultant_names = consultant_names
+            sale.consultant_names = '' #TODO
 
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
         self.nox_ftepercent = self.nox_ftepercent_temp
-
-    @api.onchange('nox_ftepercent_temp2')
-    def onchange_nox_ftepercent2(self):
-        self.nox_ftepercent2 = self.nox_ftepercent_temp2

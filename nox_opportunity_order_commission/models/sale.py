@@ -76,10 +76,6 @@ class SaleOrder(models.Model):
 
             #get quantity from related PO's Vendor Bills (PO created from sale_purchase_b2b app functionality
             qty = 0.0
-            if sale.nox_product1:
-                qty += sale.nox_sum_hours
-            if sale.nox_product2:
-                qty += sale.nox_sum_hours2
 
             #purchase order lines :
 

@@ -2,23 +2,17 @@
 <odoo>
 	<data>
 
-		<!-- filter Products list by removing products from Ongoing Sales Order -->
-		<record id="view_sale_nox_opportunity_order_product_filters" model="ir.ui.view">
+        <!-- filter Products list by removing products from Ongoing Sales Order -->
+        <record id="view_sale_nox_opportunity_order_product_filters" model="ir.ui.view">
             <field name="name">sale.nox.opportunity.order.product.filters</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="nox_opportunity_order.view_sale_nox_opportunity_order_form"/>
             <field name="arch" type="xml">
 
-            	<field name="nox_product1" position="attributes">
-            		<attribute name="context">{'product_filter_so_po': True}</attribute>
-                    <attribute name="options">{'no_create': 1}</attribute>
-            	</field>
-
-            	<field name="nox_product2" position="attributes">
-            		<attribute name="context">{'product_filter_so_po': True}</attribute>
-                    <attribute name="options">{'no_create': 1}</attribute>
-            	</field>
-
+                <group name="nox_opportunity_right" position="after">
+                    <newline/>
+                </group>
+                
             </field>
         </record>
 

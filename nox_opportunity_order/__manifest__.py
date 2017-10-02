@@ -16,7 +16,6 @@
                 NOX Opportunity Order
 ##############################################################
 This module adds following new fields in Opportunity & Quotation views:
-    *   Related Product
     *	Cost hourly rate
     *	Avg FTE (%)
     *	Total hours
@@ -30,8 +29,6 @@ Extra new field added in Quotation / Sales Order view:
 **When an Quote is created directly without associated opportunity the initial values will be null.**
 
 **It adds a computation button "Calculate Expected Revenue" on Opportunity form header to set Expected Revenue as [[ Expected Revenue = Sales hourly rate x Total hours ]].**
-
-**It adds button "Update Product Price" in Quotation/Sales Order to update Related Product 1 & 2 Sale Price & Vendors Price with related Sales hourly rate & Cost hourly rate respectively.**
   """,
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
