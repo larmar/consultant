@@ -21,25 +21,6 @@ class ConsultantConsult(models.Model):
     sale_order_ids = fields.Many2many('sale.order', string='Sales Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
 
-    @api.model
-    def set_consultant_product(self):
-        """This function creates & links Product with all Consultant cards that have missing related Product
-        It is executed on module *consultant_product_link* installation.
-        """
-        Consultants = []
-        all_consultants = self.search_read([('id', '>', 0)], ['product_id', 'id'])
-        for x in all_consultants:
-            if not x['product_id']:
-                Consultants.append(self.browse([x['id']]))
-
-        for consultant in Consultants:
-            Product = consultant.create_consultant_product(consultant)
-            # Link Product on Consultant
-            consultant.write({'product_id': Product.id})
-            _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(consultant.id, consultant.name))
-
-        return True
-
     @api.multi
     def create_consultant_product(self, Consultant):
         """This function creates and links a Product with given Consultant Card
@@ -97,19 +78,9 @@ class ConsultantConsult(models.Model):
     @api.multi
     def _get_orders(self):
         for consultant in self:
-            if consultant.product_id:
-                sale_line_ids = self.env['sale.order.line'].search([('product_id', '=', consultant.product_id.id)])
-                sale_order_ids = []
-                temp = [sale_order_ids.append(line.order_id.id) for line in sale_line_ids]
-                consultant.sale_order_ids = sale_order_ids
-                #auto set consultant stage based on related Sales Order's expiration date
-                if sale_order_ids:
-                    consultant.auto_set_consultant_stage()
-
-                purchase_line_ids = self.env['purchase.order.line'].search([('product_id', '=', consultant.product_id.id)])
-                purchase_order_ids = []
-                temp = [purchase_order_ids.append(line.order_id.id) for line in purchase_line_ids]
-                consultant.purchase_order_ids = purchase_order_ids
+            sale_order_ids, purchase_order_ids = [], []
+            consultant.sale_order_ids = sale_order_ids
+            consultant.purchase_order_ids = purchase_order_ids
 
     @api.multi
     def auto_set_consultant_stage(self):

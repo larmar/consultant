@@ -13,38 +13,6 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        """Set default order lines with Consultants Product (from Opportunity)
-        """
-        res = super(SaleOrder, self).onchange_partner_id()
-        context = self.env.context
-        if 'active_model' in context and context['active_model'] == 'crm.lead' and context.get('default_opportunity_id', False):
-            Opportunity = self.env['crm.lead'].browse([context['default_opportunity_id']])
-            consultants, products, order_lines = [], [], []
-            temp = [consultants.append(consultant) for consultant in Opportunity.consultant_ids]
-            for consultant in consultants:
-                if consultant.product_id:
-                    products.append(consultant.product_id)
-            for product in products:
-                taxes = []
-                temp = [taxes.append(tax.id) for tax in product.taxes_id]
-                name = product.name_get()[0][1]
-                if product.description_sale:
-                    name += '\n' + product.description_sale
-                line_data = {
-                    'product_id': product.id,
-                    'product_uom': product.uom_id and product.uom_id.id or False,
-                    'price_unit': Opportunity.nox_sales_hourly_rate,
-                    'product_uom_qty': Opportunity.nox_sum_hours,
-                    'tax_id': [[6, 0, taxes]],
-                    'name': name,
-                }
-                order_lines.append(line_data)
-            if order_lines:
-                self.update({'order_line': order_lines})
-
-    @api.multi
     def write(self, vals):
         """Validate Order End Date & Status to update related Consultant(s) stage 
             1. If Order is ongoing; Set consultant stage as "On Nox Contract"
@@ -61,7 +29,7 @@ class SaleOrder(models.Model):
             if line.product_id:
                 sol_products.append(line.product_id.id)
         for product in sol_products:
-            consultant_id = self.env['consultant.consult'].search([('product_id', '=', product)])
+            consultant_id = False #TODO
             if consultant_id:
                 consultants.append(consultant_id)
         consultants = list(set(consultants))
@@ -90,7 +58,7 @@ class SaleOrder(models.Model):
 
         sol_products = list(set(sol_products))
         for product in sol_products:
-            consultant_id = self.env['consultant.consult'].search([('product_id', '=', product)])
+            consultant_id = False #TODO
             if consultant_id:
                 consultants.append(consultant_id)
         consultants = list(set(consultants))
