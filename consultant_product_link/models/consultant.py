@@ -17,38 +17,9 @@ _logger = logging.getLogger(__name__)
 class ConsultantConsult(models.Model):
     _inherit = "consultant.consult"
 
-    product_id = fields.Many2one('product.product', 'Related Product', readonly=True, copy=False)
+    product_ids = fields.Many2many('product.product', string='Products', compute="_get_products", store=False, copy=False)
     sale_order_ids = fields.Many2many('sale.order', string='Sales Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
-
-    @api.model
-    def create(self, vals):
-        res = super(ConsultantConsult, self).create(vals)
-
-        #link Product on Consultant Card
-        Product = self.create_consultant_product(res)
-        res.write({'product_id': Product.id})
-        _logger.info("Product has been linked with Consultant. Id: %s | Consultant: %s"%(res.id, res.name))
-
-        return res
-
-    @api.multi
-    def write(self, vals):
-        """Update related Product name and/or Vendor
-        """
-        if not vals: vals = {}
-
-        if 'name' in vals and vals['name']:
-            if self.product_id:
-                self.product_id.write({'name': vals['name']})
-        if 'partner_id' in vals and vals['partner_id']:
-            if self.product_id:
-                #delete existing Product Vendor(s):
-                for Seller in self.product_id.seller_ids:
-                    Seller.unlink()
-                #create new Product Vendor:
-                self.env['product.supplierinfo'].create({'name': vals['partner_id'], 'product_tmpl_id': self.product_id.product_tmpl_id.id})
-        return super(ConsultantConsult, self).write(vals)
 
     @api.model
     def set_consultant_product(self):
