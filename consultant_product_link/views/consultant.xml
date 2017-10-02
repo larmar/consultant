@@ -7,10 +7,6 @@
 			<field name="model">consultant.consult</field>
 			<field name="inherit_id" ref="consultant.view_form_consultant_consult"/>
 			<field name="arch" type="xml">
-				<xpath expr="//group[@name='group_right']/field[@name='partner_id']" position="after">
-					<field name="product_id" readonly="1"/>
-				</xpath>
-
 				<field name="opportunity_ids" position="after">
 					<field name="sale_order_ids" widget="many2many_tags" readonly="1"/>
 					<field name="purchase_order_ids" widget="many2many_tags" readonly="1"/>
