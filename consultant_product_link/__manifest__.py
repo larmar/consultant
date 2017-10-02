@@ -35,7 +35,6 @@ This module also adds a scheduler function (scheduled to execute every 12 hours)
   'data': [ 
     'views/consultant.xml',
 
-    'data/data.xml',
     'data/scheduler.xml',
 
     'security/ir.model.access.csv',
