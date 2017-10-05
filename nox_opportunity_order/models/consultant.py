@@ -21,6 +21,13 @@ class ConsultantConsult(models.Model):
     def create_order_line_product(self):
         """This function creates and links a Product with Sales Order line
         """
+        context = self.env.context or {}
+        sales_hourly_rate, cost_hourly_rate = 0, 0
+        if context.get('sales_hourly_rate', 0):
+        	sales_hourly_rate = context['sales_hourly_rate']
+        if context.get('cost_hourly_rate', 0):
+        	cost_hourly_rate = context['cost_hourly_rate']
+
         Consultant = self
         User = self.env['res.users'].browse([self._uid])
 
@@ -40,7 +47,7 @@ class ConsultantConsult(models.Model):
                                                 'sale_ok': True,
                                                 'purchase_ok': True,
                                                 'type': 'service',
-                                                'list_price': 0.0,
+                                                'list_price': sales_hourly_rate,
                                                 'standard_price': 0.0,
                                                 
                                                 'can_be_expensed': True,
@@ -75,6 +82,6 @@ class ConsultantConsult(models.Model):
 
         # Set Vendor on Product
         if vendor_id:
-            self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id})
+            self.env['product.supplierinfo'].create({'name': vendor_id, 'product_tmpl_id': Product.product_tmpl_id.id, 'price': cost_hourly_rate})
 
         return Product

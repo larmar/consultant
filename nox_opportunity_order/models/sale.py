@@ -190,8 +190,12 @@ class SaleOrderLine(models.Model):
     def create(self, vals):
         """Create & Set Product for Consultant Order lines
         """
+        sales_hourly_rate, cost_hourly_rate = 0, 0
+        if vals.get('order_id', False):
+            Order = self.env['sale.order'].browse([vals['order_id']])
+            sales_hourly_rate, cost_hourly_rate = Order.nox_sales_hourly_rate, Order.nox_cost_hourly_rate
         if vals.get('consultant_line_check', False) and vals.get('consultant_id', False):
-            product = self.env['consultant.consult'].browse([vals['consultant_id']]).create_order_line_product()
+            product = self.env['consultant.consult'].browse([vals['consultant_id']]).with_context(sales_hourly_rate=sales_hourly_rate, cost_hourly_rate=cost_hourly_rate).create_order_line_product()
             vals['product_id'] = product.id
             vals['product_dummy_check'] = False
             vals['product_dummy_id'] = False
