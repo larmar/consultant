@@ -79,7 +79,12 @@ class ConsultantConsult(models.Model):
     def _get_orders(self):
         for consultant in self:
             sale_order_ids, purchase_order_ids = [], []
+            consultant_orders = self.env['sale.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
+            temp = [sale_order_ids.append(sale.order_id.id) for sale in consultant_orders]
             consultant.sale_order_ids = sale_order_ids
+
+            consultant_orders = self.env['purchase.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
+            temp = [purchase_order_ids.append(purchase.order_id.id) for purchase in consultant_orders]
             consultant.purchase_order_ids = purchase_order_ids
 
     @api.multi
