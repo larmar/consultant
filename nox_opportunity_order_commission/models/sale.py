@@ -74,9 +74,11 @@ class SaleOrder(models.Model):
             
             vendor_price = sale.nox_commission_payment_amount or 0.0            
 
-            #get quantity from related PO's Vendor Bills (PO created from sale_purchase_b2b app functionality
+            #get quantity from all sale order lines:
             qty = 0.0
-
+            for line in sale.order_line:
+                qty += line.product_uom_qty
+                
             #purchase order lines :
 
             commission_order_products = self.env['product.product'].search([('product_tmpl_id.is_commission_product', '=', True)])
