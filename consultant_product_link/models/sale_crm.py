@@ -24,14 +24,11 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).write(vals)
 
         #get all consultants related to Sales Order:
-        sol_products, consultants = [], []
+        consultants = []
         for line in self.order_line:
-            if line.product_id:
-                sol_products.append(line.product_id.id)
-        for product in sol_products:
-            consultant_id = False #TODO
-            if consultant_id:
-                consultants.append(consultant_id)
+            if line.product_id and line.product_id.consultant_id:
+                consultants.append(line.product_id.consultant_id)
+
         consultants = list(set(consultants))
 
         #update consultant(s) stage by validating all his related Sale Orders:
@@ -46,21 +43,16 @@ class SaleOrder(models.Model):
         """This function is executed by cron/scheduler to check Sales Order(s) and update Consultant Stage.
         It is executed on every 12 hours.
         """
-        sol_products, consultants = [], []
+        consultants = []
         
         yesterday = dt.today() - timedelta(1)
         orders = self.search([('nox_is_enddate', '=', yesterday)])
 
         for order in orders:
             for line in order.order_line:
-                if line.product_id:
-                    sol_products.append(line.product_id.id)
+                if line.product_id and line.product_id.consultant_id:
+                    consultants.append(line.product_id.consultant_id)
 
-        sol_products = list(set(sol_products))
-        for product in sol_products:
-            consultant_id = False #TODO
-            if consultant_id:
-                consultants.append(consultant_id)
         consultants = list(set(consultants))
 
         #update consultant(s) stage by validating all his related Sale Orders:
