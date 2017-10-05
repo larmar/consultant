@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
             for line in order.order_line:
                 vendor_price = order.validate_product_for_vendor(line.product_id)
                 if vendor_price != order.nox_cost_hourly_rate:
-                    raise ValidationError(_('Unit price in PO Order line cannot be different from Cost hourly rate in SO!\n\Product: %s'%(line.product_id.name)))
+                    raise ValidationError(_('Unit price in PO Order line cannot be different from Cost hourly rate in SO!\n\nProduct: %s'%(line.product_id.name)))
 
         return super(SaleOrder, self).action_create_draft_po()
 
