@@ -142,7 +142,7 @@ class SaleOrder(models.Model):
             consultants,  order_lines = [], []
             temp = [consultants.append(consultant) for consultant in Opportunity.consultant_ids]
 
-            temp_product = self.env['product.product'].search([('sale_ok','=',True)], limit=1)
+            temp_product = self.env['product.product'].search([('sale_ok','=',True)], limit=1) #to set default Tax on order line
             for consultant in consultants:
                 hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
 
@@ -181,6 +181,8 @@ class SaleOrderLine(models.Model):
 
     consultant_line_check = fields.Boolean('Consultant Product Line?', help="If checked, Product and Description are not allowed to modify; Product is auto Created & set on Save.")
     consultant_id = fields.Many2one('consultant.consult', 'Related Consultant', copy=False)
+
+    #dummy fields to hide original product id field if Order is created from Opportunity:
     product_dummy_id = fields.Many2one('product.product', 'Product(dummy)', readonly=False, copy=False)
     product_dummy_check = fields.Boolean('Product Check')
 
