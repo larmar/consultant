@@ -22,7 +22,7 @@
             	</xpath>
 
                   <field name="state" position="before">
-                        <button name="action_create_commission_order" type="object" string="Create Commission Order" attrs="{'invisible':[('nox_commission_payment','=',False)]}"/>
+                        <button name="action_create_commission_order" type="object" string="Create Commission Order" attrs="{'invisible':['|', ('nox_commission_payment','!=',True), ('state', '!=', 'sale')]}"/>
                   </field>
             </field>
         </record>
