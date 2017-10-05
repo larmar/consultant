@@ -170,7 +170,10 @@ class SaleOrder(models.Model):
     @api.depends('order_line')
     def compute_consultant_names(self):
         for sale in self:
-            sale.consultant_names = '' #TODO
+            consultant_names = []
+            temp = [consultant_names.append(line.consultant_id.name) for line in sale.order_line if line.consultant_id]
+            consultant_names = list(set(consultant_names))
+            sale.consultant_names = ', '.join(consultant_names)
 
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
