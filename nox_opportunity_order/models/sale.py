@@ -142,6 +142,7 @@ class SaleOrder(models.Model):
             consultants,  order_lines = [], []
             temp = [consultants.append(consultant) for consultant in Opportunity.consultant_ids]
 
+            temp_product = self.env['product.product'].search([('sale_ok','=',True)], limit=1)
             for consultant in consultants:
                 hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
 
@@ -150,11 +151,11 @@ class SaleOrder(models.Model):
                 customer_default_tax = self.env['ir.values'].get_default('product.template', 'taxes_id', company_id = User.company_id.id)
                 if customer_default_tax:
                     taxes = customer_default_tax
-                
                 line_data = {
-                    'product_id': False,
+                    'product_id': temp_product and temp_product.id or False,
                     'name': consultant.name,
                     'consultant_line_check': True,
+                    'product_dummy_check': True,
                     'consultant_id': consultant.id,
                     'product_uom': hour_uom or False,
                     'price_unit': Opportunity.nox_sales_hourly_rate,
@@ -180,6 +181,8 @@ class SaleOrderLine(models.Model):
 
     consultant_line_check = fields.Boolean('Consultant Product Line?', help="If checked, Product and Description are not allowed to modify; Product is auto Created & set on Save.")
     consultant_id = fields.Many2one('consultant.consult', 'Related Consultant', copy=False)
+    product_dummy_id = fields.Many2one('product.product', 'Product(dummy)', readonly=False, copy=False)
+    product_dummy_check = fields.Boolean('Product Check')
 
     @api.model
     def create(self, vals):
@@ -188,5 +191,6 @@ class SaleOrderLine(models.Model):
         if vals.get('consultant_line_check', False) and vals.get('consultant_id', False):
             product = self.env['consultant.consult'].browse([vals['consultant_id']]).create_order_line_product()
             vals['product_id'] = product.id
+            vals['product_dummy_check'] = False
+            vals['product_dummy_id'] = False
         return super(SaleOrderLine, self).create(vals)
-

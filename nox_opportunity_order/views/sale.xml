@@ -29,23 +29,28 @@
 
             	</notebook>
 
-                <xpath expr="//field[@name='order_line']/form[1]/group[1]/group[1]/field[@name='price_subtotal']" position="after">
+                <xpath expr="//field[@name='order_line']/form[1]/group[1]/group[1]/field[@name='product_id']" position="after">
+                    <field name="product_dummy_id" string="" readonly="1" attrs="{'invisible':[('product_dummy_check','=',False)]}"/>
+                    <field name="product_dummy_check" invisible="1"/>
                     <field name="consultant_line_check" invisible="1"/>
                     <field name="consultant_id" invisible="1"/>
                 </xpath>
 
                 <xpath expr="//field[@name='order_line']/form[1]/group[1]/group[1]/field[@name='product_id']" position="attributes">
-                    <attribute name="attrs">{'readonly': ['|', '|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', []), ('consultant_line_check','=',True)]}</attribute>
+                    <attribute name="attrs">{'readonly': ['|', '|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', []), ('consultant_line_check','=',True)], 'invisible':[('product_dummy_check','=',True)]}</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='order_line']/tree[1]/field[@name='name']" position="after">
+                <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="after">
+                    <field name="product_dummy_id" string="" readonly="1" attrs="{'invisible':[('product_dummy_check','=',False)]}"/>
+                    <field name="product_dummy_check" invisible="1"/>
                     <field name="consultant_line_check" invisible="1"/>
                     <field name="consultant_id" invisible="1"/>
                 </xpath>
 
                 <xpath expr="//field[@name='order_line']/tree[1]/field[@name='product_id']" position="attributes">
-                    <attribute name="attrs">{'readonly': ['|', '|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', []), ('consultant_line_check','=',True)]}</attribute>
+                    <attribute name="attrs">{'readonly': ['|', '|', ('qty_invoiced', '&gt;', 0), ('procurement_ids', '!=', []), ('consultant_line_check','=',True)], 'invisible':[('product_dummy_check','=',True)]}</attribute>
                 </xpath>
+
             </field>
         </record>
 
