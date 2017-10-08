@@ -19,7 +19,7 @@ class AccountInvoice(models.Model):
         Otherwise set current Date.
         """
         res = super(AccountInvoice, self).default_get(default_fields)
-        if 'type' in res and res['type'] == 'in_invoice':
+        if 'type' in res and res['type'] in ('in_invoice', 'out_invoice'):
             current_date = datetime.now().date()
             year, month = current_date.year, current_date.month
 
