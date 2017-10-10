@@ -41,3 +41,19 @@ class ProductProduct(models.Model):
         if vals:
             res.update(vals)
         return res
+
+    @api.model
+    def create(self, vals):
+        context = self.env.context
+        if context and context.get('is_commission_product', 0):
+            raise ValidationError(_('Access Denied.\n\nCommission Product already exists! Please contact your System Administrator.'))
+
+        return super(ProductProduct, self).create(vals)
+
+    @api.multi
+    def unlink(self):
+        for product in self:
+            if product.is_commission_product:
+                raise ValidationError(_('Access Denied.\n\nYou cannot delete a Commission Product! Please contact your System Administrator.'))
+        return super(ProductProduct, self).unlink()
+
