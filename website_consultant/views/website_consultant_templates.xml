@@ -3,6 +3,9 @@
         <xpath expr="." position="inside">
             <link rel='stylesheet' type="text/css" href='/website_consultant/static/src/css/website_consultant.less'/>
             <script type="text/javascript" src="/website_consultant/static/src/js/website_consultant.js"></script>
+
+
+            
         </xpath>
     </template>
     
@@ -193,11 +196,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
-
+            
             <xpath expr="//div['@id=wrap']" position="inside">
                 <div id="openTerms" class="modalDialog">
                     <div>  
@@ -254,6 +254,8 @@
     <!-- TODO Consultant Profile - Edit mode -->
     <template id="consultants_profile_update" name="Consultant Profile Update">
         <t t-call="website.layout">
+            <!-- <link rel='stylesheet' type="text/css" href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css'/> -->
+
             <div id="wrap">
                 <div class="container">
                     <div class="oe_structure">
@@ -274,7 +276,7 @@
                                 </ol>
                             </div>
                         </div>
-                        <form action="/my/consultants/" method="post">
+                        <form action="/my/consultants/" method="post" id="consultant_edit_form">
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input name="consultant_id" type="hidden" t-att-value="consultant.id"/>
                             <h1>
@@ -297,7 +299,7 @@
                                             <label class="control-label" for="available">Next Available</label>
                                             <br/>
                                             <h4>
-                                                <input type="date" name="next_available" t-att-value="consultant.available"/>
+                                                <input type="text" name="next_available" t-att-value="consultant.available" data-date-format="YYYY-MM-DD"/>
                                             </h4>
                                         </div>
                                         <div t-attf-class="form-group col-sm-12 col-lg-8">
@@ -454,6 +456,11 @@
                     </div>
                 </div>
                 <div class="oe_structure mb32"/>
+                
+                <link rel='stylesheet' type="text/css" href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css'/>
+                <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.0/moment.min.js"></script>
+                <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
                 <xpath expr="//div['@id=wrap']" position="inside">
                     <div id="openTerms" class="modalDialog">
                         <div>
@@ -468,10 +475,10 @@
                         </div>
                     </div>
                     <script>
-                    $('.btn-popup-reject').on('click', function (e) {
-                        $('.modalDialog').hide();
-                    });
-                </script>
+                        $('.btn-popup-reject').on('click', function (e) {
+                            $('.modalDialog').hide();
+                        });
+                    </script>
                 </xpath>
             </div>
         </t>
