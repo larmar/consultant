@@ -102,5 +102,19 @@
             </field>
         </record>
 
+        <!-- Opportunities search filters -->
+        <record id="view_crm_case_opportunities_filter_nox" model="ir.ui.view">
+            <field name="name">crm.lead.opportunity.nox.search</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+                <filter name="message_needaction" position="before">
+                    <filter name="won_without_order" context="{'won_without_order': True}" string="Won w/o Order"/>
+                    <filter name="won_with_active_order" context="{'won_with_active_order': True}" string="Won w/o Order but Passed Start Date"/>
+                    <separator/>
+                </filter>
+            </field>
+        </record>
+
 	</data>
 </odoo>

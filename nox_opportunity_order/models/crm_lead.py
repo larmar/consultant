@@ -48,6 +48,58 @@ class CrmLead(models.Model):
             vals['nox_ftepercent'] = vals['nox_ftepercent_temp']
         return super(CrmLead, self).write(vals)
 
+    @api.model
+    def search(self, args, offset=0, limit=None, order=None, count=False):
+        """Search Filters : (1) Won w/o Order (2) Won w/o Order but Passed Start Date
+        """
+        context = self.env.context
+        stages, opportunity_ids, sale_opportunities, result, result2 = [], [], [], [], []
+
+        won_stage_ids = self.env['crm.stage'].search_read([('name', 'ilike', 'won')], fields=['id'])
+        for stage in won_stage_ids:
+            stages.append(str(stage['id']))
+
+        if stages:
+            if context and context.get('won_without_order', False):
+                query = """select id from crm_lead where stage_id in (%s)""" % ','.join(stages)
+                self._cr.execute(query)
+                ids = self._cr.fetchall()
+                for opportunity_id in ids:
+                    opportunity_ids.append(opportunity_id[0])
+
+                opportunity_ids = list(set(opportunity_ids))
+
+                sale_ids = self.env['sale.order'].search_read([('opportunity_id', '!=', False)], fields=['opportunity_id'])
+                for oppor in sale_ids:
+                    sale_opportunities.append(oppor['opportunity_id'][0])
+                sale_opportunities = list(set(sale_opportunities))
+
+                temp = [result.append(a) for a in opportunity_ids if a not in sale_opportunities]
+
+            if context and context.get('won_with_active_order', False):
+                query = """select id from crm_lead where stage_id in (%s)""" % ','.join(stages)
+                self._cr.execute(query)
+                ids = self._cr.fetchall()
+                for opportunity_id in ids:
+                    opportunity_ids.append(opportunity_id[0])
+
+                opportunity_ids = list(set(opportunity_ids))
+                today = datetime.now().date()
+                for oppor in self.env['crm.lead'].browse(opportunity_ids):
+                    if oppor.nox_is_startdate and datetime.strptime(oppor.nox_is_startdate, "%Y-%m-%d").date() <= today:
+                        result2.append(oppor.id)
+                
+            if result and result2:
+                temp = [result.append(a) for a in result2]
+                result = list(set(result))
+                args += [('id', 'in', result)]
+            elif result:
+                args += [('id', 'in', result)]
+            elif result2:
+                args += [('id', 'in', result2)]
+                
+        return super(CrmLead, self).search(args, offset, limit, order, count)
+
     @api.onchange('nox_ftepercent_temp')
     def onchange_nox_ftepercent(self):
         self.nox_ftepercent = self.nox_ftepercent_temp
