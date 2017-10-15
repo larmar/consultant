@@ -15,8 +15,8 @@ class AccountInvoice(models.Model):
 
     @api.model
     def default_get(self, default_fields):
-        """Set Vendor Bill Invoice Date as the last day of the month;
-        - Month Period = 11th day of month TO 10th day of following month.
+        """Set Vendor Bill Invoice Date as the last day of the month; if Current Date is between 1 to 10th of the month.
+        Otherwise set current Date.
         """
         res = super(AccountInvoice, self).default_get(default_fields)
         if 'type' in res and res['type'] == 'in_invoice':
@@ -29,7 +29,10 @@ class AccountInvoice(models.Model):
                 month = 12
                 year = year - 1
 
-            lastDayofMonth = calendar.monthrange(year, month)[1]
+            if current_date.day <= 10:
+                lastDayofMonth = calendar.monthrange(year, month)[1]
+            else:
+                lastDayofMonth = current_date.day
             
             invoice_date = str(year) + '-' + str(month) + '-' + str(lastDayofMonth)
             invoice_date = datetime.strptime(invoice_date, '%Y-%m-%d').date()
