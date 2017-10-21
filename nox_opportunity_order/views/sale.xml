@@ -16,6 +16,8 @@
             				<field name="nox_contract_signed"/>
 		    				<field name="nox_is_startdate"/>
 		    				<field name="nox_is_enddate"/>
+                            <field name="nox_followup_startdate" readonly="1" attrs="{'invisible':[('nox_followup_startdate','=',False)]}"/>
+                            <field name="nox_followup_enddate" readonly="1" attrs="{'invisible':[('nox_followup_enddate','=',False)]}"/>
 		    			</group>
                         <group name="nox_opportunity_right">
 		    				<field name="nox_sales_hourly_rate"/>

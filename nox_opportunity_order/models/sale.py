@@ -11,6 +11,7 @@ from odoo.exceptions import ValidationError
 from odoo.tools.translate import _
 
 from datetime import datetime
+import dateutil.relativedelta as rt
 
 from odoo.addons.nox_opportunity_order.models.crm_lead import get_weekdaysrange
 from odoo.addons.nox_opportunity_order.models.crm_lead import get_value_percent
@@ -31,6 +32,22 @@ class SaleOrder(models.Model):
                     nox_sum_hours = get_value_percent((len(diffDays) * 8), oppr.nox_ftepercent_temp)
                     oppr.nox_sum_hours = nox_sum_hours
 
+    @api.depends('nox_is_startdate')
+    def _compute_followup_startdate(self):
+        date = False
+        for order in self:
+            if order.nox_is_startdate:
+                date = datetime.strptime(order.nox_is_startdate, "%Y-%m-%d") + rt.relativedelta(months=1)
+            order.nox_followup_startdate = date
+
+    @api.depends('nox_is_enddate')
+    def _compute_followup_enddate(self):
+        date = False
+        for order in self:
+            if order.nox_is_enddate:
+                date = datetime.strptime(order.nox_is_enddate, "%Y-%m-%d") - rt.relativedelta(months=2)
+            order.nox_followup_enddate = date
+
     nox_is_startdate = fields.Date("Start Date")
     nox_is_enddate = fields.Date("End Date")
     nox_cost_hourly_rate = fields.Float('Cost hourly rate')
@@ -38,6 +55,9 @@ class SaleOrder(models.Model):
     nox_ftepercent_temp = fields.Float('Avg FTE (%)')
     nox_sum_hours = fields.Float(string='Total Hours', compute='_compute_nox_sum_hours', store=True)
     nox_sales_hourly_rate = fields.Float('Sales hourly rate')
+
+    nox_followup_startdate = fields.Date(compute='_compute_followup_startdate', string='Start Follow-up Date', store=True)
+    nox_followup_enddate = fields.Date(compute='_compute_followup_enddate', string='End Follow-up Date', store=True)
 
     nox_contract_signed = fields.Boolean('Contract Signed')
 
