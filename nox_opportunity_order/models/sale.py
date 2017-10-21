@@ -34,16 +34,16 @@ class SaleOrder(models.Model):
 
     @api.depends('nox_is_startdate')
     def _compute_followup_startdate(self):
-        date = False
         for order in self:
+            date = False
             if order.nox_is_startdate:
                 date = datetime.strptime(order.nox_is_startdate, "%Y-%m-%d") + rt.relativedelta(months=1)
             order.nox_followup_startdate = date
 
     @api.depends('nox_is_enddate')
     def _compute_followup_enddate(self):
-        date = False
         for order in self:
+            date = False
             if order.nox_is_enddate:
                 date = datetime.strptime(order.nox_is_enddate, "%Y-%m-%d") - rt.relativedelta(months=2)
             order.nox_followup_enddate = date
