@@ -93,7 +93,7 @@ class ConsultantConsult(models.Model):
         today = datetime.now().date()
         for consultant in self:
             for order in consultant.sale_order_ids:
-                if order.nox_is_enddate:
+                if order.state == 'sale' and order.nox_is_enddate:
                     order_end_date = datetime.strptime(order.nox_is_enddate, '%Y-%m-%d').date()
                     if order_end_date >= today and order.state == 'sale':
                         valid = True
