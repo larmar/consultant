@@ -62,7 +62,7 @@
               <group name="group_left">
                 <field name="linkedin" widget="url"/>
                 <field name="available" />
-                <field name="opportunity_ids" widget="many2many_tags"/>
+                <field name="opportunity_ids" widget="many2many_tags" invisible="1"/>
                 <field name="priority" widget="priority" />
                 <field name="region_ids" options="{'no_create': 1, 'create': 0}" widget="many2many_tags"/>
               </group>

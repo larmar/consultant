@@ -8,8 +8,8 @@
 			<field name="inherit_id" ref="consultant.view_form_consultant_consult"/>
 			<field name="arch" type="xml">
 				<field name="opportunity_ids" position="after">
-					<field name="sale_order_ids" widget="many2many_tags" readonly="1"/>
-					<field name="purchase_order_ids" widget="many2many_tags" readonly="1"/>
+					<field name="sale_order_ids" widget="many2many_tags" readonly="1" invisible="1"/>
+					<field name="purchase_order_ids" widget="many2many_tags" readonly="1" invisible="1"/>
 				</field>
 			</field>
 		</record>
