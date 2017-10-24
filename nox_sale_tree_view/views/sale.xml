@@ -15,8 +15,8 @@
                     <field name="consultant_names"/>
                     <field name="nox_contract_signed"/>
                     <field name="nox_is_startdate"/>
-                    <field name="nox_followup_startdate"/>
                     <field name="nox_is_enddate"/>
+                    <field name="nox_followup_startdate"/>
                     <field name="nox_followup_enddate"/>
                 </field>
 
@@ -54,8 +54,8 @@
                     <field name="consultant_names"/>
                     <field name="nox_contract_signed"/>
                     <field name="nox_is_startdate"/>
-                    <field name="nox_followup_startdate"/>
                     <field name="nox_is_enddate"/>
+                    <field name="nox_followup_startdate"/>
                     <field name="nox_followup_enddate"/>
                 </field>
 
