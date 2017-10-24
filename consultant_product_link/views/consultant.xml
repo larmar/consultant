@@ -11,6 +11,24 @@
 					<field name="sale_order_ids" widget="many2many_tags" readonly="1" invisible="1"/>
 					<field name="purchase_order_ids" widget="many2many_tags" readonly="1" invisible="1"/>
 				</field>
+
+				<div name="button_box" position="inside">
+					<button name="action_open_sale_orders" 
+						type="object" 
+						class="oe_stat_button"
+						icon="fa-usd"
+						help="Sale Orders related to Consultant">
+	                	<field name="total_sale_orders" widget="statinfo" string="Sale Orders"/>
+	                </button>
+
+	                <button name="action_open_purchase_orders" 
+	                	type="object" 
+	                	class="oe_stat_button"
+	                	icon="fa-shopping-cart"
+	                	help="Purchase Orders related to Consultant">
+	                	<field name="total_purchase_orders" widget="statinfo" string="Purchase Orders"/>
+	                </button>
+				</div>
 			</field>
 		</record>
 

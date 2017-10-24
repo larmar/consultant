@@ -30,6 +30,18 @@ class crm_lead(models.Model):
     main_role_ids = fields.Many2many('consultant.role.main', string='Main Roles')
     main_competence_ids = fields.Many2many('consultant.competence.main', string='Main Competence')
 
+    @api.model
+    def create(self, vals):
+        """Link Consultant with Opportunity when Opportunity is created through Consultants reference
+        """
+        res = super(crm_lead, self).create(vals)
+        context = self.env.context or {}
+        if context.get('consultant_link_id', False):
+            consultant_id = context['consultant_link_id']
+            opportunity_id = res.id
+            self._cr.execute(""" insert into consultant_consult_opportunity_rel(opportunity_id,consultant_id) values(%s,%s);"""%(opportunity_id, consultant_id))
+        return res
+
     @api.multi
     def action_open_consultants(self):
         """

@@ -52,6 +52,15 @@
             <field name="stage_id" widget="statusbar" clickable="True"/>
           </header>
           <sheet>
+          	<div class="oe_button_box" name="button_box">
+                <button name="action_open_opportunities" 
+                		type="object" 
+                		class="oe_stat_button"
+                		icon="fa-star"
+                		help="Opportunities related to Consultant">
+                	<field name="total_opportunities" widget="statinfo" string="Opportunities"/>
+                </button>
+            </div>
             <div class="oe_title">
                <label for="name" class="oe_edit_only"/>
                <h1>

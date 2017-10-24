@@ -20,6 +20,11 @@ class consultant_consult(models.Model):
     _description = "Consultants"
     _inherit = ['mail.thread', 'ir.needaction_mixin', 'utm.mixin']
 
+    @api.multi
+    def compute_total_opportunities(self):
+        for consultant in self:
+            consultant.total_opportunities = len(consultant.opportunity_ids)
+
     name = fields.Char(String='Name', track_visibility='onchange')
     linkedin = fields.Char('Linkedin')
     available = fields.Date('Next available', track_visibility='onchange')
@@ -47,6 +52,8 @@ class consultant_consult(models.Model):
     web_profile_viewed = fields.Boolean('Web profile viewed')
     web_profile_edited = fields.Boolean('Web profile edited')
     user_id = fields.Many2one('res.users', 'Related User')
+
+    total_opportunities = fields.Integer(compute='compute_total_opportunities', string='Related Opportunities', store=False)
 
     _sql_constraints = [('consultant_name_unique', 'unique(name)', 'Consultant already exists.')]    
 
@@ -194,6 +201,18 @@ class consultant_consult(models.Model):
                     self._cr.execute(""" delete from consultant_consult_opportunity_rel where 
                                             opportunity_id=%s and 
                                             consultant_id=%s;"""%(opportunity_id, consultant.id))
+
+    @api.multi
+    def action_open_opportunities(self):
+        """Open list of Opportunities related to Consutant
+        Auto link consultant if new opportunity is created from Opportunity list navigated through consultant.
+        """
+        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
+        opportunity_ids = []
+        temp = [opportunity_ids.append(o.id) for o in self.opportunity_ids]
+        action['domain'] = [['id', 'in', opportunity_ids]]
+        action['context'] = {'consultant_link_id': self.id}
+        return action
 
 # Industry
 

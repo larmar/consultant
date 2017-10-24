@@ -21,6 +21,9 @@ class ConsultantConsult(models.Model):
     sale_order_ids = fields.Many2many('sale.order', string='Sales Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
 
+    total_sale_orders = fields.Integer(compute='_get_orders', string='Total Sale Orders', store=False)
+    total_purchase_orders = fields.Integer(compute='_get_orders', string='Total Purchase Orders', store=False)
+
     @api.multi
     def create_consultant_product(self, Consultant):
         """This function creates and links a Product with given Consultant Card
@@ -82,10 +85,12 @@ class ConsultantConsult(models.Model):
             consultant_orders = self.env['sale.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
             temp = [sale_order_ids.append(sale.order_id.id) for sale in consultant_orders]
             consultant.sale_order_ids = sale_order_ids
+            consultant.total_sale_orders = len(sale_order_ids)
 
             consultant_orders = self.env['purchase.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
             temp = [purchase_order_ids.append(purchase.order_id.id) for purchase in consultant_orders]
             consultant.purchase_order_ids = purchase_order_ids
+            consultant.total_purchase_orders = len(purchase_order_ids)
 
     @api.multi
     def auto_set_consultant_stage(self):
@@ -112,3 +117,21 @@ class ConsultantConsult(models.Model):
         else:
             stage_id = self.env['consultant.stage'].search([('name', 'ilike', 'sale ready')], limit=1)
         return stage_id and stage_id.id or False
+
+    @api.multi
+    def action_open_sale_orders(self):
+        for consultant in self:
+            action = consultant.env.ref('sale.action_orders').read()[0]
+            order_ids = []
+            temp = [order_ids.append(sale.id) for sale in consultant.sale_order_ids]
+            action['domain'] = [['id','in',order_ids]]
+            return action
+
+    @api.multi
+    def action_open_purchase_orders(self):
+        for consultant in self:
+            action = consultant.env.ref('purchase.purchase_form_action').read()[0]
+            order_ids = []
+            temp = [order_ids.append(po.id) for po in consultant.purchase_order_ids]
+            action['domain'] = [['id','in',order_ids]]
+            return action
