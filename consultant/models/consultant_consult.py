@@ -65,8 +65,8 @@ class consultant_consult(models.Model):
             self._cr.execute("CREATE UNIQUE INDEX unique_name_idx on consultant_consult (LOWER(name));")
             _logger.info("Unique Constraint Index successfully created")
         except Exception, e:
-            error = "Error Creating Constraint!\n\nConsultant with Duplicate Names exist.\n\nError Details:\n%s"%(e)
-            _logger.error(error)
+            error = "ERROR CREATING CONSTRAINT!\n\nCONSULTANTS WITH DUPLICATE NAMES EXISTS.\n\nError Details:\n%s"%(e)
+            _logger.warn(error)
             pass
 
     @api.model
