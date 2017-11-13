@@ -62,7 +62,7 @@ class SaleOrder(models.Model):
     nox_contract_signed = fields.Boolean('Contract Signed')
 
     consultant_names = fields.Char(compute='compute_consultant_names', string='Consultants', store=True)
-    opportunity_id_copy = fields.Many2one(related="opportunity_id", string='Opportunity Description', store=True, readonly=True)
+    opportunity_id_copy = fields.Many2one(related="opportunity_id", string='Opportunity', store=True, readonly=True, website_form_blacklisted=False)
 
     @api.model
     def default_get(self, fields):
