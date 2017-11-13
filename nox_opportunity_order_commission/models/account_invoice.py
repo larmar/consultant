@@ -66,4 +66,13 @@ class AccountInvoice(models.Model):
 
                 data['quantity'] = bill_to_qty
 
+        #set Taxes (if applicable):
+        if data and data.get('product_id', False):
+            taxes = []
+            product = self.env['product.product'].browse(data['product_id'])
+            for tax in product.supplier_taxes_id:
+                taxes.append(tax.id)
+            if taxes:
+                data['invoice_line_tax_ids'] = [[6, 0, taxes]]
+                
         return data
