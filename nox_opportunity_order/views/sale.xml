@@ -31,7 +31,7 @@
                             <field name="nox_followup_enddate" readonly="1" attrs="{'invisible':[('nox_followup_enddate','=',False)]}"/>
 		    			</group>
                         <group name="nox_opportunity_right">
-                            <field name="opportunity_id_copy" string="Opportunity" readonly="1"/>
+                            <field name="opportunity_id_copy" string="Opportunity Name" readonly="1"/>
 		    				<field name="nox_sales_hourly_rate"/>
                             <field name="nox_cost_hourly_rate"/>
                     		<field name="nox_ftepercent" widget="progressbar" readonly="1"/>
