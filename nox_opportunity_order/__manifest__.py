@@ -37,6 +37,7 @@ Extra new field added in Quotation / Sales Order view:
   'data': [ 
   		'views/crm_lead.xml',
   		'views/sale.xml',
+      'views/product.xml',
 	],
 
   'application': False,
