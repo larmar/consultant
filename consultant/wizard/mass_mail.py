@@ -28,6 +28,7 @@ class MailComposeMessage(models.TransientModel):
                 'partner_ids': [[6, 0, partners]],
                 'message_type': 'email',
                 'no_auto_thread': True,
+                'reply_to': self.env['res.users'].browse([self.env.uid])[0].email or '',
                 }
             res.update(vals)
         return res
