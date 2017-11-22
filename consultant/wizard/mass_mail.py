@@ -22,11 +22,12 @@ class MailComposeMessage(models.TransientModel):
             vals = {
                 'model': 'consultant.consult',
                 'template_id': False,
-                'composition_mode': 'comment',
+                'composition_mode': 'mass_mail',
                 'subject': '',
                 'body': '',
                 'partner_ids': [[6, 0, partners]],
-                'message_type': 'email'
+                'message_type': 'email',
+                'no_auto_thread': True,
                 }
             res.update(vals)
         return res
