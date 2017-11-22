@@ -19,10 +19,11 @@ class MailComposeMessage(models.TransientModel):
             partners = []
             temp = [partners.append(consultant.contact_id.id) for consultant in self.env['consultant.consult'].browse(context.get('active_ids', False)) if consultant.contact_id]
             partners = list(set(partners))
-            reply_to = ''
+            reply_to, user_signature = '', ''
             if self.env.uid:
                 user_id = self.env['res.users'].browse([self.env.uid])[0]
                 reply_to = str(user_id.name) + ' <' + user_id.email + '>'
+                user_signature = user_id.signature
             vals = {
                 'model': 'consultant.consult',
                 'template_id': False,
@@ -33,6 +34,7 @@ class MailComposeMessage(models.TransientModel):
                 'message_type': 'email',
                 'no_auto_thread': True,
                 'reply_to': reply_to,
+                'body': '<br/><br/> ' + user_signature
                 }
             res.update(vals)
         return res
