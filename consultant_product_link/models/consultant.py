@@ -81,13 +81,20 @@ class ConsultantConsult(models.Model):
     @api.multi
     def _get_orders(self):
         for consultant in self:
-            sale_order_ids, purchase_order_ids = [], []
-            consultant_orders = self.env['sale.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
+            consultant_products, sale_order_ids, purchase_order_ids = [], [], []
+
+            #search products using with_context to bypass products filtering done in def search
+            products = self.env['product.product'].with_context(show_consultant_product_template=True).search_read([('consultant_id', '=', consultant.id)], fields=['id'])
+            print products
+            for prod in products:
+                consultant_products.append(prod['id'])
+
+            consultant_orders = self.env['sale.order.line'].search([('product_id', 'in', consultant_products)])
             temp = [sale_order_ids.append(sale.order_id.id) for sale in consultant_orders]
             consultant.sale_order_ids = sale_order_ids
             consultant.total_sale_orders = len(sale_order_ids)
 
-            consultant_orders = self.env['purchase.order.line'].search([('product_id.consultant_id.id','=',consultant.id)])
+            consultant_orders = self.env['purchase.order.line'].search([('product_id', 'in', consultant_products)])
             temp = [purchase_order_ids.append(purchase.order_id.id) for purchase in consultant_orders]
             consultant.purchase_order_ids = purchase_order_ids
             consultant.total_purchase_orders = len(purchase_order_ids)
