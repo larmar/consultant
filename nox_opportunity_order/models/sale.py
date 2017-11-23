@@ -163,7 +163,7 @@ class SaleOrder(models.Model):
             consultants,  order_lines = [], []
             temp = [consultants.append(consultant) for consultant in Opportunity.consultant_ids]
 
-            temp_product = self.env['product.product'].search([('sale_ok','=',True)], limit=1) #to set default Tax on order line
+            temp_product = self.env['product.product'].with_context(show_consultant_product_template=True).search([('sale_ok','=',True)], limit=1) #to set default Tax on order line
             for consultant in consultants:
                 hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
 
