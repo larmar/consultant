@@ -7,6 +7,7 @@
 ##############################################################################
 
 from odoo import models, fields, api
+from email.utils import formataddr
 
 class MailComposeMessage(models.TransientModel):
     _inherit = "mail.compose.message"
@@ -22,7 +23,7 @@ class MailComposeMessage(models.TransientModel):
             reply_to, user_signature = '', ''
             if self.env.uid:
                 user_id = self.env['res.users'].browse([self.env.uid])[0]
-                reply_to = str(user_id.name) + ' <' + user_id.email + '>'
+                reply_to = formataddr((user_id.name, user_id.email))
                 user_signature = user_id.signature
             vals = {
                 'model': 'consultant.consult',
