@@ -146,6 +146,9 @@ class consultant_consult(models.Model):
         #keep only 10 main competences:
         if 'main_competence_ids' in vals and vals['main_competence_ids']:
             vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
+        #archive/unarchive related Contact (Consultant Contact):
+        if 'active' in vals:
+            self.consultant_contact_id.write({'active': vals['active']})
         return super(consultant_consult, self).write(vals)
 
     @api.onchange('main_role_ids')
