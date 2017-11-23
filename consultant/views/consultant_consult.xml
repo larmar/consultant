@@ -53,6 +53,11 @@
           </header>
           <sheet>
           	<div class="oe_button_box" name="button_box">
+                <button name="toggle_active" type="object"
+                    class="oe_stat_button" icon="fa-archive">
+                    <field name="active" widget="boolean_button"
+                        options='{"terminology": "archive"}'/>
+                </button>
                 <button name="action_open_opportunities" 
                 		type="object" 
                 		class="oe_stat_button"
@@ -248,6 +253,7 @@
 
                 <filter name="web_profile_viewed" string="Web profile viewed" domain="[('web_profile_viewed','=',True)]"/>
                 <filter name="web_profile_edited" string="Web profile edited" domain="[('web_profile_edited','=',True)]"/>
+                <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
                 <newline/>
                 <group expand="0" string="Group By">
                     <filter name="group_by_stage" string="Stages" context="{'group_by': 'stage_id'}"/>

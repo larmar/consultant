@@ -52,6 +52,7 @@ class consultant_consult(models.Model):
     web_profile_viewed = fields.Boolean('Web profile viewed')
     web_profile_edited = fields.Boolean('Web profile edited')
     user_id = fields.Many2one('res.users', 'Related User')
+    active = fields.Boolean(default=True)
 
     total_opportunities = fields.Integer(compute='compute_total_opportunities', string='Related Opportunities', store=False)
 
