@@ -122,7 +122,7 @@ class ConsultantConsult(models.Model):
             #stage_id = self._cr.execute("select id from consultant_stage where name ilike '%%on nox contract%%'")
             stage_id = self.env['consultant.stage'].search([('name', 'ilike', 'on nox contract')], limit=1)
         else:
-            stage_id = self.env['consultant.stage'].search([('name', 'ilike', 'sale ready')], limit=1)
+            stage_id = self.env['consultant.stage'].search([('name', 'ilike', 'offered')], limit=1)
         return stage_id and stage_id.id or False
 
     @api.multi
