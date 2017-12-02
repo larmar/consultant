@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<!-- Rename Lock to Close -->
+		<record id="view_order_lock_to_close_form" model="ir.ui.view">
+            <field name="name">sale.order.lock.to.close.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<button name="action_done" position="replace">
+            		<button name="action_done" type="object" string="Close" states="sale"
+                        help="If the sale is closed, you can not modify it anymore. Also, you will not be able to invoice the same."/>
+            	</button>
+            </field>
+        </record>
+
+	</data>
+</odoo>
