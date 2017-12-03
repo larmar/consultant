@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consultant_test_tag_user,consultant.test.tag.user,model_consultant_test_tag,base.group_consultant_user,1,0,0,0
+access_consultant_test_tag_manager,consultant.test.tag.manager,model_consultant_test_tag,base.group_consultant_manager,1,1,1,1

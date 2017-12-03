@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="view_consultant_test_tag_form" model="ir.ui.view">
+			<field name="name">consultant.test.tag.form</field>
+			<field name="model">consultant.test.tag</field>
+			<field name="arch" type="xml">
+				<form string="Consultant - Test Tags">
+					<sheet>
+						<group col="4">
+							<field name="name"/>
+							<field name="index_number"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_consultant_test_tag_tree" model="ir.ui.view">
+			<field name="name">consultant.test.tag.tree</field>
+			<field name="model">consultant.test.tag</field>
+			<field name="arch" type="xml">
+				<tree string="Consultant - Test Tags">
+					<field name="name" select="1"/>
+					<field name="index_number" select="1"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_consultant_test_tag" model="ir.actions.act_window">
+			<field name="name">Test Tag</field>
+			<field name="res_model">consultant.test.tag</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+                    Add Consultant Test Tags here...
+                </p>
+            </field>
+		</record>
+
+		<menuitem id="menu_consultant_configuration_test_tag"
+	        action="action_consultant_test_tag"
+	        parent="consultant.menu_consultant_configuration"
+	        sequence="16"/>
+
+	</data>
+</odoo>

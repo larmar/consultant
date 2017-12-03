@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="consultant_test_tag_update_form" model="ir.ui.view">
+			<field name="name">consultant.test.tag.update.form</field>
+			<field name="model">consultant.test.tag.update</field>
+			<field name="arch" type="xml">
+				<form string="Consultant - Update Test Tags">
+					<label string="Select Consultant(s) to assign with Test Tag." colspan="4"/>
+					<group>
+						<field name="test_tag_ids" widget="many2many_tags" readonly="1" string="Test Tags (to update)"/>
+						<field name="consultant_ids" widget="many2many_tags" options="{'no_create': 1}"/>
+					</group>
+					<footer>
+						<button name="action_update_tags" type="object" string="Mass Update Tags" class="oe_highlight"/>
+						<button name="cancel" string="Close" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<!-- Action to update all test tags on selected Consultant(s) -->
+		<record id="action_consultant_test_tag_update" model="ir.actions.act_window">
+			<field name="name">Update test tag on Consultant(s)</field>
+			<field name="res_model">consultant.test.tag.update</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'all_tags': True}</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem id="menu_consultant_configuration_test_tag_update"
+	        action="action_consultant_test_tag_update"
+	        parent="consultant.menu_consultant_configuration"
+	        sequence="17"/>
+
+		<!-- Action to update single test tag on selected Consultant(s) -->
+		<act_window id="action_consultant_assign_test_tag"
+			name="Update test tag on Consultant(s)"
+			res_model="consultant.test.tag.update"
+			src_model="consultant.test.tag"
+			view_mode="form"
+			multi="True"
+			target="new"/>
+
+	</data>
+</odoo>

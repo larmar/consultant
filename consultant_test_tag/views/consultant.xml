@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+    <record id="consultant_consult_test_tags_form" model="ir.ui.view">
+		<field name="name">consultant.consult.test.tag.form</field>
+		<field name="model">consultant.consult</field>
+		<field name="inherit_id" ref="consultant.view_form_consultant_consult"/>
+		<field name="arch" type="xml">
+			<xpath expr="//notebook[1]" position="inside">
+				<page name="other" string="Other">
+					<group name="test_tags">
+						<field name="test_tag_ids" widget="many2many_tags" options="{'no_create': 1}"/>
+					</group>
+				</page>
+			</xpath>
+		</field>
+	</record>
+
+    <record id="consultant_competence_index_number_form" model="ir.ui.view">
+        <field name="name">consultant.competence.index.number.form</field>
+        <field name="model">consultant.competence</field>
+        <field name="inherit_id" ref="consultant.consultant_competence_form"/>
+        <field name="arch" type="xml">
+			<field name="name" position="after">
+				<field name="index_number"/>
+			</field>
+        </field>
+    </record>
+
+    <record id="consultant_industry_index_number_form" model="ir.ui.view">
+        <field name="name">consultant.industry.index.number.form</field>
+        <field name="model">consultant.industry</field>
+        <field name="inherit_id" ref="consultant.consultant_industry_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+				<field name="index_number"/>
+			</field>
+        </field>
+    </record>
+
+    <record id="consultant_region_index_number_form" model="ir.ui.view">
+        <field name="name">consultant.region.index.number.form</field>
+        <field name="model">consultant.region</field>
+        <field name="inherit_id" ref="consultant.consultant_region_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+				<field name="index_number"/>
+			</field>
+        </field>
+    </record>
+
+    <record id="consultant_role_index_number_form" model="ir.ui.view">
+        <field name="name">consultant.role.index.number.form</field>
+        <field name="model">consultant.role</field>
+        <field name="inherit_id" ref="consultant.consultant_role_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+				<field name="index_number"/>
+			</field>
+        </field>
+    </record>
+
+
+	</data>
+</odoo>
