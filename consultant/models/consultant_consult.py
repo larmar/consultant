@@ -209,7 +209,7 @@ class consultant_consult(models.Model):
         """Open list of Opportunities related to Consutant
         Auto link consultant if new opportunity is created from Opportunity list navigated through consultant.
         """
-        action = self.env.ref('crm.crm_lead_opportunities').read()[0]
+        action = self.env.ref('consultant.crm_lead_opportunities_default_list').read()[0]
         opportunity_ids = []
         temp = [opportunity_ids.append(o.id) for o in self.opportunity_ids]
         action['domain'] = [['id', 'in', opportunity_ids]]
