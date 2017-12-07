@@ -111,3 +111,16 @@ class Sale(models.Model):
     @api.multi
     def create_purchase_order(self, order_id, vals):
         return self.env['purchase.order'].create(vals)
+
+    @api.multi
+    def action_done(self):
+        """Close Related Purchase Orders
+        """
+        for sale in self:
+            po_ids = []
+            temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
+            po_ids = list(set(po_ids))
+            for po in po_ids:
+                if po.state != 'cancel':
+                    po.button_done()
+        return super(Sale, self).action_done()
