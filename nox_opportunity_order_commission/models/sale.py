@@ -49,6 +49,34 @@ class SaleOrder(models.Model):
                 })
         return res
 
+    @api.multi
+    def write(self, vals):
+        """Update Start Date | End Date on related Commission Orders
+        """
+        if not vals: vals = {}
+
+        for sale in self:
+            nox_is_startdate, nox_is_enddate = '', ''
+            if vals.get('nox_is_startdate', ''):
+                nox_is_startdate = vals['nox_is_startdate']
+            if vals.get('nox_is_enddate', ''):
+                nox_is_enddate = vals['nox_is_enddate']
+
+            po_vals = {}
+            if nox_is_startdate:
+                po_vals['nox_is_startdate'] = nox_is_startdate
+            if nox_is_enddate:
+                po_vals['nox_is_enddate'] = nox_is_enddate
+
+            if po_vals:
+                po_ids = []
+                temp = [po_ids.append(pol.order_id) for pol in sale.commission_order_lines]
+                po_ids = list(set(po_ids))
+                for po in po_ids:
+                    po.write(po_vals)
+
+        return super(SaleOrder, self).write(vals)
+
     @api.depends('commission_order_lines')
     def _commission_order_line_check(self):
         for sale in self:
