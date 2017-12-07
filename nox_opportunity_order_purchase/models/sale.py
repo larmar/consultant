@@ -24,3 +24,31 @@ class SaleOrder(models.Model):
                     'nox_is_enddate': order_id.nox_is_enddate,
                     })
         return purchase_id
+
+    @api.multi
+    def write(self, vals):
+        """Update Start Date | End Date on related Purchase Orders
+        """
+        if not vals: vals = {}
+
+        for sale in self:
+            nox_is_startdate, nox_is_enddate = '', ''
+            if vals.get('nox_is_startdate', ''):
+                nox_is_startdate = vals['nox_is_startdate']
+            if vals.get('nox_is_enddate', ''):
+                nox_is_enddate = vals['nox_is_enddate']
+
+            po_vals = {}
+            if nox_is_startdate:
+                po_vals['nox_is_startdate'] = nox_is_startdate
+            if nox_is_enddate:
+                po_vals['nox_is_enddate'] = nox_is_enddate
+
+            if po_vals:
+                po_ids = []
+                temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
+                po_ids = list(set(po_ids))
+                for po in po_ids:
+                    po.write(po_vals)
+
+        return super(SaleOrder, self).write(vals)
