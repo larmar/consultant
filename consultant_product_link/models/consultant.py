@@ -85,7 +85,6 @@ class ConsultantConsult(models.Model):
 
             #search products using with_context to bypass products filtering done in def search
             products = self.env['product.product'].with_context(show_consultant_product_template=True).search_read([('consultant_id', '=', consultant.id)], fields=['id'])
-            print products
             for prod in products:
                 consultant_products.append(prod['id'])
 
