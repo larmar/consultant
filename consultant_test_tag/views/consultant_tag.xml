@@ -11,6 +11,7 @@
 						<group col="4">
 							<field name="name"/>
 							<field name="index_number"/>
+							<field name="search_text"/>
 						</group>
 					</sheet>
 				</form>
@@ -23,6 +24,7 @@
 			<field name="arch" type="xml">
 				<tree string="Consultant - Test Tags">
 					<field name="name" select="1"/>
+					<field name="search_text" select="1"/>
 					<field name="index_number" select="1"/>
 				</tree>
 			</field>

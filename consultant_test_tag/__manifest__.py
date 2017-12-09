@@ -31,7 +31,7 @@
 	'website': 'www.linserv.se/en/',
 	'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
 
-	'depends': ['consultant'],
+	'depends': ['consultant', 'consultant_alfresco'],
 	'data': [ 
 		'views/consultant_tag.xml',
 		'views/consultant.xml',

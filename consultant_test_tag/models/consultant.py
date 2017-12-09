@@ -21,6 +21,7 @@ class ConsultantTestTag(models.Model):
 
     name = fields.Char('Tag', required=True)
     index_number = fields.Char('Index Number', size=1, default='5')
+    search_text = fields.Char('Search Text')
 
     @api.constrains('index_number')
     def check_index_number(self):
