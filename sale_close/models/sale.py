@@ -31,4 +31,4 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if context.get('active_model', False) and context['active_model'] == 'sale.order':
             if self.env['sale.order'].browse(context['active_ids'])[0].state == 'done':
                 raise ValidationError('Access Denied!\n\nYou cannot create Invoice for Closed Sales Order.')
-                
+        return super(SaleAdvancePaymentInv, self).default_get(fields)

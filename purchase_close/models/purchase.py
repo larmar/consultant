@@ -38,4 +38,5 @@ class AccountInvoice(models.Model):
                 po_state = self.env['purchase.order'].browse(context['active_ids'])[0].state
                 if po_state and po_state == 'done':
                     raise ValidationError('Access Denied!\n\nYou cannot create Invoice for Closed Purchase Order.')
-                
+        return res
+        
