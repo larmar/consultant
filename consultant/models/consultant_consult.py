@@ -213,7 +213,9 @@ class consultant_consult(models.Model):
         opportunity_ids = []
         temp = [opportunity_ids.append(o.id) for o in self.opportunity_ids]
         action['domain'] = [['id', 'in', opportunity_ids]]
-        action['context'] = {'consultant_link_id': self.id}
+        action['context'] = {'consultant_link_id': self.id} #not recognised when Remove Opportunity wizard is loaded. so workaround:
+        for oppr in self.opportunity_ids:
+            oppr.write({'consultant_unlink_id': self.id})
         return action
 
 # Industry

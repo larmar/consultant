@@ -29,6 +29,8 @@ class crm_lead(models.Model):
     competence_ids = fields.Many2many('consultant.competence', string='Competence')
     main_role_ids = fields.Many2many('consultant.role.main', string='Main Roles')
     main_competence_ids = fields.Many2many('consultant.competence.main', string='Main Competence')
+    consultant_unlink_id = fields.Many2one('consultant.consult', 'Consultant To Unlink', help="This is a temporary fields which sets every time user opens \
+                                Opportunities related to Consultant from Consultant card; workaround to remove Consultant Opportunity.")
 
     @api.model
     def create(self, vals):

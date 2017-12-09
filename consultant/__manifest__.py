@@ -38,6 +38,7 @@ Manage consultants and search for knowledge
     'views/nox_alert.xml',
 
     'wizard/consultant_opportunity_link.xml',
+    'wizard/consultant_opportunity_unlink.xml',
     'wizard/mass_mail_view.xml',
     
     'security/ir.model.access.csv',
