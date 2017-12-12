@@ -58,12 +58,12 @@ class ConsultantTestTagUpdate(models.TransientModel):
         for consultant in consultants:
             consultant_tags_list[consultant.id] = []
             for tag in tags:
-                tag_id, index_number, search_text, search_text_list = tag[0], tag[1], tag[2], []
+                tag_id, index_number, search_text, search_text_query, search_text_list = tag[0], tag[1], tag[2],tag[2], []
                 search_text = search_text.split('OR')
                 temp = [search_text_list.append(text.strip()) for text in search_text]
 
                 result = repo.query("select * from cv:curriculumvitae as cv where contains('%s') and \
-                                        cv.cv:consultant = '%s'"%('ASP.NET', consultant.name))
+                                        cv.cv:consultant = '%s'"%(search_text_query, consultant.name))
                 doc = result.getResults()
                 data, datastring = '', ''
                 for d in doc:
