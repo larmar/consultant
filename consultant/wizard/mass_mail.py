@@ -39,3 +39,58 @@ class MailComposeMessage(models.TransientModel):
                 }
             res.update(vals)
         return res
+
+    @api.multi
+    def render_message(self, res_ids):
+        """Overrite function to fix bug of partner_ids key not found when email is sent through a template
+        """
+        self.ensure_one()
+        multi_mode = True
+        if isinstance(res_ids, (int, long)):
+            multi_mode = False
+            res_ids = [res_ids]
+
+        subjects = self.render_template(self.subject, self.model, res_ids)
+        bodies = self.render_template(self.body, self.model, res_ids, post_process=True)
+        emails_from = self.render_template(self.email_from, self.model, res_ids)
+        replies_to = self.render_template(self.reply_to, self.model, res_ids)
+        default_recipients = {}
+        if not self.partner_ids:
+            default_recipients = self.env['mail.thread'].message_get_default_recipients(res_model=self.model, res_ids=res_ids)
+
+        results = dict.fromkeys(res_ids, False)
+        for res_id in res_ids:
+            results[res_id] = {
+                'subject': subjects[res_id],
+                'body': bodies[res_id],
+                'email_from': emails_from[res_id],
+                'reply_to': replies_to[res_id],
+            }
+            results[res_id].update(default_recipients.get(res_id, dict()))
+
+        # generate template-based values
+        if self.template_id:
+            template_values = self.generate_email_for_composer(
+                self.template_id.id, res_ids,
+                fields=['email_to', 'partner_to', 'email_cc', 'attachment_ids', 'mail_server_id'])
+        else:
+            template_values = {}
+
+        for res_id in res_ids:
+            if template_values.get(res_id):
+                # recipients are managed by the template
+                ##customization:
+                if 'partner_ids' in results[res_id]:
+                    results[res_id].pop('partner_ids')
+                if 'email_to' in results[res_id]:
+                    results[res_id].pop('email_to')
+                if 'email_cc' in results[res_id]:
+                    results[res_id].pop('email_cc')
+                # remove attachments from template values as they should not be rendered
+                template_values[res_id].pop('attachment_ids', None)
+            else:
+                template_values[res_id] = dict()
+            # update template values by composer values
+            template_values[res_id].update(results[res_id])
+
+        return multi_mode and template_values or template_values[res_ids[0]]
