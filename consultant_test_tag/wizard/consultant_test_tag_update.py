@@ -72,7 +72,7 @@ class ConsultantTestTagUpdate(models.TransientModel):
                     datastring = data.getvalue()
                     for text in search_text_list:
                         _logger.info('Searching for test tag %s'%(text))
-                        count = datastring.count(str(text))
+                        count = datastring.count(text.encode('utf-8'))
                         if count >= int(index_number):
                             consultant_tags_list[consultant.id].append(tag_id)
                             break
