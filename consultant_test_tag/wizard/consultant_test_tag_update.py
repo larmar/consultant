@@ -50,25 +50,35 @@ class ConsultantTestTagUpdate(models.TransientModel):
 
         temp = [tags.append([tag.id, tag.index_number, tag.search_text]) for tag in self.test_tag_ids]
         temp = [consultants.append(consultant) for consultant in self.consultant_ids]
-        
+
         consultant_tags_list = {}
+        updated_consultant_ids = []
         for consultant in consultants:
             consultant_tags_list[consultant.id] = []
             for tag in tags:
-                tag_id, index_number, search_text = tag[0], tag[1], tag[2]
-                result = repo.query("select cv.cv:consultant from cv:curriculumvitae as cv where contains('%s') and \
-                                        cv.cv:consultant = '%s'"%(search_text, consultant.name))
+                tag_id, index_number, search_text, search_text_list = tag[0], tag[1], tag[2], []
+                search_text = search_text.split('OR')
+                temp = [search_text_list.append(text.strip()) for text in search_text]
 
-                #count no of occurances of the tag's search text in the consultant document
-                count = 0
-                for res in result:
-                    count += 1
-
-                if count >= int(index_number):
-                    consultant_tags_list[consultant.id].append(tag_id)
+                result = repo.query("select * from cv:curriculumvitae as cv where contains('%s') and \
+                                        cv.cv:consultant = '%s'"%('ASP.NET', consultant.name))
+                doc = result.getResults()
+                data, datastring = '', ''
+                for d in doc:
+                    d.reload()
+                    data = d.getContentStream()
+                    datastring = data.getvalue()
+                    for text in search_text_list:
+                        count = datastring.count(str(text))
+                        if count >= int(index_number):
+                            consultant_tags_list[consultant.id].append(tag_id)
+                            break
 
         #update consultant's test tags
         if consultant_tags_list:
             for consultant_list in consultant_tags_list:
-                self.env['consultant.consult'].browse([consultant_list]).write({'test_tag_ids': [[6, 0, consultant_tags_list[consultant_list]]]})
+                if consultant_tags_list[consultant_list]:
+                    updated_consultant_ids.append(consultant_list)
+                    self.env['consultant.consult'].browse([consultant_list]).write({'test_tag_ids': [[6, 0, consultant_tags_list[consultant_list]]]})
+        _logger.info("Updated Consultant IDS: %s"%(updated_consultant_ids))
         return True
