@@ -38,6 +38,8 @@ class ConsultantTestTagUpdate(models.TransientModel):
         update tags if no. of occurances of the search text appears as greater than or equal to Index no set on tag.
         """
         _logger.info('Mass Update Consultant tags functionality has started!')
+        _logger.info('Total tags to search for update: %s'%(len(self.test_tag_ids)))
+        _logger.info('Total consultants to update: %s'%(len(self.consultant_ids)))
         consultants, tags = [], []
 
         #Re-test & Valdate Alfresco Connection:
@@ -69,6 +71,7 @@ class ConsultantTestTagUpdate(models.TransientModel):
                     data = d.getContentStream()
                     datastring = data.getvalue()
                     for text in search_text_list:
+                        _logger.info('Searching for test tag %s'%(text))
                         count = datastring.count(str(text))
                         if count >= int(index_number):
                             consultant_tags_list[consultant.id].append(tag_id)
