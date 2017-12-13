@@ -10,7 +10,7 @@
 					<label string="Select Consultant(s) to assign with Test Tag." colspan="4"/>
 					<group>
 						<field name="test_tag_ids" widget="many2many_tags" readonly="1" string="Test Tags (to update)"/>
-						<field name="consultant_ids" widget="many2many_tags" options="{'no_create': 1}"/>
+						<field name="consultant_ids" widget="many2many_list" options="{'no_create': 1}"/>
 					</group>
 					<footer>
 						<button name="action_update_tags" type="object" string="Mass Update Tags" class="oe_highlight"/>
