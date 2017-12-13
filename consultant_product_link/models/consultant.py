@@ -21,6 +21,9 @@ class ConsultantConsult(models.Model):
     sale_order_ids = fields.Many2many('sale.order', string='Sales Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
     purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', compute="_get_orders", store=False, copy=False, help="Sale Order associated with related Consultant Product.")
 
+    sale_line_ids = fields.One2many('sale.order.line', 'consultant_id', 'Sale Order Lines', readonly=True)
+    sale_order_id = fields.Many2one('sale.order', related='sale_line_ids.order_id', string="Sales Order")
+    
     total_sale_orders = fields.Integer(compute='_get_orders', string='Total Sale Orders', store=False)
     total_purchase_orders = fields.Integer(compute='_get_orders', string='Total Purchase Orders', store=False)
 

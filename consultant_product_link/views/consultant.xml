@@ -32,5 +32,17 @@
 			</field>
 		</record>
 
+		<!-- Add sale order on consultants search view -->
+		<record id="view_search_consultants_consultant_sale_order" model="ir.ui.view">
+	        <field name="name">Consultants Search - Sales order</field>
+	        <field name="model">consultant.consult</field>
+	        <field name="inherit_id" ref="consultant.view_search_consultants_consultant"/>
+	        <field name="arch" type="xml">
+	        	<field name="opportunity_ids" position="after">
+	        		<field name="sale_order_id"/>
+	        	</field>
+	        </field>
+	    </record>
+
 	</data>
 </odoo>
