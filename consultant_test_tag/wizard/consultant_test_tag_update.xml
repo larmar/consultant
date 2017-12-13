@@ -7,9 +7,11 @@
 			<field name="model">consultant.test.tag.update</field>
 			<field name="arch" type="xml">
 				<form string="Consultant - Update Test Tags">
-					<label string="Select Consultant(s) to assign with Test Tag." colspan="4"/>
 					<group>
 						<field name="test_tag_ids" widget="many2many_tags" readonly="1" string="Test Tags (to update)"/>
+					</group>
+					<label string="Select Consultant(s) to assign with Test Tag." colspan="4"/>
+					<group>
 						<field name="consultant_ids" widget="many2many_list" options="{'no_create': 1}"/>
 					</group>
 					<footer>
