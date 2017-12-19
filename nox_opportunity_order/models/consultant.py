@@ -73,11 +73,16 @@ class ConsultantConsult(models.Model):
         if categ_id:
             update_vals['categ_id'] = categ_id
 
-        # Set Default Purchase tax as Vendor tax on Product:
-        product_vendor_tax = self.env['ir.values'].get_default('product.template', 'supplier_taxes_id', company_id = User.company_id.id)
-        if product_vendor_tax:
-            update_vals['supplier_taxes_id'] = [[6, 0, product_vendor_tax]]
-
+        # Set Default Sales tax & Purchase tax as Vendor tax on Product:
+        company_id = User.company_id.id
+        sales_tax = self.env['ir.model.data'].xmlid_to_res_id('l10n_se.' + str(company_id) + '_sale_tax_25_services')
+        if sales_tax:
+            update_vals['taxes_id'] = [[6, 0, [sales_tax]]]
+        
+        purchase_tax = self.env['ir.model.data'].xmlid_to_res_id('l10n_se.' + str(company_id) + '_purchase_tax_25_services')
+        if purchase_tax:
+            update_vals['supplier_taxes_id'] = [[6, 0, [purchase_tax]]]
+        
         Product.write(update_vals)
 
         # Set Vendor on Product
