@@ -35,6 +35,15 @@ class PurchaseOrder(models.Model):
                 })
         return res
 
+    @api.multi
+    def write(self, vals):
+        """Set Contract Signed unticked on changing End Date
+        """
+        if not vals: vals = {}
+        if 'nox_is_enddate' in vals:
+            vals['nox_contract_signed'] = False
+        return super(PurchaseOrder, self).write(vals)
+
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
         """Search Filters: Not Started | Started | Ended
