@@ -93,8 +93,6 @@ class SaleOrder(models.Model):
         if 'nox_ftepercent_temp' in vals:
             vals['nox_ftepercent'] = vals['nox_ftepercent_temp']
 
-        res = super(SaleOrder, self).write(vals)
-
         #Validate Start Date & End Date
         start_date = self.nox_is_startdate
         end_date = self.nox_is_enddate
@@ -102,11 +100,13 @@ class SaleOrder(models.Model):
             start_date = vals['nox_is_startdate']
         if 'nox_is_enddate' in vals:
             end_date = vals['nox_is_enddate']
+            #make contract signed unticked
+            vals['nox_contract_signed'] = False
 
         if start_date and end_date and start_date > end_date:
             raise ValidationError(_('Invalid Start Date!\n\nContract Start Date cannot be greater than End Date!'))
 
-        return res
+        return super(SaleOrder, self).write(vals)
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
