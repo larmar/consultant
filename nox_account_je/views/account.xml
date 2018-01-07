@@ -1,0 +1,16 @@
+<odoo>
+	<data>
+
+        <record id="nox_view_move_form" model="ir.ui.view">
+            <field name="name">account.move.nox.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="line_ids" position="attributes">
+                    <attribute name="context">{'line_ids': line_ids, 'journal_id': journal_id, 'default_name': ref}</attribute>
+                </field>
+            </field>
+        </record>
+
+	</data>
+</odoo>
