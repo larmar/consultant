@@ -168,10 +168,11 @@ class SaleOrder(models.Model):
                 hour_uom = self.env['ir.model.data'].xmlid_to_res_id('product.product_uom_hour')
 
                 User = self.env['res.users'].browse([self._uid])
-                taxes = []
-                customer_default_tax = self.env['ir.values'].get_default('product.template', 'taxes_id', company_id = User.company_id.id)
-                if customer_default_tax:
-                    taxes = customer_default_tax
+
+                company_id = User.company_id.id
+                sales_tax = False
+                sales_tax = self.env['ir.model.data'].xmlid_to_res_id('l10n_se.' + str(company_id) + '_sale_tax_25_services')
+
                 line_data = {
                     'product_id': temp_product and temp_product.id or False,
                     'name': consultant.name,
@@ -181,7 +182,7 @@ class SaleOrder(models.Model):
                     'product_uom': hour_uom or False,
                     'price_unit': Opportunity.nox_sales_hourly_rate,
                     'product_uom_qty': Opportunity.nox_sum_hours,
-                    'tax_id': [[6, 0, taxes]],
+                    'tax_id': [[6, 0, [sales_tax]]],
                 }
                 order_lines.append(line_data)
 
@@ -223,10 +224,10 @@ class SaleOrderLine(models.Model):
             vals['product_id'] = product.id
             vals['product_dummy_check'] = False
             vals['product_dummy_id'] = False
-            #set sale order line tax:
-            taxes = []
-            for tax in product.taxes_id:
-                taxes.append(tax.id)
-            if taxes:
-                vals['tax_id'] = [[6, 0, taxes]]
+            #set sale order line tax: #keep tax mapped through Fiscal Position Configurations; instead of forcibly setting tax
+            #taxes = []
+            #for tax in product.taxes_id:
+            #    taxes.append(tax.id)
+            #if taxes:
+            #    vals['tax_id'] = [[6, 0, taxes]]'''
         return super(SaleOrderLine, self).create(vals)
