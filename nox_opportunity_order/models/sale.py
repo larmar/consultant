@@ -223,4 +223,10 @@ class SaleOrderLine(models.Model):
             vals['product_id'] = product.id
             vals['product_dummy_check'] = False
             vals['product_dummy_id'] = False
+            #set sale order line tax:
+            taxes = []
+            for tax in product.taxes_id:
+                taxes.append(tax.id)
+            if taxes:
+                vals['tax_id'] = [[6, 0, taxes]]
         return super(SaleOrderLine, self).create(vals)
