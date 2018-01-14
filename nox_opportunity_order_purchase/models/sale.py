@@ -52,3 +52,45 @@ class SaleOrder(models.Model):
                     po.write(po_vals)
 
         return super(SaleOrder, self).write(vals)
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    @api.multi
+    def _compute_analytic(self, domain=None):
+        """Update Delivered Quantity in Sales Order line when Vendor Bill related to PO related to SO is Validated.
+            - Compute Delivered quantity by deducting Refund Vendor Bill quantity
+        """
+        lines = {}
+        context = self.env.context or {}
+        if context.get('type', '') == 'in_invoice':
+            force_so_lines = self.env.context.get("force_so_lines")
+            
+            domain = [('so_line', 'in', self.ids)]
+
+            data = self.env['account.analytic.line'].search_read(domain, fields=['so_line', 'unit_amount', 'product_uom_id', 'amount'])
+            # If the unlinked analytic line was the last one on the SO line, the qty was not updated.
+            if force_so_lines:
+                for line in force_so_lines:
+                    lines.setdefault(line, 0.0)
+
+            for d in data:
+                if not d['product_uom_id']:
+                    continue
+                line = self.browse(d['so_line'][0])
+                lines.setdefault(line, 0.0)
+                uom = self.env['product.uom'].browse(d['product_uom_id'][0])
+                if line.product_uom.category_id == uom.category_id:
+                    qty = uom._compute_quantity(d['unit_amount'], line.product_uom)
+                else:
+                    qty = d['unit_amount']
+                
+                if d['amount'] > 0:
+                    qty = -qty
+                
+                lines[line] += qty
+
+            for line, qty in lines.items():
+                line.qty_delivered = qty
+        else:
+            return super(SaleOrderLine, self)._compute_analytic(domain=domain)
