@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_date_month_year_user,name.date.month.year.user,model_date_month_year,base.group_user,1,0,0,0
+,,,,,,,
+access_date_month_year_manager,name.date.month.year.sale.user,model_date_month_year,sales_team.group_sale_manager,1,1,1,1
+,,,,,,,
+access_date_month_working_hours_user,name.date.month.working.hours.user,model_date_month_working_hours,base.group_user,1,0,0,0
+,,,,,,,
+access_date_month_working_hours_manager,name.date.month.working.hours.manager,model_date_month_working_hours,sales_team.group_sale_manager,1,1,1,1

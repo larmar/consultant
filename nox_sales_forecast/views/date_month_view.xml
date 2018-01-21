@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="date_month_year_form" model="ir.ui.view">
+			<field name="name">date.month.year.form</field>
+			<field name="model">date.month.year</field>
+			<field name="arch" type="xml">
+				<form string="Months of the Year">
+					<sheet>
+						<group col="4">
+							<field name="year"/>
+							<field name="month"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="date_month_year_tree" model="ir.ui.view">
+			<field name="name">date.month.year.tree</field>
+			<field name="model">date.month.year</field>
+			<field name="arch" type="xml">
+				<tree string="Months of the Year">
+					<field name="year"/>
+					<field name="month"/>
+				</tree>
+			</field>
+		</record>
+
+		
+		<!-- Month working hours views -->
+
+		<record id="date_month_working_hours_form" model="ir.ui.view">
+			<field name="name">date.month.working.hours.form</field>
+			<field name="model">date.month.working.hours</field>
+			<field name="arch" type="xml">
+				<form string="Month - Working Hours" create="0" delete="0">
+					<sheet>
+						<group col="4">
+							<field name="month_year_id" options="{'no_open': 1, 'create': 0}" readonly="1"/>
+							<field name="working_hours"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="date_month_working_hours_tree" model="ir.ui.view">
+			<field name="name">date.month.working.hours.tree</field>
+			<field name="model">date.month.working.hours</field>
+			<field name="arch" type="xml">
+				<tree string="Months of the Year" create="0" delete="0">
+					<field name="month_year_id"/>
+					<field name="working_hours"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="date_month_working_hours_search" model="ir.ui.view">
+			<field name="name">date.month.working.hours.search</field>
+			<field name="model">date.month.working.hours</field>
+			<field name="arch" type="xml">
+				<search string="Months of the Year">
+					<filter name="group_by_year" string="Year" context="{'group_by': 'year'}"/>
+				</search>
+			</field>
+		</record>
+
+		<record id="action_date_month_working_hours" model="ir.actions.act_window">
+			<field name="name">Working Hours by Month</field>
+			<field name="res_model">date.month.working.hours</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_group_by_year': True}</field>
+		</record>
+
+		<menuitem id="menu_date_month_working_hours"
+			parent="sales_team.menu_sale_config"
+			action="action_date_month_working_hours"
+			groups="sales_team.group_sale_manager"
+			sequence="12"
+			/>
+
+	</data>
+</odoo>
