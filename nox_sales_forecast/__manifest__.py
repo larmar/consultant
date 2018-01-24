@@ -22,7 +22,7 @@ Sales Forecasting for Cost & Revenue
   'author': 'Linserv AB',
   'contributors': ['Riyaj Pathan <rjpathan19@gmail.com>'],
   'website': 'www.linserv.se/en/',
-  'depends': ['nox_opportunity_order'],
+  'depends': ['analytic', 'nox_opportunity_order'],
   'data': [ 
   		
   		'security/ir.model.access.csv',
@@ -31,6 +31,7 @@ Sales Forecasting for Cost & Revenue
   		'data/scheduler.xml',
 
   		'views/date_month_view.xml',
+      'views/analytic_account_view.xml',
 	],
 
   'application': False,

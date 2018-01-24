@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="account_analytic_account_cost_revenue_forecast_form" model="ir.ui.view">
+            <field name="name">analytic.analytic.account.cost.revenue.forecast.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <button name="%(analytic.account_analytic_line_action)d" position="attributes">
+                    <attribute name="context">{'default_forecast_analytic_account_id': False}</attribute>
+                </button>
+
+            	<button name="%(analytic.account_analytic_line_action)d" position="after">
+            		<button class="oe_stat_button" type="object" name="action_open_analytic_forecast"
+                        icon="fa-usd"  string="Cost/Revenue Forecast" widget="statinfo"/>
+            	</button>
+            </field>
+        </record>
+
+	</data>
+</odoo>
