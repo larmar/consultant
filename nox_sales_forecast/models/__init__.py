@@ -7,3 +7,4 @@
 ##############################################################################
 from . import date_month_year
 from . import sale_forecast
+from . import analytic_account

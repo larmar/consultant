@@ -11,26 +11,26 @@ from odoo.exceptions import ValidationError
 from datetime import datetime
 
 MONTHS = {
-	'01': 'January',
-	'02': 'February',
-	'03': 'March',
-	'04': 'April',
-	'05': 'May',
-	'06': 'June',
-	'07': 'July',
-	'08': 'August',
-	'09': 'September',
-	'10': 'October',
-	'11': 'November',
-	'12': 'December'
+	1: 'January',
+	2: 'February',
+	3: 'March',
+	4: 'April',
+	5: 'May',
+	6: 'June',
+	7: 'July',
+	8: 'August',
+	9: 'September',
+	10: 'October',
+	11: 'November',
+	12: 'December'
 }
 class date_month_year(models.Model):
 	_name = "date.month.year"
 	_description = "Years"
 	_order = "month,year"
 
-	year = fields.Char('Year', size=4, required=True)
-	month = fields.Char('Month', size=2, required=True)
+	year = fields.Integer('Year', size=4, required=True)
+	month = fields.Integer('Month', size=2, required=True)
 
 	_sql_constraints = [('month_year_uniq', 'unique(year,month)', 'Duplicate Month-Year not allowed!')]
 
@@ -39,7 +39,7 @@ class date_month_year(models.Model):
 		res = []
 		for rec in self:
 			month = MONTHS[rec.month]
-			res.append((rec.id, ' '.join([month, rec.year])))
+			res.append((rec.id, ' '.join([month, str(rec.year)])))
 		return res
 
 	@api.model
@@ -65,8 +65,8 @@ class date_month_working_hours(models.Model):
 	_order = "year,month"
 
 	month_year_id = fields.Many2one('date.month.year', 'Month', required=True)
-	month = fields.Char(related="month_year_id.month", store=True)
-	year = fields.Char(related="month_year_id.year", store=True)
+	month = fields.Integer(related="month_year_id.month", store=True)
+	year = fields.Integer(related="month_year_id.year", store=True)
 	working_hours = fields.Integer('Working Hours')
 
 	@api.constrains('working_hours')
