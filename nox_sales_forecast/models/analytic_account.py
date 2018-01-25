@@ -170,4 +170,5 @@ class AnalyticAccountLine(models.Model):
     forecast_type = fields.Selection([('Cost', 'Cost'), ('Revenue', 'Revenue')], 'Forecast Type')
     month_year_id = fields.Many2one('date.month.year', 'Month')
     sale_id = fields.Many2one('sale.order', 'Sales Order')
+    team_id = fields.Many2one(related='sale_id.team_id', store=True)
     

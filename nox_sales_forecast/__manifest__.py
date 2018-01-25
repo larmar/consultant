@@ -32,6 +32,8 @@ Sales Forecasting for Cost & Revenue
 
   		'views/date_month_view.xml',
       'views/analytic_account_view.xml',
+
+      'report/sale_forecast_report.xml',
 	],
 
   'application': False,
