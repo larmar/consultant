@@ -19,3 +19,12 @@ class HRExpenseSheet(models.Model):
         for expense in self:
             expense.account_move_id.write({'state': 'draft'})
         return res
+
+    #redefine state field: rename status "Posted" to "Audited"
+    state = fields.Selection([('submit', 'Submitted'),
+                              ('approve', 'Approved'),
+                              ('post', 'Audited'),
+                              ('done', 'Paid'),
+                              ('cancel', 'Refused')
+                              ], string='Status', index=True, readonly=True, track_visibility='onchange', copy=False, default='submit', required=True,
+        help='Expense Report State')
