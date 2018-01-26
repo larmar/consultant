@@ -23,5 +23,10 @@
             </field>
         </record>
 
+        <!-- rename menu name -->
+        <record id="hr_expense.menu_hr_expense_sheet_all_to_post" model="ir.ui.menu">
+            <field name="name">Expense Reports To Audit</field>
+        </record>
+        
 	</data>
 </odoo>
