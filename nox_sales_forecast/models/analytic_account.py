@@ -171,4 +171,5 @@ class AnalyticAccountLine(models.Model):
     month_year_id = fields.Many2one('date.month.year', 'Month')
     sale_id = fields.Many2one('sale.order', 'Sales Order')
     team_id = fields.Many2one(related='sale_id.team_id', store=True)
+    sale_user_id = fields.Many2one(related="sale_id.user_id", store=True)
     
