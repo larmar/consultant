@@ -5,5 +5,4 @@
 #    Copyright (C) 2016-TODAY Linserv Aktiebolag, Sweden (<http://www.linserv.se>).
 #
 ##############################################################################
-from . import models
-from . import wizard
+from . import temp_working_year

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="temp_working_year_form" model="ir.ui.view">
+			<field name="name">temp.working.year.form</field>
+			<field name="model">temp.working.year</field>
+			<field name="arch" type="xml">
+				<form string="Generate Working Months">
+					<label string="Input year to generate months." colspan="4"/>
+					<group>
+						<label string=""/>
+					</group>
+					<group col="4">
+						<field name="year"/>
+						<label string=""/>
+					</group>
+					<footer>
+						<button name="action_generate_working_year_months" type="object" string="Generate Working Months" class="oe_highlight"/>
+						<button name="cancel" string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_temp_working_year" model="ir.actions.act_window">
+			<field name="name">Generate Working Months</field>
+			<field name="res_model">temp.working.year</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem id="menu_generate_working_months"
+			parent="menu_nox_sale_forecast_config"
+			action="action_temp_working_year"
+			sequence="10"
+			/>
+	</data>
+</odoo>

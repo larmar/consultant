@@ -75,11 +75,16 @@
 			<field name="context">{'search_default_group_by_year': True}</field>
 		</record>
 
-		<menuitem id="menu_date_month_working_hours"
+		<menuitem id="menu_nox_sale_forecast_config"
+			name="Sales Forecast - Configuration"
 			parent="sales_team.menu_sale_config"
-			action="action_date_month_working_hours"
 			groups="sales_team.group_sale_manager"
-			sequence="12"
+			sequence="12"/>
+
+		<menuitem id="menu_date_month_working_hours"
+			parent="menu_nox_sale_forecast_config"
+			action="action_date_month_working_hours"
+			sequence="5"
 			/>
 
 	</data>

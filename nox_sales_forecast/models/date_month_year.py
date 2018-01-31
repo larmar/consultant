@@ -58,6 +58,21 @@ class date_month_year(models.Model):
 					})
 		return True
 
+	@api.multi
+	def generate_year_months(self, year):
+		"""Function to generate months of the given year
+		"""
+		for month in MONTHS:
+			if not self.search([('year','=',year), ('month','=',month)]):
+				rec = self.create({
+						'year': year,
+						'month': month
+					})
+				self.env['date.month.working.hours'].create({
+						'month_year_id': rec.id
+					})
+		return True
+
 class date_month_working_hours(models.Model):
 	_name = "date.month.working.hours"
 	_description = "Working Hours Per Month"
