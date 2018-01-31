@@ -82,9 +82,9 @@ class AnalyticAccount(models.Model):
                                                                               ('month_year_id','=',month_year_id),
                                                                               ('sale_id','=',sale.id)])
                     if not analytic_forecast_id:
-                        amount = sales_hourly_rate * quantity
+                        amount = sales_hourly_rate * quantity * (sale.nox_ftepercent / 100)
                         if ttype == 'Cost':
-                            amount = -(cost_hourly_rate * quantity)
+                            amount = -(cost_hourly_rate * quantity * (sale.nox_ftepercent / 100))
                         
                         vals = {
                             'name': name,
@@ -101,9 +101,9 @@ class AnalyticAccount(models.Model):
                         line_id = self.env['account.analytic.line'].create(vals)
                         forecast_analytic_ids.append(line_id.id)
                     else:
-                        amount = sales_hourly_rate * quantity
+                        amount = sales_hourly_rate * quantity * (sale.nox_ftepercent / 100)
                         if ttype == 'Cost':
-                            amount = -(cost_hourly_rate * quantity)
+                            amount = -(cost_hourly_rate * quantity * (sale.nox_ftepercent / 100)) 
 
                         analytic_forecast_id.write({'unit_amount': quantity, 'amount': amount, 'date': date})
                         forecast_analytic_ids.append(analytic_forecast_id.id)
