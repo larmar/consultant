@@ -6,3 +6,4 @@
 #
 ##############################################################################
 from . import temp_working_year
+from . import temp_recompute_sale_forecast

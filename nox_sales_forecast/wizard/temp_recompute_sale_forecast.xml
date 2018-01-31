@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="temp_recompute_sale_forecast_form" model="ir.ui.view">
+			<field name="name">temp.recompute.sale.forecast.form</field>
+			<field name="model">temp.recompute.sale.forecast</field>
+			<field name="arch" type="xml">
+				<form string="Recompute Sales Forecast">
+					<label string="Click on Recompute button to recompute sales forecast for all confirmed sale orders." colspan="4"/>
+					<footer>
+						<button name="action_recompute_forecast" type="object" string="Recompute" class="oe_highlight"/>
+						<button name="cancel" string="Cancel" class="oe_link" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_recompute_forecast_view" model="ir.actions.act_window">
+			<field name="name">Recompute Sales Forecast</field>
+			<field name="res_model">temp.recompute.sale.forecast</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem id="menu_recompute_sale_forecast"
+			parent="menu_nox_sale_forecast_config"
+			action="action_recompute_forecast_view"
+			sequence="15"
+			/>
+	</data>
+</odoo>

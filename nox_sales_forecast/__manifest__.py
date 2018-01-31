@@ -34,6 +34,7 @@ Sales Forecasting for Cost & Revenue
       'views/analytic_account_view.xml',
 
       'wizard/temp_working_year.xml',
+      'wizard/temp_recompute_sale_forecast.xml',
 
       'report/sale_forecast_report.xml',
 	],
