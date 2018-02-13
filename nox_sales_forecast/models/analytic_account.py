@@ -52,6 +52,10 @@ class AnalyticAccount(models.Model):
 
                 if month_years:
                     self.generate_forecast_analytics(month_years, sale)
+            else:
+                unlink_ids = self.env['account.analytic.line'].search([('forecast_type','in',('Cost', 'Revenue')), 
+                            ('sale_id','=',sale.id)])
+                unlink_ids.unlink()
         return True
 
     @api.multi

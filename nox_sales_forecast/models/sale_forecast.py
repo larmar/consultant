@@ -18,6 +18,6 @@ class SaleOrder(models.Model):
     def write(self, vals):
         res = super(SaleOrder, self).write(vals)
         for sale in self:
-            if sale.related_project_id and sale.state == 'sale':
+            if sale.related_project_id:
                 sale.related_project_id.compute_forecast(sale)
         return res
