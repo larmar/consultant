@@ -17,7 +17,7 @@ class TempRecomputeForecast(models.TransientModel):
     def action_recompute_forecast(self):
         """Recompute Sales Forecast for all confirmed Sales Orders
         """
-        order_ids = self.env['sale.order'].search([('state','=','sale')])
+        order_ids = self.env['sale.order'].search([('state','in',('sale', 'done'))])
         for order in order_ids:
         	if order.related_project_id:
 				order.related_project_id.compute_forecast(order)
