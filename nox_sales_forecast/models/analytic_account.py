@@ -22,7 +22,7 @@ class AnalyticAccount(models.Model):
     @api.one
     def compute_forecast(self, sale_id):
         for sale in sale_id:
-            if sale.state == 'sale':
+            if sale.state in ('sale', 'done'):
                 years, months = [], []
                 start_month, end_month, end_year, end_month = False, False, False, False
                 if sale.nox_is_startdate:
