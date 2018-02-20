@@ -7,7 +7,10 @@
 ##############################################################################
 
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, timedelta
+
+from dateutil.relativedelta import relativedelta as rdelta
+from calendar import monthrange
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -18,6 +21,8 @@ class PurchaseOrder(models.Model):
 
     nox_sale_partner_id = fields.Many2one(related="sale_id.partner_id", string="Customer", store=False)
     nox_sale_consultants = fields.Char(related="sale_id.consultant_names", string="Consultants", store=False)
+
+    date_search_po_bills = fields.Date('Bills not received for month')
 
     @api.model
     def default_get(self, fields):
@@ -84,4 +89,48 @@ class PurchaseOrder(models.Model):
                 args = [['id', 'in', ids]]
             else:
                 args.append(['id', 'in', ids])
+
+        if context.get('date_search_po_bills', False):
+            """Filter Purchase orders for which Vendor Bills in selected month have not been registered
+            """
+            date_search_po_bill = datetime.strptime(context['date_search_po_bills'], '%Y-%m-%d').date()
+            
+            last_day = monthrange(date_search_po_bill.year, date_search_po_bill.month)[1]
+
+            start_date = date_search_po_bill.replace(day=1)
+            end_date = date_search_po_bill.replace(day=last_day)
+
+            self._cr.execute("""select id from purchase_order where
+                                    state in ('purchase')"""
+                            )
+            result = self._cr.fetchall()
+
+            po_ids, orders = [], []
+            temp = [orders.append(res[0]) for res in result]
+            for po in self.browse(orders):
+                if not po.invoice_ids:
+                    po_ids.append(po.id)
+                
+                flag = True
+                for invoice in po.invoice_ids:
+                    if invoice.date_invoice:
+                        invoice_date = datetime.strptime(invoice.date_invoice, "%Y-%m-%d").date()
+                        if invoice_date >= start_date and invoice_date <= end_date and invoice.state in ('open', 'paid'):
+                            flag = False
+                            break
+                if flag:
+                    po_ids.append(po.id)
+            po_ids = list(set(po_ids))
+
+            if not args:
+                args = [['id','in',po_ids]]
+            else:
+                args.append(['id','in',po_ids])
+
+            #remove date_search_po_bills from domain:
+            result = []
+            for res in args:
+                if res[0] != 'date_search_po_bills':
+                    result.append(res)
+            args = result
         return super(PurchaseOrder, self).search(args, offset, limit, order, count)
