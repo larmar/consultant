@@ -41,9 +41,19 @@ class MailComposeMessage(models.TransientModel):
         return res
 
     @api.multi
+    def get_mail_values(self, res_ids):
+        #keep only one res_ids to create single mass mail with all recepients
+        context = self.env.context or {}
+        if context.get('consultant_mass_mail', False):
+            if res_ids and len(res_ids) > 1:
+                res_ids = [res_ids[0]]
+        return super(MailComposeMessage, self).get_mail_values(res_ids)
+
+    @api.multi
     def render_message(self, res_ids):
         """Overrite function to fix bug of partner_ids key not found when email is sent through a template
         """
+        context = self.env.context or {}
         self.ensure_one()
         multi_mode = True
         if isinstance(res_ids, (int, long)):
@@ -75,6 +85,11 @@ class MailComposeMessage(models.TransientModel):
                 fields=['email_to', 'partner_to', 'email_cc', 'attachment_ids', 'mail_server_id'])
         else:
             template_values = {}
+        
+        if context.get('consultant_mass_mail', False):
+            #keep only one res_ids to create single mass mail with all recepients
+            if res_ids and len(res_ids) > 1:
+                res_ids = [res_ids[0]]
 
         for res_id in res_ids:
             if template_values.get(res_id):
