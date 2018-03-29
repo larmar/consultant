@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+
+        <record id="invoice_supplier_vendor_reference_attrs_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.vendor.reference.attrs.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <field name="reference" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','in',('cancel','paid'))]}</attribute>
+                </field>
+            </field>
+        </record>
+
+	</data>
+</odoo>

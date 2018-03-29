@@ -37,6 +37,7 @@ Commission Order details:
   		'views/sale.xml',
   		'views/product.xml',
   		'views/purchase.xml',
+      'views/invoice.xml',
 
   		'data/product_data.xml',
 	],
