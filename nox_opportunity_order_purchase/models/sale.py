@@ -55,10 +55,12 @@ class SaleOrder(models.Model):
 
     @api.one
     def recompute_so_delivered_qty(self):
+        """Compute accumulated Delivered Quantity in Sales Order lines with Consultant Product from related PO > Vendor Bills
+        """
         for sale in self:
             product_list, po_ids = {}, []
             for line in sale.order_line:
-                if line.product_id.id not in product_list:
+                if line.product_id and line.product_id.consultant_product and line.product_id.id not in product_list:
                     product_list[line.product_id.id] = 0
             temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
             for po in po_ids:
@@ -71,22 +73,9 @@ class SaleOrder(models.Model):
                                     qty = -line.quantity
                                 product_list[line.product_id.id] += qty
             #update delivered qty:
+            lines_freeze = []
             for line2 in sale.order_line:
-                line2.write({'qty_delivered': product_list[line.product_id.id]})
+                if line2.product_id.id not in lines_freeze and line2.product_id.id in product_list.keys():
+                    line2.write({'qty_delivered': product_list[line2.product_id.id]})
+                    lines_freeze.append(line2.product_id.id)
         return True
-
-class SaleOrderLine(models.Model):
-    _inherit = "sale.order.line"
-
-    @api.multi
-    def _compute_analytic(self, domain=None):
-        """Update Delivered Quantity in Sales Order line when Vendor Bill related to PO related to SO is Validated.
-            - Compute Delivered quantity by deducting Refund Vendor Bill quantity
-        """
-        lines = {}
-        context = self.env.context or {}
-        if context.get('type', '') == 'in_invoice':
-            # reset delivered quantity:
-            self.order_id.recompute_so_delivered_qty()
-        else:
-            return super(SaleOrderLine, self)._compute_analytic(domain=domain)
