@@ -21,6 +21,6 @@ class AccountInvoice(models.Model):
             if vals.get('state', '') and invoice.type in ('in_invoice', 'in_refund'):
                 temp = [sale_ids.append(line.purchase_line_id.sale_id) for line in invoice.invoice_line_ids if line.purchase_line_id and line.purchase_line_id.sale_id]
             for sale in sale_ids:
-                sale.recompute_so_delivered_qty()
+                sale.with_context(invoice_type=invoice.type).recompute_so_delivered_qty()
             return res
                 

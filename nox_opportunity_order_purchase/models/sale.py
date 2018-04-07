@@ -78,4 +78,30 @@ class SaleOrder(models.Model):
                 if line2.product_id.id not in lines_freeze and line2.product_id.id in product_list.keys():
                     line2.write({'qty_delivered': product_list[line2.product_id.id]})
                     lines_freeze.append(line2.product_id.id)
+        
+        # update quantity on validating refund bill:
+        context = self.env.context or {}
+        if context.get('invoice_type', '') == 'in_refund':
+            product_list, po_ids = {}, []
+            for line in sale.order_line:
+                if line.product_id and not line.product_id.consultant_product and line.product_id.id not in product_list:
+                    product_list[str(line.product_id.id) + '_' + str(line.price_unit)] = 0
+            
+            temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
+            for po in po_ids:
+                for bill in po.invoice_ids:
+                    if bill.state in ('open', 'paid'):
+                        for line in bill.invoice_line_ids:
+                            linekey = str(line.product_id.id) + '_' + str(line.price_unit)
+                            if linekey in product_list.keys():
+                                qty = line.quantity
+                                if bill.type == 'in_refund':
+                                    qty = -line.quantity
+                                product_list[linekey] += qty
+            
+            #update delivered qty:
+            for line2 in sale.order_line:
+                linekey = str(line2.product_id.id) + '_' + str(line2.price_unit)
+                if line2.product_id and not line2.product_id.consultant_product and linekey in product_list.keys():
+                    line2.write({'qty_delivered': product_list[linekey]})
         return True
