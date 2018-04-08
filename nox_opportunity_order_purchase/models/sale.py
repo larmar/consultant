@@ -79,9 +79,7 @@ class SaleOrder(models.Model):
                     line2.write({'qty_delivered': product_list[line2.product_id.id]})
                     lines_freeze.append(line2.product_id.id)
         
-        # update quantity on validating refund bill:
-        context = self.env.context or {}
-        if context.get('invoice_type', '') == 'in_refund':
+            # update quantity on validating refund bill:
             product_list, po_ids = {}, []
             for line in sale.order_line:
                 if line.product_id and not line.product_id.consultant_product and line.product_id.id not in product_list:
@@ -90,7 +88,7 @@ class SaleOrder(models.Model):
             temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
             for po in po_ids:
                 for bill in po.invoice_ids:
-                    if bill.state in ('open', 'paid'):
+                    if bill.state in ('open', 'paid') and bill.type in ('in_invoice', 'in_refund'):
                         for line in bill.invoice_line_ids:
                             linekey = str(line.product_id.id) + '_' + str(line.price_unit)
                             if linekey in product_list.keys():
