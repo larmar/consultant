@@ -33,4 +33,5 @@ class AccountInvoice(models.Model):
             invoice = self.browse(context['active_ids'])[0]
             if invoice.type == 'out_invoice':
                 vals['name'] = invoice.name
+                vals['origin'] = invoice.origin
         return super(AccountInvoice, self).create(vals)
