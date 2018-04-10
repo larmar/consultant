@@ -24,3 +24,13 @@ class AccountInvoice(models.Model):
                 sale.with_context(invoice_type=invoice.type).recompute_so_delivered_qty()
             return res
                 
+    @api.model
+    def create(self, vals):
+        """On Credit Invoice, set Reference/Description with Customer Reference value of sourcing invoice instead of Reason
+        """
+        context = self.env.context or {}
+        if context.get('active_model', '') == 'account.invoice':
+            invoice = self.browse(context['active_ids'])[0]
+            if invoice.type == 'out_invoice':
+                vals['name'] = invoice.name
+        return super(AccountInvoice, self).create(vals)
