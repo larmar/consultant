@@ -14,6 +14,7 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     consultant_product = fields.Boolean('Is Consultant Product?', copy=False)
+    non_standard_product = fields.Boolean('Is Non-Standard Product?', copy=False)
     consultant_id = fields.Many2one('consultant.consult', 'Related Consultant', copy=False, readonly=True)
     
     @api.model
