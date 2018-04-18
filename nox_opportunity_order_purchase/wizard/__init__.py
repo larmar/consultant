@@ -6,5 +6,4 @@
 #
 ##############################################################################
 
-from . import models
-from . import wizard
+from . import nonstandard_product

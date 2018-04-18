@@ -6,7 +6,9 @@
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
-
+                <xpath expr="//header[1]" position="inside">
+                    <button name="action_add_nonstandard_product" type="object" string="Add Non-Standard Product"/>
+                </xpath>
                 <xpath expr="//sheet[1]/group[1]" position="after">
                     <group name="nox_contract">
                         <group>

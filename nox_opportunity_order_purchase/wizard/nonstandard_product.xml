@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record id="nonstandard_product_create_form" model="ir.ui.view">
+			<field name="name">nonstandard.product.create.form</field>
+			<field name="model">nonstandard.product.create</field>
+			<field name="priority" eval="1"/>
+			<field name="arch" type="xml">
+				<form string="Non-Standard Product">
+					<group colspan="4">
+						<field name="name"/>
+					</group>
+					<footer>
+						<button name="action_create_nonstandard_product" type="object" string="Add Non-Standard Product" class="oe_highlight"/>or
+						<button name="cancel" special="cancel" string="Cancel" class="oe_link"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta as rdelta
 from calendar import monthrange
+from odoo.exceptions import ValidationError
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -134,3 +135,41 @@ class PurchaseOrder(models.Model):
                     result.append(res)
             args = result
         return super(PurchaseOrder, self).search(args, offset, limit, order, count)
+
+    @api.multi
+    def action_add_nonstandard_product(self):
+        for po in self:
+            consultant, consultant_product, account_analytic_id, sales_hourly_rate, cost_hourly_rate, taxes  = False, False, False, 0, 0, []
+            Order = po.sale_id or False
+            if Order:
+                sales_hourly_rate, cost_hourly_rate = Order.nox_sales_hourly_rate, Order.nox_cost_hourly_rate
+
+            for line in po.order_line:
+                if line.product_id and line.product_id.consultant_product and line.product_id.consultant_id:
+                    consultant = line.product_id.consultant_id.id
+                    consultant_product = line.product_id.id
+                    account_analytic_id = line.account_analytic_id and line.account_analytic_id.id or False
+                    temp = [taxes.append(tax.id) for tax in line.taxes_id]
+                    break
+
+            if not consultant:
+                raise ValidationError(('Purchase Order %s is not related to any Consultant.'%(po.name)))
+
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'nonstandard.product.create',
+                'name': 'Add Non-Standard Product',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                                'po': po.id,
+                                'sale_id': Order.id,
+                                'sales_hourly_rate': sales_hourly_rate,
+                                'cost_hourly_rate': cost_hourly_rate,
+                                'consultant': consultant,
+                                'consultant_product': consultant_product,
+                                'account_analytic_id': account_analytic_id,
+                                'taxes': taxes
+                            }
+            }

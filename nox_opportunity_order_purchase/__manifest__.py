@@ -34,6 +34,7 @@ If Purchase Order is created from Sales Order; Start Date & End Date are auto se
   'depends': ['nox_opportunity_order', 'sale_purchase_b2b'],
   'data': [ 
   		'views/purchase.xml',
+  		'wizard/nonstandard_product.xml',
 	],
 
   'application': False,
