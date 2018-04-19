@@ -26,7 +26,9 @@ class nonstandard_product_create(models.TransientModel):
 
             if consultant:
                 Consultant = self.env['consultant.consult'].browse([consultant])
-                consultant_product = self.env['product.product'].with_context(show_consultant_product_template=True).search([('consultant_id', '=', Consultant.id)], order="name desc", limit=1)
+                consultant_product = self.env['product.product'].with_context(show_consultant_product_template=True).search(
+                                        [('consultant_id', '=', Consultant.id), ('non_standard_product', '=', False)], 
+                                        order="name desc", limit=1)
                 name = u' '.join([consultant_product.name, rec.name]).encode('utf-8')
                 nonstandard_product = Consultant.with_context(name=name, 
                                                                 sales_hourly_rate=sales_hourly_rate, 
