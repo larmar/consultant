@@ -18,8 +18,25 @@ class AccountInvoice(models.Model):
                 vals = {}
             res = super(AccountInvoice, invoice).write(vals)
             sale_ids = []
-            if vals.get('state', '') and invoice.type in ('in_invoice', 'in_refund'):
+            if vals.get('state', ''):
                 temp = [sale_ids.append(line.purchase_line_id.sale_id) for line in invoice.invoice_line_ids if line.purchase_line_id and line.purchase_line_id.sale_id]
+                
+                #get sale order reference from customer invoices to recompute delivered quantity
+                invoice_lines = []
+                temp = [invoice_lines.append(str(l.id)) for l in invoice.invoice_line_ids]
+
+                order_ids, order_line_ids = [], []
+                self._cr.execute("select order_line_id from sale_order_line_invoice_rel \
+                                where invoice_line_id in (%s)"%(', '.join(invoice_lines)))
+                result = self._cr.fetchall()
+                temp = [order_line_ids.append(res[0]) for res in result]
+                if order_line_ids:
+                    lines = self.env['sale.order.line'].search_read([('id','in',order_line_ids)], fields=['order_id'])
+                    temp = [order_ids.append(sale_line['order_id'][0]) for sale_line in lines]
+                    for sale_order in order_ids:
+                        sale_ids.append(self.env['sale.order'].browse([sale_order]))
+
+            sale_ids = list(set(sale_ids))
             for sale in sale_ids:
                 sale.with_context(invoice_type=invoice.type).recompute_so_delivered_qty()
             return res
