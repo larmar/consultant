@@ -130,3 +130,26 @@ class SaleOrder(models.Model):
             #     if line2.product_id and not line2.product_id.consultant_product and linekey in product_list.keys():
             #         line2.write({'qty_delivered': product_list[linekey]})
         return True
+
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
+
+    @api.model
+    def create(self, vals):
+        """Remove PO number from order line description for non-standard product; line created automatically from Vendor Bill
+        """
+        if not vals:
+            vals = {}
+
+        product_id = vals.get('product_id', False)
+        if product_id:
+            product_name = self.env['product.product'].browse([product_id])[0].name
+
+        description = vals.get('name', '')
+        desc = description.split(':')
+        if len(desc) > 1:
+            newdesc = desc[1:].pop().strip()
+            if newdesc == product_name:
+                vals['name'] = product_name
+
+        return super(SaleOrderLine, self).create(vals)
