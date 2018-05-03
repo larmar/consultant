@@ -12,6 +12,8 @@ from odoo import SUPERUSER_ID
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
+import calendar
+
 class Sale(models.Model):
     _inherit = "sale.order"
 
@@ -124,3 +126,44 @@ class Sale(models.Model):
                 if po.state != 'cancel':
                     po.button_done()
         return super(Sale, self).action_done()
+
+    @api.multi
+    def _prepare_invoice(self):
+        """set default invoice date & due date when invoice is created from Sale Order 
+        """
+        invoice_vals = super(Sale, self)._prepare_invoice()
+
+        current_date = datetime.now().date()
+        year, month = current_date.year, current_date.month
+
+        if current_date.day <= 10:
+            month = month - 1
+        if month == 0:
+            month = 12
+            year = year - 1
+
+        if current_date.day <= 10:
+            lastDayofMonth = calendar.monthrange(year, month)[1]
+        else:
+            lastDayofMonth = current_date.day
+        
+        invoice_date = str(year) + '-' + str(month) + '-' + str(lastDayofMonth)
+        invoice_date = datetime.strptime(invoice_date, '%Y-%m-%d').date()
+        invoice_date = invoice_date.strftime('%Y-%m-%d')
+
+        invoice_vals.update({'date_invoice': invoice_date})
+
+        #set due date based on payment term
+        pterm = self.payment_term_id
+        partner_id = False
+        if not pterm:
+            if 'partner_id' in invoice_vals:
+                partner_id = self.env['res.partner'].browse([self.partner_invoice_id.id])
+            if partner_id:
+                pterm = partner_id.property_supplier_payment_term_id
+        if pterm:
+            currency_id = self.pricelist_id.currency_id.id
+            pterm_list = pterm.with_context(currency_id=currency_id).compute(value=1, date_ref=invoice_date)[0]
+            invoice_vals.update({'date_due': max(line[0] for line in pterm_list)})
+
+        return invoice_vals
