@@ -50,10 +50,24 @@ class AccountInvoice(models.Model):
                     partner_id = self.env['res.partner'].browse([res['partner_id']])
                 if partner_id:
                     pterm = partner_id.property_supplier_payment_term_id
+                    res.update({'partner_id': partner_id.id})
             if pterm:
                 currency_id = res.get('currency_id', False)
                 pterm_list = pterm.with_context(currency_id=currency_id).compute(value=1, date_ref=invoice_date)[0]
-                res.update({'date_due': max(line[0] for line in pterm_list)})
+                res.update({'date_due': max(line[0] for line in pterm_list), 'payment_term_id': pterm.id})
+        return res
+
+    @api.onchange('partner_id', 'company_id')
+    def _onchange_partner_id(self):
+        """Override function to reset Due Date based on Vendor Payment Term which is being set to False on load of Vendor Bill from PO
+        """
+        date_due = self.date_due
+        res = super(AccountInvoice, self)._onchange_partner_id()
+        
+        if date_due and self.partner_id.property_supplier_payment_term_id:
+            self.date_due = date_due
+        else:
+            self.date_due = False
         return res
 
 class AccountInvoiceLine(models.Model):
