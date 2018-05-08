@@ -78,12 +78,11 @@ class SaleOrder(models.Model):
                                 if bill.type == 'in_refund':
                                     qty = -line.quantity
                                 product_list[line.product_id.id] += qty
-
             #update delivered qty:
             lines_freeze = []
             for line2 in sale.order_line:
                 if line2.product_id.id not in lines_freeze and line2.product_id.id in product_list.keys():
-                    line2.write({'qty_delivered': product_list[line2.product_id.id]})
+                    line2.with_context(allow_write=True).write({'qty_delivered': product_list[line2.product_id.id]})
                     lines_freeze.append(line2.product_id.id)
         
         	# check for expense product (by comparing product and unit price from sale order in vendor bill): update delivered qty
@@ -103,7 +102,7 @@ class SaleOrder(models.Model):
             for line3 in sale.order_line:
                 line_pkey = '-'.join([str(line3.product_id.id), str(line3.price_unit)])
                 if line_pkey not in lines_freeze and line_pkey in expense_product_list.keys():
-                    line3.write({'qty_delivered': expense_product_list[line_pkey]})
+                    line3.with_context(allow_write=True).write({'qty_delivered': expense_product_list[line_pkey]})
                     lines_freeze.append(line_pkey)	
 
             # # update quantity on validating refund bill:
@@ -153,3 +152,16 @@ class SaleOrderLine(models.Model):
                 vals['name'] = product_name
 
         return super(SaleOrderLine, self).create(vals)
+
+
+    @api.multi
+    def write(self, vals):
+        """Re-compute Delivered Quantity if its attempted to update using odoo default
+        """
+        res = super(SaleOrderLine, self).write(vals)
+        if not vals: vals = {}
+        if vals.get('qty_delivered', '') and 'allow_write' not in self.env.context:
+            order_id = self.order_id or False
+            if order_id:
+                order_id.recompute_so_delivered_qty()
+        return res
