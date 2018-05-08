@@ -105,6 +105,37 @@ class SaleOrder(models.Model):
                     line3.with_context(allow_write=True).write({'qty_delivered': expense_product_list[line_pkey]})
                     lines_freeze.append(line_pkey)	
 
+            # UPDATE INVOICED QUANTITY IN SOL
+            product_list = {}
+            for line4 in sale.order_line:
+                # check for consultant (standard) product & non-standard product
+                if line4.product_id and line4.product_id.consultant_product or line4.product_id.non_standard_product and line4.product_id.id not in product_list:
+                    product_list[line4.product_id.id] = 0
+                # check for expense product (by comparing product and unit price from sale order in vendor bill):
+                elif line4.product_id and not line4.product_id.consultant_product and not line4.product_id.non_standard_product:
+                    expense_product_key = '-'.join([str(line4.product_id.id), str(line4.price_unit)])
+                    if expense_product_key not in expense_product_list:
+                        expense_product_list[expense_product_key] = 0
+           
+            #get sale customer invoices
+            for inv in sale.invoice_ids:
+                if inv.state in ('open', 'paid'):
+                    for il in inv.invoice_line_ids:
+                        if il.product_id.id in product_list.keys():
+                            qty = 0
+                            if inv.type == 'out_invoice':
+                                qty = il.quantity
+                            if inv.type == 'out_refund':
+                                qty = -il.quantity
+                            product_list[il.product_id.id] += qty 
+
+            #update invoiced qty:
+            lines_freeze = []
+            for line5 in sale.order_line:
+                if line5.product_id.id not in lines_freeze and line5.product_id.id in product_list.keys():
+                    line5.with_context(allow_write=True).write({'qty_invoiced': product_list[line5.product_id.id]})
+                    lines_freeze.append(line5.product_id.id)
+
             # # update quantity on validating refund bill:
             # product_list, po_ids = {}, []
             # for line in sale.order_line:
@@ -156,7 +187,7 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def write(self, vals):
-        """Re-compute Delivered Quantity if its attempted to update using odoo default
+        """Re-compute Delivered/Invoiced Quantity if its attempted to update using odoo default
         """
         res = super(SaleOrderLine, self).write(vals)
         if not vals: vals = {}
@@ -164,4 +195,9 @@ class SaleOrderLine(models.Model):
             order_id = self.order_id or False
             if order_id:
                 order_id.recompute_so_delivered_qty()
+        if vals.get('qty_invoiced', '') and 'allow_write' not in self.env.context:
+            order_id = self.order_id or False
+            if order_id:
+                order_id.recompute_so_delivered_qty()
         return res
+

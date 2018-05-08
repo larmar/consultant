@@ -18,14 +18,15 @@ class AccountInvoice(models.Model):
                 vals = {}
             res = super(AccountInvoice, invoice).write(vals)
             sale_ids = []
-            if vals.get('state', ''):
-                temp = [sale_ids.append(line.purchase_line_id.sale_id) for line in invoice.invoice_line_ids if line.purchase_line_id and line.purchase_line_id.sale_id]
+            
+            temp = [sale_ids.append(line.purchase_line_id.sale_id) for line in invoice.invoice_line_ids if line.purchase_line_id and line.purchase_line_id.sale_id]
                 
-                #get sale order reference from customer invoices to recompute delivered quantity
-                invoice_lines = []
-                temp = [invoice_lines.append(str(l.id)) for l in invoice.invoice_line_ids]
+            #get sale order reference from customer invoices to recompute delivered quantity
+            invoice_lines = []
+            temp = [invoice_lines.append(str(l.id)) for l in invoice.invoice_line_ids]
 
-                order_ids, order_line_ids = [], []
+            order_ids, order_line_ids = [], []
+            if invoice_lines:
                 self._cr.execute("select order_line_id from sale_order_line_invoice_rel \
                                 where invoice_line_id in (%s)"%(', '.join(invoice_lines)))
                 result = self._cr.fetchall()
@@ -35,6 +36,11 @@ class AccountInvoice(models.Model):
                     temp = [order_ids.append(sale_line['order_id'][0]) for sale_line in lines]
                     for sale_order in order_ids:
                         sale_ids.append(self.env['sale.order'].browse([sale_order]))
+
+            #get sale order reference from origin to recompute invoiced quantity
+            so_refs = self.env['sale.order'].search([('name','=',invoice.origin)])
+            for so_ref in so_refs:
+                sale_ids.append(so_ref)
 
             sale_ids = list(set(sale_ids))
             for sale in sale_ids:
@@ -51,4 +57,5 @@ class AccountInvoice(models.Model):
             if invoice.type == 'out_invoice':
                 vals['name'] = invoice.name
                 vals['origin'] = invoice.origin
-        return super(AccountInvoice, self).create(vals)
+        res = super(AccountInvoice, self).create(vals)
+        return res
