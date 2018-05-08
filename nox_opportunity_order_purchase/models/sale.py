@@ -106,7 +106,7 @@ class SaleOrder(models.Model):
                     lines_freeze.append(line_pkey)	
 
             # UPDATE INVOICED QUANTITY IN SOL
-            product_list = {}
+            product_list, expense_product_list = {}, {}
             for line4 in sale.order_line:
                 # check for consultant (standard) product & non-standard product
                 if line4.product_id and line4.product_id.consultant_product or line4.product_id.non_standard_product and line4.product_id.id not in product_list:
@@ -135,6 +135,27 @@ class SaleOrder(models.Model):
                 if line5.product_id.id not in lines_freeze and line5.product_id.id in product_list.keys():
                     line5.with_context(allow_write=True).write({'qty_invoiced': product_list[line5.product_id.id]})
                     lines_freeze.append(line5.product_id.id)
+
+            #update invoiced qty for expense products
+            for inv2 in sale.invoice_ids:
+                if inv2.state in ('open', 'paid'):
+                    for iline in inv2.invoice_line_ids:
+                        product_key = '-'.join([str(iline.product_id.id), str(iline.price_unit)])
+                        if product_key in expense_product_list.keys():
+                            qty = 0
+                            if inv2.type == 'out_invoice':
+                                qty = iline.quantity
+                            if inv2.type == 'out_refund':
+                                qty = -iline.quantity
+                            expense_product_list[product_key] += qty 
+            #update delivered qty for expense product
+            lines_freeze = []
+            for sline in sale.order_line:
+                line_pkey = '-'.join([str(sline.product_id.id), str(sline.price_unit)])
+                if line_pkey not in lines_freeze and line_pkey in expense_product_list.keys():
+                    sline.with_context(allow_write=True).write({'qty_invoiced': expense_product_list[line_pkey]})
+                    lines_freeze.append(line_pkey)  
+
 
             # # update quantity on validating refund bill:
             # product_list, po_ids = {}, []
@@ -200,4 +221,5 @@ class SaleOrderLine(models.Model):
             if order_id:
                 order_id.recompute_so_delivered_qty()
         return res
+
 
