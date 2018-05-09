@@ -35,6 +35,8 @@ If Purchase Order is created from Sales Order; Start Date & End Date are auto se
   'data': [ 
   		'views/purchase.xml',
   		'wizard/nonstandard_product.xml',
+
+      'data/scheduler.xml',
 	],
 
   'application': False,

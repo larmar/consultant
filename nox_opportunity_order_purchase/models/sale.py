@@ -11,6 +11,9 @@ from odoo import models, fields, api
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
@@ -53,7 +56,7 @@ class SaleOrder(models.Model):
 
         return super(SaleOrder, self).write(vals)
 
-    @api.one
+    @api.multi
     def recompute_so_delivered_qty(self):
         """Compute accumulated Delivered Quantity in Sales Order lines with Consultant Product from related PO > Vendor Bills
         """
@@ -181,6 +184,16 @@ class SaleOrder(models.Model):
             #     if line2.product_id and not line2.product_id.consultant_product and linekey in product_list.keys():
             #         line2.write({'qty_delivered': product_list[linekey]})
         return True
+
+    @api.model
+    def cron_update_so_quantities(self):
+        _logger.info("Scheduler function to recompute Delivered & Invoiced quantity in Sales Order has started!")
+        so_ids = self.search([('state','=','sale')])
+        so_ids.recompute_so_delivered_qty()
+        result = []
+        temp = [result.append(s.id) for s in so_ids]
+        _logger.info("Scheduler function successfully executed on Sales Orders %s"%(result))
+
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
