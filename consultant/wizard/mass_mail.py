@@ -38,6 +38,15 @@ class MailComposeMessage(models.TransientModel):
                 'body': '<br/><br/> ' + user_signature
                 }
             res.update(vals)
+        #reset Subject by removing Reference/Description from Subject when compose message wizard opened from Invoice
+        if context and context.get('active_model','') == 'account.invoice':
+            invoice_ref = self.env['account.invoice'].sudo().browse(context['active_ids'])[0].name
+            subject = res.get('subject', '')
+            if invoice_ref and subject:
+                result = subject.split(invoice_ref)
+                if result and len(result) > 1:
+                    subject = result[0]
+                    res.update({'subject': subject})
         return res
 
     @api.multi
