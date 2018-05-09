@@ -5,7 +5,7 @@
         <record model="ir.cron" id="cron_compute_so_quantities" forcecreate="True">
             <field name="name">Recompute Delivered &amp; Invoiced quantity in SO</field>
             <field name="interval_number">1</field>
-            <field name="interval_type">year</field>
+            <field name="interval_type">months</field>
             <field name="numbercall">1</field>
             <field name="doall" eval="False"/>
             <field name="model" eval="'sale.order'"/>
