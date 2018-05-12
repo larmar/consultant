@@ -72,6 +72,7 @@ class SaleOrder(models.Model):
                     if expense_product_key not in expense_product_list:
                         expense_product_list[expense_product_key] = 0
             temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
+            po_ids = list(set(po_ids))
             for po in po_ids:
                 for bill in po.invoice_ids:
                     if bill.state in ('open', 'paid'):
@@ -194,6 +195,48 @@ class SaleOrder(models.Model):
         temp = [result.append(s.id) for s in so_ids]
         _logger.info("Scheduler function successfully executed on Sales Orders %s"%(result))
 
+    @api.multi
+    def action_map_lines_by_vendor_bills(self):
+        """check if all non-standard/expense products in Sales > PO > Vendor Bills with respect to Unit Price are all linked in Sales Order
+        """  
+        for sale in self:
+            po_ids = []
+            temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
+            po_ids = list(set(po_ids))
+
+            product_keys = []
+            for po in po_ids:
+                for bill in po.invoice_ids:
+                    if bill.state in ('open', 'paid'):
+                        for line in bill.invoice_line_ids:
+                            key = '^'.join([str(line.product_id.id), str(line.price_unit)])
+                            product_keys.append(key)
+            product_keys = list(set(product_keys))
+            
+            sales_tax = self.env['ir.model.data'].xmlid_to_res_id('l10n_se.' + str(self.env.user.company_id) + '_sale_tax_25_services')
+            if not sales_tax:
+                sales_tax = 0
+
+            for pkey in product_keys:
+                vals = pkey.split('^')
+                lines_freeze = []
+                line_item = self.env['sale.order.line'].search_read([('product_id','=',int(vals[0])), ('price_unit','=',float(vals[1])), ('order_id','=',sale.id)])
+                if not line_item:
+                    lineid_item = self.env['sale.order.line'].search([('product_id','=',int(vals[0])), ('order_id','=',sale.id), ('id','not in',lines_freeze)], limit=1) 
+                    if lineid_item:
+                        lineid_item.write({'price_unit': float(vals[1])})
+                        lines_freeze.append(lineid_item.id)
+                    else:
+                        Product = self.env['product.product'].browe([int(vals[0])])[0]
+                        self.env['sale.order.line'].create({
+                                'product_id': int(vals[0]),
+                                'name': Product.name,
+                                'product_uom': Product.uom_id.id,
+                                'price_unit': float(vals[1]),
+                                'tax_id': [[6, 0, [sales_tax]]],
+                                'order_id': sale.id,
+                            })
+        return True
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
