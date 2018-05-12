@@ -197,7 +197,7 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_map_lines_by_vendor_bills(self):
-        """check if all non-standard/expense products in Sales > PO > Vendor Bills with respect to Unit Price are all linked in Sales Order
+        """check if all non-standard/expense products in Sales > PO > Vendor Bills with respect to Unit Price are all linked in Sales Order with correct unit price
         """  
         for sale in self:
             po_ids = []

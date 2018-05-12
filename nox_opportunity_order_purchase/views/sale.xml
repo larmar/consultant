@@ -7,8 +7,8 @@
         <field name="inherit_id" ref="sale_purchase_b2b.view_order_form_po_b2b"/>
         <field name="arch" type="xml">
         	<button name="action_create_draft_po" position="after">
-        		<button name="recompute_so_delivered_qty" type="object" string="Recompute Delivered &amp; Invoiced Qty" groups="base.group_no_one"/>
         		<button name="action_map_lines_by_vendor_bills" type="object" string="Map Lines by Vendor Bills" groups="base.group_no_one"/>
+        		<button name="recompute_so_delivered_qty" type="object" string="Recompute Delivered &amp; Invoiced Qty" groups="base.group_no_one"/>
         	</button>
         </field>
     </record>
