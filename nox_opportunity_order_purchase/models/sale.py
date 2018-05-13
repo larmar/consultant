@@ -94,7 +94,8 @@ class SaleOrder(models.Model):
                 for bill in po.invoice_ids:
                     if bill.state in ('open', 'paid'):
                         for line in bill.invoice_line_ids:
-                            product_key = '-'.join([str(line.product_id.id), str(line.price_unit)])
+                            price_unit = line.product_id.get_product_price_by_invoice_policy(line.price_unit)
+                            product_key = '-'.join([str(line.product_id.id), str(price_unit)])
                             if product_key in expense_product_list.keys():
                                 qty = line.quantity
                                 if bill.type == 'in_refund':
@@ -104,7 +105,8 @@ class SaleOrder(models.Model):
             #update delivered qty for expense product
             lines_freeze = []
             for line3 in sale.order_line:
-                line_pkey = '-'.join([str(line3.product_id.id), str(line3.price_unit)])
+                price_unit = line3.product_id.get_product_price_by_invoice_policy(line3.price_unit)
+                line_pkey = '-'.join([str(line3.product_id.id), str(price_unit)])
                 if line_pkey not in lines_freeze and line_pkey in expense_product_list.keys():
                     line3.with_context(allow_write=True).write({'qty_delivered': expense_product_list[line_pkey]})
                     lines_freeze.append(line_pkey)	
@@ -117,7 +119,8 @@ class SaleOrder(models.Model):
                     product_list[line4.product_id.id] = 0
                 # check for expense product (by comparing product and unit price from sale order in vendor bill):
                 elif line4.product_id and not line4.product_id.consultant_product and not line4.product_id.non_standard_product:
-                    expense_product_key = '-'.join([str(line4.product_id.id), str(line4.price_unit)])
+                    price_unit = line4.product_id.get_product_price_by_invoice_policy(line4.price_unit)
+                    expense_product_key = '-'.join([str(line4.product_id.id), str(price_unit)])
                     if expense_product_key not in expense_product_list:
                         expense_product_list[expense_product_key] = 0
            
@@ -144,7 +147,8 @@ class SaleOrder(models.Model):
             for inv2 in sale.invoice_ids:
                 if inv2.state in ('open', 'paid'):
                     for iline in inv2.invoice_line_ids:
-                        product_key = '-'.join([str(iline.product_id.id), str(iline.price_unit)])
+                        price_unit = iline.product_id.get_product_price_by_invoice_policy(iline.price_unit)
+                        product_key = '-'.join([str(iline.product_id.id), str(price_unit)])
                         if product_key in expense_product_list.keys():
                             qty = 0
                             if inv2.type == 'out_invoice':
@@ -155,7 +159,8 @@ class SaleOrder(models.Model):
             #update delivered qty for expense product
             lines_freeze = []
             for sline in sale.order_line:
-                line_pkey = '-'.join([str(sline.product_id.id), str(sline.price_unit)])
+                price_unit = iline.product_id.get_product_price_by_invoice_policy(sline.price_unit)
+                line_pkey = '-'.join([str(sline.product_id.id), str(price_unit)])
                 if line_pkey not in lines_freeze and line_pkey in expense_product_list.keys():
                     sline.with_context(allow_write=True).write({'qty_invoiced': expense_product_list[line_pkey]})
                     lines_freeze.append(line_pkey)  
@@ -198,7 +203,7 @@ class SaleOrder(models.Model):
     @api.multi
     def action_map_lines_by_vendor_bills(self):
         """check if all non-standard/expense products in Sales > PO > Vendor Bills with respect to Unit Price are all linked in Sales Order with correct unit price
-        """  
+        """ 
         for sale in self:
             po_ids = []
             temp = [po_ids.append(pol.order_id) for pol in sale.purchase_line_ids]
@@ -209,8 +214,9 @@ class SaleOrder(models.Model):
                 for bill in po.invoice_ids:
                     if bill.state in ('open', 'paid'):
                         for line in bill.invoice_line_ids:
-                            key = '^'.join([str(line.product_id.id), str(line.price_unit)])
-                            product_keys.append(key)
+                            if not line.product_id.consultant_product:
+                                key = '^'.join([str(line.product_id.id), str(line.price_unit)])
+                                product_keys.append(key)
             product_keys = list(set(product_keys))
             
             sales_tax = self.env['ir.model.data'].xmlid_to_res_id('l10n_se.' + str(self.env.user.company_id) + '_sale_tax_25_services')
@@ -220,19 +226,21 @@ class SaleOrder(models.Model):
             for pkey in product_keys:
                 vals = pkey.split('^')
                 lines_freeze = []
-                line_item = self.env['sale.order.line'].search_read([('product_id','=',int(vals[0])), ('price_unit','=',float(vals[1])), ('order_id','=',sale.id)])
+
+                Product = self.env['product.product'].browse([int(vals[0])])
+                price_unit = Product.get_product_price_by_invoice_policy(float(vals[1]))
+                line_item = self.env['sale.order.line'].search_read([('product_id','=',int(vals[0])), ('price_unit','=',price_unit), ('order_id','=',sale.id)])
                 if not line_item:
                     lineid_item = self.env['sale.order.line'].search([('product_id','=',int(vals[0])), ('order_id','=',sale.id), ('id','not in',lines_freeze)], limit=1) 
                     if lineid_item:
-                        lineid_item.write({'price_unit': float(vals[1])})
+                        lineid_item.write({'price_unit': price_unit})
                         lines_freeze.append(lineid_item.id)
                     else:
-                        Product = self.env['product.product'].browe([int(vals[0])])[0]
                         self.env['sale.order.line'].create({
                                 'product_id': int(vals[0]),
                                 'name': Product.name,
                                 'product_uom': Product.uom_id.id,
-                                'price_unit': float(vals[1]),
+                                'price_unit': price_unit,
                                 'tax_id': [[6, 0, [sales_tax]]],
                                 'order_id': sale.id,
                             })
@@ -277,5 +285,3 @@ class SaleOrderLine(models.Model):
             if order_id:
                 order_id.recompute_so_delivered_qty()
         return res
-
-
