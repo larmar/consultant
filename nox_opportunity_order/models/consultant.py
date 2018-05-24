@@ -34,7 +34,7 @@ class ConsultantConsult(models.Model):
         vendor_id = Consultant.partner_id and Consultant.partner_id.id or False
         consultant_name = Consultant.name
         
-        consultant_product = self.env['product.product'].with_context(show_consultant_product_template=True).search([('consultant_id', '=', Consultant.id)], order="name desc", limit=1)
+        consultant_product = self.env['product.product'].with_context(show_consultant_product_template=True).search([('consultant_id', '=', Consultant.id), ('non_standard_product', '=', False)], order="name desc", limit=1)
         consultant_product_no = '1'
         if consultant_product:
             consultant_prod_name = consultant_product.name.split(' ')[-1]
