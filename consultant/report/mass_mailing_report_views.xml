@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_mail_statistics_report_search" model="ir.ui.view">
+            <field name="name">mail.statistics.report.consultant.search</field>
+            <field name="model">mail.statistics.report</field>
+            <field name="inherit_id" ref="mass_mailing.view_mail_statistics_report_search"/>
+            <field name="arch" type="xml">
+                <search string="Mass Mailing Statistics">
+                    <group expand="0" position="before">
+                        <filter name="consultant_mass_mail" domain="[('consultant_mass_mail','=',True)]" string="Consultant Mails"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+</odoo>

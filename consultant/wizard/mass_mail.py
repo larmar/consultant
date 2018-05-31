@@ -9,6 +9,8 @@
 from odoo import models, fields, api
 from email.utils import formataddr
 
+from datetime import datetime, timedelta
+
 class MailComposeMessage(models.TransientModel):
     _inherit = "mail.compose.message"
 
@@ -53,6 +55,38 @@ class MailComposeMessage(models.TransientModel):
             #reset subject as Company Name + Invoice + (Ref InvoiceNo)
             res.update({'subject': '%s Invoice (Ref %s)'%(company_name, invoice_ref)})
         return res
+
+    @api.multi
+    def send_mail_action(self):
+        """Create & execute Mass Mail from mail compose wizard
+        """
+        context = self.env.context or {}
+        if 'consultant_mass_mail' in context:
+            partners = []
+            temp = [partners.append(consultant.contact_id.id) for consultant in self.env['consultant.consult'].browse(context.get('active_ids', False)) if consultant.contact_id]
+            partners = str(list(set(partners)))
+
+            attachments = []
+            temp = [attachments.append(attach.id) for attach in self.attachment_ids]
+
+            mass_mail_vals = {
+                'email_from': self.email_from,
+                'name': self.subject,
+                'mailing_model': 'res.partner',
+                'mailing_domain': "[[u'id', u'in', %s]]" % (partners),
+                'body_html': self.body,
+                'reply_to': self.reply_to,
+                'keep_archives': True,
+                'reply_to_mode': 'email',
+                'schedule_date': datetime.now() + timedelta(minutes=3),
+                'next_departure': datetime.now() + timedelta(minutes=3),
+                'attachment_ids': [[6, 0, attachments]],
+                'consultant_mass_mail': True,
+            }
+            mass_mailing_id = self.env['mail.mass_mailing'].create(mass_mail_vals)
+            mass_mailing_id.put_in_queue()
+        else:
+            return super(MailComposeMessage, self).send_mail_action()
 
     @api.multi
     def get_mail_values(self, res_ids):
@@ -123,3 +157,33 @@ class MailComposeMessage(models.TransientModel):
             template_values[res_id].update(results[res_id])
 
         return multi_mode and template_values or template_values[res_ids[0]]
+
+
+class MailMassMailing(models.Model):
+    _inherit = "mail.mass_mailing"
+
+    consultant_mass_mail = fields.Boolean('Consultant Mails')
+
+
+class MailMailStats(models.Model):
+    _inherit = 'mail.mail.statistics'
+
+    consultant_mass_mail = fields.Boolean('Consultant Mails')
+
+    @api.model
+    def create(self, vals):
+        """Set Consultant mass mail check 
+        """
+        if not vals: vals = {}
+        if vals.get('mass_mailing_id', False):
+            consultant_mass_mail = self.env['mail.mass_mailing'].browse([vals['mass_mailing_id']])[0].consultant_mass_mail
+            if consultant_mass_mail:
+                vals['consultant_mass_mail'] = True
+        return super(MailMailStats, self).create(vals)
+
+
+class MassMailingReport(models.Model):
+    _inherit = 'mail.statistics.report'
+
+
+

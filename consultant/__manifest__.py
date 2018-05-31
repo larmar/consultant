@@ -21,7 +21,7 @@ Manage consultants and search for knowledge
   """,
   'author': 'Martin WIlderoth',
   'website': 'www.linserv.se/en/',
-  'depends': ['crm'],
+  'depends': ['crm', 'mass_mailing'],
   'application': True,
   'auto_install': False,
   'installable': True,
@@ -40,7 +40,9 @@ Manage consultants and search for knowledge
     'wizard/consultant_opportunity_link.xml',
     'wizard/consultant_opportunity_unlink.xml',
     'wizard/mass_mail_view.xml',
-    
+
+    'report/mass_mailing_report_views.xml',
+  
     'security/ir.model.access.csv',
 	],
 }
