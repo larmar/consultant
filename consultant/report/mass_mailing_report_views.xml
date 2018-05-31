@@ -14,4 +14,15 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_mail_mass_mailing_consultant_search">
+            <field name="name">mail.mass_mailing.consultant.search</field>
+            <field name="model">mail.mass_mailing</field>
+            <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_search"/>
+            <field name="arch" type="xml">
+                <filter name="inactive" position="before">
+                    <filter name="consultant_mass_mail" domain="[('consultant_mass_mail','=',True)]" string="Consultant Mails"/>
+                </filter>
+            </field>
+        </record>
+
 </odoo>
