@@ -17,8 +17,8 @@ class MailComposeMessage(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(MailComposeMessage, self).default_get(fields)
-        context = self._context
-        if context and isinstance(context, dict) and 'consultant_mass_mail' in context:
+        context = self.env.context or {}
+        if context and isinstance(context, dict) and context.get('consultant_mass_mail', False):
             partners = []
             temp = [partners.append(consultant.contact_id.id) for consultant in self.env['consultant.consult'].browse(context.get('active_ids', False)) if consultant.contact_id]
             partners = list(set(partners))
@@ -78,13 +78,18 @@ class MailComposeMessage(models.TransientModel):
                 'reply_to': self.reply_to,
                 'keep_archives': True,
                 'reply_to_mode': 'email',
-                'schedule_date': datetime.now() + timedelta(minutes=3),
-                'next_departure': datetime.now() + timedelta(minutes=3),
+                'schedule_date': datetime.now() - timedelta(minutes=5),
+                'next_departure': datetime.now() - timedelta(minutes=5),
                 'attachment_ids': [[6, 0, attachments]],
                 'consultant_mass_mail': True,
             }
             mass_mailing_id = self.env['mail.mass_mailing'].create(mass_mail_vals)
             mass_mailing_id.put_in_queue()
+            #manually trigger mass mailing function to execute **RUN MANUALLY**
+            cron_id = self.env['ir.model.data'].xmlid_to_res_id('mass_mailing.ir_cron_mass_mailing_queue')
+            if cron_id:
+            	cron = self.env['ir.cron'].browse([cron_id])
+            	cron.with_context(consultant_mass_mail=False).method_direct_trigger()
         else:
             return super(MailComposeMessage, self).send_mail_action()
 
