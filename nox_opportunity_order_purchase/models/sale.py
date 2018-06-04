@@ -159,7 +159,7 @@ class SaleOrder(models.Model):
             #update delivered qty for expense product
             lines_freeze = []
             for sline in sale.order_line:
-                price_unit = iline.product_id.get_product_price_by_invoice_policy(sline.price_unit)
+                price_unit = sline.product_id.get_product_price_by_invoice_policy(sline.price_unit)
                 line_pkey = '-'.join([str(sline.product_id.id), str(price_unit)])
                 if line_pkey not in lines_freeze and line_pkey in expense_product_list.keys():
                     sline.with_context(allow_write=True).write({'qty_invoiced': expense_product_list[line_pkey]})
