@@ -225,10 +225,11 @@
         <tree>
           <field name="name" />
           <field name="partner_id"/>
-          <field name="contact_no"/>
+          <field name="consultant_contact_tags"/>
           <field name="available" />
           <field name="stage_id"/>
           <field name="priority" />
+          <field name="main_role_ids"/>
           <field name="opportunity_ids"/>
         </tree>
       </field>

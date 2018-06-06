@@ -25,6 +25,15 @@ class consultant_consult(models.Model):
         for consultant in self:
             consultant.total_opportunities = len(consultant.opportunity_ids)
 
+    @api.depends('consultant_contact_id', 'consultant_contact_id.category_id')
+    def _compute_consultant_type(self):
+        for consultant in self:
+            result, tags = '', []
+            if consultant.consultant_contact_id:
+                temp = [tags.append(tag.name) for tag in consultant.consultant_contact_id.category_id]
+                result = ', '.join(tags)
+            consultant.consultant_contact_tags = result
+
     name = fields.Char(String='Name', track_visibility='onchange')
     linkedin = fields.Char('Linkedin')
     available = fields.Date('Next available', track_visibility='onchange')
@@ -43,6 +52,7 @@ class consultant_consult(models.Model):
     opportunity_ids = fields.Many2many('crm.lead', 'consultant_consult_opportunity_rel', 'consultant_id', 'opportunity_id', 'Opportunities')
     contact_id = fields.Many2one('res.partner', 'Business Contact', track_visibility='onchange')
     consultant_contact_id = fields.Many2one('res.partner', 'Consultant Contact', track_visibility='onchange')
+    consultant_contact_tags = fields.Char(compute='_compute_consultant_type', string='Consultant Type', store=True)
     contact_no = fields.Char(related="contact_id.mobile", string="Telephone")
     category_ids = fields.Many2many('res.partner.category', 'res_partner_category_consultant_rel', 'consultant_id', 'category_id', 'Tags')
 
