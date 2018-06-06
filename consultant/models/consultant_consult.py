@@ -149,34 +149,34 @@ class consultant_consult(models.Model):
         
         return super(consultant_consult, self).write(vals)
 
-    @api.onchange('main_role_ids')
-    def onchange_roles(self):
-        if len(self.main_role_ids) > 5:
-            warning = {
-                'title': 'Maximum Selection Exceeded.',
-                'message': 'You can only select up to 5 Main Roles. Options selected more than 5 will be removed.'
-            }
-            roles = []
-            for role in self.main_role_ids:
-                roles.append(role.id)
-            roles = roles[-5:]
-            self.update({'main_role_ids': [[6, 0, roles]]})
-            return {'warning': warning}
+    # @api.onchange('main_role_ids')
+    # def onchange_roles(self):
+    #     if len(self.main_role_ids) > 5:
+    #         warning = {
+    #             'title': 'Maximum Selection Exceeded.',
+    #             'message': 'You can only select up to 5 Main Roles. Options selected more than 5 will be removed.'
+    #         }
+    #         roles = []
+    #         for role in self.main_role_ids:
+    #             roles.append(role.id)
+    #         roles = roles[-5:]
+    #         self.update({'main_role_ids': [[6, 0, roles]]})
+    #         return {'warning': warning}
 
-    @api.onchange('main_competence_ids')
-    def onchange_competences(self):
-        if len(self.main_competence_ids) > 10:
-            competences = []
-            for competence in self.main_competence_ids:
-                roles.append(competence.id)
-            competences = competences[-10:]
-            self.main_competence_ids = [[6, 0, competences]]
+    # @api.onchange('main_competence_ids')
+    # def onchange_competences(self):
+    #     if len(self.main_competence_ids) > 10:
+    #         competences = []
+    #         for competence in self.main_competence_ids:
+    #             roles.append(competence.id)
+    #         competences = competences[-10:]
+    #         self.main_competence_ids = [[6, 0, competences]]
 
-            warning = {
-                'title': 'Maximum Selection Exceeded.',
-                'message': 'You can only select up to 10 Main Competences. Options selected more than 10 will be removed.'
-            }
-            return {'warning': warning}
+    #         warning = {
+    #             'title': 'Maximum Selection Exceeded.',
+    #             'message': 'You can only select up to 10 Main Competences. Options selected more than 10 will be removed.'
+    #         }
+    #         return {'warning': warning}
 
     @api.onchange('future_role_ids')
     def onchange_future_roles(self):
