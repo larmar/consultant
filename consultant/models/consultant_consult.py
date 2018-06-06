@@ -114,15 +114,15 @@ class consultant_consult(models.Model):
 
     @api.model
     def create(self, vals):
-        #keep only 5 main roles:
-        if 'main_role_ids' in vals and vals['main_role_ids']:
-            vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
+        # #keep only 5 main roles:
+        # if 'main_role_ids' in vals and vals['main_role_ids']:
+        #     vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
         #keep only 3 future roles:
         if 'future_role_ids' in vals and vals['future_role_ids']:
             vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-3:] ]]
-        #keep only 10 main competences:
-        if 'main_competence_ids' in vals and vals['main_competence_ids']:
-            vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
+        # #keep only 10 main competences:
+        # if 'main_competence_ids' in vals and vals['main_competence_ids']:
+        #     vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
 
         res = super(consultant_consult, self).create(vals)
 
@@ -147,15 +147,15 @@ class consultant_consult(models.Model):
             if vals['contact_id'] not in existing_followers:
                 self.message_subscribe(partner_ids=[vals['contact_id']])
 
-        #keep only 5 main roles:
-        if 'main_role_ids' in vals and vals['main_role_ids']:
-            vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
+        # #keep only 5 main roles:
+        # if 'main_role_ids' in vals and vals['main_role_ids']:
+        #     vals['main_role_ids'] = [[6, False, vals['main_role_ids'][0][2][-5:] ]]
         #keep only 3 future roles:
         if 'future_role_ids' in vals and vals['future_role_ids']:
             vals['future_role_ids'] = [[6, False, vals['future_role_ids'][0][2][-3:] ]]
-        #keep only 10 main competences:
-        if 'main_competence_ids' in vals and vals['main_competence_ids']:
-            vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
+        # #keep only 10 main competences:
+        # if 'main_competence_ids' in vals and vals['main_competence_ids']:
+        #     vals['main_competence_ids'] = [[6, False, vals['main_competence_ids'][0][2][-10:] ]]
         
         return super(consultant_consult, self).write(vals)
 
