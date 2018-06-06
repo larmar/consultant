@@ -248,6 +248,7 @@
                 <field name="certificate_ids" invisible="1"/>
                 <field name="competence_ids" string="Competence"/>
                 <field name="stage_id"/>
+                <field name="consultant_contact_tags"/>
                 <field name="available" />
                 <field name="priority" />
                 <field name="opportunity_ids"/>
