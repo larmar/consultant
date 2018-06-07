@@ -88,8 +88,8 @@ class MailComposeMessage(models.TransientModel):
             #manually trigger mass mailing function to execute **RUN MANUALLY**
             cron_id = self.env['ir.model.data'].xmlid_to_res_id('mass_mailing.ir_cron_mass_mailing_queue')
             if cron_id:
-            	cron = self.env['ir.cron'].browse([cron_id])
-            	cron.with_context(consultant_mass_mail=False).method_direct_trigger()
+            	cron = self.env['ir.cron'].sudo().browse([cron_id])
+            	cron.with_context(consultant_mass_mail=False).sudo().method_direct_trigger()
         else:
             return super(MailComposeMessage, self).send_mail_action()
 
