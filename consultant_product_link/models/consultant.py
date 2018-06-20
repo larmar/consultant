@@ -147,4 +147,5 @@ class ConsultantConsult(models.Model):
             order_ids = []
             temp = [order_ids.append(po.id) for po in consultant.purchase_order_ids]
             action['domain'] = [['id','in',order_ids]]
+            action['context'] = {'show_purchase': False}
             return action
