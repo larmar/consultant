@@ -60,9 +60,12 @@
                 </field>
 
                 <field name="state" position="attributes">
-                    <attribute name="invisible">True</attribute>
+                    <attribute name="invisible">not context.get('show_sale', False)</attribute>
                 </field>
-                
+                <field name="invoice_status" position="attributes">
+                    <attribute name="invisible">context.get('show_sale', False)</attribute>
+                </field>
+
             </field>
         </record>
 

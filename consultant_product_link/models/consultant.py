@@ -138,6 +138,7 @@ class ConsultantConsult(models.Model):
             order_ids = []
             temp = [order_ids.append(sale.id) for sale in consultant.sale_order_ids]
             action['domain'] = [['id','in',order_ids]]
+            action['context'] = {'show_sale': True}
             return action
 
     @api.multi
