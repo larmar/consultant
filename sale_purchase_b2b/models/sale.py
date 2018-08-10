@@ -34,11 +34,6 @@ class Sale(models.Model):
         """
         purchase_vals, purchase_ids = {}, []
         for sale in self:
-            #purchase order :
-            fiscal_position_id = self.env['account.fiscal.position'].with_context(company_id=self.create_uid.company_id.id).get_fiscal_position(sale.partner_id.id)
-            payment_term_id = sale.partner_id.property_supplier_payment_term_id.id
-            currency_id = sale.partner_id.property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
-
             #create PO by Vendor:
             lines_by_vendor = {}
             for line in sale.order_line:
@@ -60,6 +55,11 @@ class Sale(models.Model):
                     break
 
             for vendor in lines_by_vendor:
+                #purchase order :
+                fiscal_position_id = self.env['account.fiscal.position'].with_context(company_id=self.create_uid.company_id.id).get_fiscal_position(vendor)
+                payment_term_id = self.env['res.partner'].browse([vendor]).property_supplier_payment_term_id.id
+                currency_id = self.env['res.partner'].browse([vendor]).property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
+                
                 purchase_vals = {
                     'partner_id': vendor,
                     'project_id': sale.related_project_id and sale.related_project_id.id or False,
@@ -88,6 +88,8 @@ class Sale(models.Model):
                         'order_id': purchase_id.id
                     }
                     purchase_line_id = self.env['purchase.order.line'].create(line_vals)
+                    # recompute taxes on purchase lines to apply fiscal position setting
+                    purchase_line_id._compute_tax_id()
 
             res_id, domain = False, []
 
