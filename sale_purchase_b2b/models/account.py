@@ -77,6 +77,16 @@ class AccountInvoice(models.Model):
         """
         for invoice in self:
             invoice.invoice_line_ids._compute_tax_id()
+            self.set_tax_ids()
+
+    @api.multi
+    def set_tax_ids(self):
+        # reset taxes when Invoice is generated from SO/PO
+        taxes_grouped = self.get_taxes_values()
+        tax_lines = self.tax_line_ids.filtered('manual')
+        for tax in taxes_grouped.values():
+            tax_lines += tax_lines.new(tax)
+        self.tax_line_ids = tax_lines
 
 class AccountInvoiceLine(models.Model):
     _inherit = "account.invoice.line"
