@@ -11,15 +11,6 @@ from odoo import models, fields, api
 class HRExpenseSheet(models.Model):
     _inherit = "hr.expense.sheet"
 
-    @api.multi
-    def action_sheet_move_create(self):
-        """Set posted Journal Entries to Unposted
-        """
-        res = super(HRExpenseSheet, self).action_sheet_move_create()
-        for expense in self:
-            expense.account_move_id.write({'state': 'draft'})
-        return res
-
     #redefine state field: rename status "Posted" to "Audited"
     state = fields.Selection([('submit', 'Submitted'),
                               ('approve', 'Approved'),
@@ -28,3 +19,15 @@ class HRExpenseSheet(models.Model):
                               ('cancel', 'Refused')
                               ], string='Status', index=True, readonly=True, track_visibility='onchange', copy=False, default='submit', required=True,
         help='Expense Report State')
+
+class HR_Expense(models.Model):
+    _inherit = "hr.expense"
+
+    @api.multi
+    def action_move_create(self):
+        """Mark expense Journal entry as Unposted
+        """
+        for expense in self:
+            super(HR_Expense, expense).action_move_create()
+            expense.sheet_id.account_move_id.write({'state': 'draft'})
+            
