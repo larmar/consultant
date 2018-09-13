@@ -93,11 +93,13 @@ class ConsultantConsult(models.Model):
 
             consultant_orders = self.env['sale.order.line'].search([('product_id', 'in', consultant_products)])
             temp = [sale_order_ids.append(sale.order_id.id) for sale in consultant_orders]
+            sale_order_ids = list(set(sale_order_ids))
             consultant.sale_order_ids = sale_order_ids
             consultant.total_sale_orders = len(sale_order_ids)
 
             consultant_orders = self.env['purchase.order.line'].search([('product_id', 'in', consultant_products)])
             temp = [purchase_order_ids.append(purchase.order_id.id) for purchase in consultant_orders]
+            purchase_order_ids = list(set(purchase_order_ids))
             consultant.purchase_order_ids = purchase_order_ids
             consultant.total_purchase_orders = len(purchase_order_ids)
 
