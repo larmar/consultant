@@ -93,13 +93,14 @@ class PurchaseOrder(models.Model):
 
         if context.get('date_search_po_bills', False):
             """Filter Purchase orders for which Vendor Bills in selected month have not been registered
+            - instead of calendar month, 2nd day of the selected month TO 1st day of the next month is checked
             """
             date_search_po_bill = datetime.strptime(context['date_search_po_bills'], '%Y-%m-%d').date()
             
             last_day = monthrange(date_search_po_bill.year, date_search_po_bill.month)[1]
 
-            start_date = date_search_po_bill.replace(day=1)
-            end_date = date_search_po_bill.replace(day=last_day)
+            start_date = date_search_po_bill.replace(day=2)
+            end_date = date_search_po_bill.replace(day=last_day) + timedelta(days=1)
 
             self._cr.execute("""select id from purchase_order where
                                     state in ('purchase')"""
